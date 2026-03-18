@@ -6,7 +6,7 @@
 
 #Instalacion Proyecto
 
-git clone https://github.com/ErJaLo/viatges
+git clone https://github.com/ErJaLo/PathFinder
 
 cd viatges
 
@@ -14,19 +14,22 @@ cp .env.example .env
 
 Comprovar si se ha de modificar el .env
 
-#Instalar dependencias 
+## Instalar dependencias 
 
-#Laravel
-composer run dev
+### Laravel
+composer install
 
-#React
+### React
 npm install
 
 
-#Setup Servidor:
+## Setup Servidor:
 
-#Generacion de AppKey
+## Generacion de AppKey
 php artisan key:gen
 
-#Generacion BD (sqlite por defecto)
+## Generacion BD (sqlite por defecto)
 php artisan migrate
+
+## Ejecutar servidor
+composer run dev
