@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viajeros — Horizonte Azul</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ══════════════════════════════
+   TOKENS — HORIZONTE AZUL
+══════════════════════════════ */
+        :root {
+            --bg: #F4F7FB;
+            --bg2: #E8F0F9;
+            --surface: #FFFFFF;
+            --surface2: #EDF3FA;
+            --border: #C8DAEE;
+            --border2: #A8C4E0;
+
+            --text: #0D1F35;
+            --text2: #2E5070;
+            --text3: #4E7099;
+
+            --primary: #1A5FA8;
+            --primary-h: #0C4880;
+            --primary-l: #DCE9F7;
+
+            --accent: #E87D2C;
+            --accent-l: #FDE9D4;
+            --accent-h: #C45E10;
+
+            --amber: #D4920E;
+            --amber-l: #FDF0D0;
+
+            --vote-up: #1A5FA8;
+            --vote-dn: #4E7099;
+
+            --tag-bg: #DCE9F7;
+            --tag-text: #0C3D70;
+
+            --r: 10px;
+            --r-sm: 6px;
+            --r-lg: 14px;
+
+            --shadow: 0 1px 3px rgba(13, 31, 53, .07), 0 4px 16px rgba(13, 31, 53, .05);
+            --shadow-hover: 0 4px 20px rgba(26, 95, 168, .20);
+        }
+
+        [data-theme="dark"] {
+            --bg: #080F1A;
+            --bg2: #0D1826;
+            --surface: #111E30;
+            --surface2: #162538;
+            --border: #1E3450;
+            --border2: #2A4668;
+
+            --text: #D6E5F4;
+            --text2: #8AB4D8;
+            --text3: #5E8AB4;
+
+            --primary: #4A96E0;
+            --primary-h: #5EAAEE;
+            --primary-l: #0E2240;
+
+            --accent: #F09040;
+            --accent-l: #2A1A08;
+            --accent-h: #F8A860;
+
+            --amber: #E8A830;
+            --amber-l: #2E2008;
+
+            --vote-up: #4A96E0;
+            --vote-dn: #5E8AB4;
+
+            --tag-bg: #122040;
+            --tag-text: #8EC4F5;
+
+            --shadow: 0 1px 3px rgba(0, 0, 0, .35), 0 4px 16px rgba(0, 0, 0, .25);
+            --shadow-hover: 0 4px 24px rgba(74, 150, 224, .28);
+        }
+
+        /* ══════════════════════════════
+   RESET & BASE
+══════════════════════════════ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.6;
+            transition: background .3s, color .3s;
+            min-height: 100vh;
+        }
+
+        /* grain texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 128px 128px;
+            z-index: 9999;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        /* ══════════════════════════════
+   NAV
+══════════════════════════════ */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: color-mix(in srgb, var(--surface) 90%, transparent);
+        }
+
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            flex-shrink: 0;
+            letter-spacing: -0.3px;
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            line-height: 1;
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0 14px;
+            gap: 8px;
+            height: 36px;
+            transition: border-color .2s;
+        }
+
+        .nav-search:focus-within {
+            border-color: var(--primary);
+        }
+
+        .nav-search svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            color: var(--text3);
+        }
+
+        .nav-search input {
+            background: none;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .nav-search input::placeholder {
+            color: var(--text3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .nav-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text2);
+            padding: 5px 12px;
+            border-radius: 999px;
+            transition: background .15s, color .15s;
+            border: none;
+            background: none;
+        }
+
+        .nav-link:hover {
+            background: var(--bg2);
+            color: var(--text);
+        }
+
+        .btn-pub {
+            background: var(--accent);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 7px 16px;
+            border-radius: 999px;
+            border: none;
+            transition: background .15s, transform .1s;
+        }
+
+        .btn-pub:hover {
+            background: var(--accent-h);
+        }
+
+        .btn-pub:active {
+            transform: scale(.97);
+        }
+
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: background .15s, border-color .15s;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle:hover {
+            background: var(--border);
+        }
+
+        /* ══════════════════════════════
+   HERO BAND
+══════════════════════════════ */
+        .hero-band {
+            background: linear-gradient(135deg, var(--primary) 0%, #1A5FA8 40%, var(--accent) 100%);
+            color: #fff;
+            padding: 36px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-band::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 100% at 60% 50%, rgba(255, 255, 255, .08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(26px, 4vw, 42px);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .hero-sub {
+            font-size: 15px;
+            opacity: .8;
+            font-weight: 300;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-num {
+            font-size: 22px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .hero-stat-label {
+            font-size: 11px;
+            opacity: .7;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        /* ══════════════════════════════
+   TAGS STRIP
+══════════════════════════════ */
+        .tags-strip {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+
+        .tags-strip::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tags-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            display: flex;
+            gap: 7px;
+            align-items: center;
+            width: max-content;
+            min-width: 100%;
+        }
+
+        .dest-tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 13px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text2);
+            transition: all .15s;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .dest-tag:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-l);
+        }
+
+        .dest-tag.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .dest-tag .flag {
+            font-size: 14px;
+        }
+
+        /* ══════════════════════════════
+   LAYOUT
+══════════════════════════════ */
+        .layout {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* ══════════════════════════════
+   TOOLBAR
+══════════════════════════════ */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .sort-tabs {
+            display: flex;
+            gap: 4px;
+        }
+
+        .sort-tab {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 13px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: none;
+            color: var(--text2);
+            transition: all .15s;
+        }
+
+        .sort-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .sort-tab.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 3px;
+        }
+
+        .view-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: none;
+            color: var(--text3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .15s;
+        }
+
+        .view-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .view-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ══════════════════════════════
+   GRID VIEW (Pinterest-style)
+══════════════════════════════ */
+        .posts-grid {
+            columns: 2;
+            column-gap: 14px;
+        }
+
+        .posts-grid .post-card {
+            break-inside: avoid;
+            margin-bottom: 14px;
+        }
+
+        /* LIST VIEW */
+        .posts-list .post-card {
+            margin-bottom: 10px;
+        }
+
+        .posts-list .post-card .card-img {
+            width: 120px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .posts-list .post-card .card-body {
+            flex: 1;
+        }
+
+        /* ══════════════════════════════
+   POST CARD
+══════════════════════════════ */
+        .post-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: box-shadow .2s, transform .2s, border-color .2s;
+            cursor: pointer;
+            animation: fadeUp .4s ease both;
+        }
+
+        .post-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            border-color: var(--border2);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .post-card:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .post-card:nth-child(2) {
+            animation-delay: .10s;
+        }
+
+        .post-card:nth-child(3) {
+            animation-delay: .15s;
+        }
+
+        .post-card:nth-child(4) {
+            animation-delay: .20s;
+        }
+
+        .post-card:nth-child(5) {
+            animation-delay: .25s;
+        }
+
+        .post-card:nth-child(6) {
+            animation-delay: .30s;
+        }
+
+        /* grid card */
+        .post-card .card-img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .4s ease;
+        }
+
+        .post-card:hover .card-img img {
+            transform: scale(1.04);
+        }
+
+        .card-img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            background: var(--surface2);
+        }
+
+        .card-country-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(18, 10, 4, .55);
+            color: #fff;
+            backdrop-filter: blur(6px);
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 9px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-save {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(18, 10, 4, .4);
+            border: none;
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            opacity: 0;
+            transition: opacity .2s, background .2s;
+        }
+
+        .post-card:hover .card-save {
+            opacity: 1;
+        }
+
+        .card-save:hover {
+            background: var(--accent) !important;
+        }
+
+        .card-save svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        /* card body */
+        .card-body {
+            padding: 13px 14px 12px;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .card-tag {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: .2px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+        }
+
+        .card-tag.verified {
+            background: var(--accent-l);
+            color: var(--accent-h);
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .card-meta {
+            font-size: 11px;
+            color: var(--text3);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-meta .sep {
+            opacity: .4;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            margin-top: 6px;
+            gap: 8px;
+        }
+
+        .vote-group {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .vote-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            transition: all .15s;
+        }
+
+        .vote-btn:hover.up {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-l);
+        }
+
+        .vote-btn:hover.dn {
+            border-color: var(--vote-dn);
+            color: var(--vote-dn);
+        }
+
+        .vote-btn.voted-up {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .vote-btn.voted-dn {
+            background: var(--bg2);
+            border-color: var(--vote-dn);
+            color: var(--vote-dn);
+        }
+
+        .vote-btn svg {
+            width: 11px;
+            height: 11px;
+        }
+
+        .vote-count {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent);
+            min-width: 28px;
+            text-align: center;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .card-action {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--text3);
+            border: none;
+            background: none;
+            padding: 4px 7px;
+            border-radius: 6px;
+            transition: background .15s, color .15s;
+        }
+
+        .card-action:hover {
+            background: var(--bg2);
+            color: var(--text2);
+        }
+
+        .card-action svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* list card overrides */
+        .posts-list .post-card {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .posts-list .card-img {
+            width: 130px;
+            aspect-ratio: unset;
+            height: 130px;
+            flex-shrink: 0;
+        }
+
+        .posts-list .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* ══════════════════════════════
+   SIDEBAR
+══════════════════════════════ */
+        .sidebar {
+            position: sticky;
+            top: 76px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 13px 16px 11px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+            color: var(--text2);
+        }
+
+        .sidebar-all {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 500;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .sidebar-all:hover {
+            text-decoration: underline;
+        }
+
+        /* trending destinations */
+        .dest-list {
+            padding: 8px 0;
+        }
+
+        .dest-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            transition: background .15s;
+            cursor: pointer;
+        }
+
+        .dest-item:hover {
+            background: var(--bg2);
+        }
+
+        .dest-rank {
+            font-size: 11px;
+            color: var(--text3);
+            width: 16px;
+            text-align: center;
+        }
+
+        .dest-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .dest-info {
+            flex: 1;
+        }
+
+        .dest-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .dest-count {
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        .dest-trend {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .dest-item:first-child {
+            border-left: 3px solid var(--accent);
+            padding-left: 13px;
+        }
+
+        /* top users */
+        .user-list {
+            padding: 8px 0;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .user-item:hover {
+            background: var(--bg2);
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .user-posts {
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        .user-badge {
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: var(--amber-l);
+            color: var(--amber);
+            font-weight: 500;
+        }
+
+        /* about widget */
+        .about-body {
+            padding: 14px 16px;
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .about-stat {
+            background: var(--bg2);
+            border-radius: var(--r-sm);
+            padding: 10px;
+            text-align: center;
+        }
+
+        .about-stat-num {
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+        }
+
+        .about-stat-lbl {
+            font-size: 10px;
+            color: var(--text3);
+            letter-spacing: .3px;
+        }
+
+        .btn-join {
+            display: block;
+            width: 100%;
+            background: var(--accent);
+            color: #fff;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 12px;
+            transition: background .15s;
+        }
+
+        .btn-join:hover {
+            background: var(--accent-h);
+        }
+
+        /* ══════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════ */
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .posts-grid {
+                columns: 1;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-band {
+                padding: 24px 16px;
+            }
+        }
+
+        /* ══════════════════════════════
+   VOTE ANIMATION
+══════════════════════════════ */
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            40% {
+                transform: scale(1.35);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .vote-btn.popping {
+            animation: pop .25s ease;
+        }
+
+        /* ══════════════════════════════
+   LOAD MORE
+══════════════════════════════ */
+        .load-more {
+            text-align: center;
+            padding: 20px 0 8px;
+        }
+
+        .btn-load {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent);
+            border: 1.5px solid var(--accent);
+            background: none;
+            padding: 9px 22px;
+            border-radius: 999px;
+            font-family: inherit;
+            transition: all .15s;
+        }
+
+        .btn-load:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══ NAV ═══ -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <div class="logo-mark">V</div>
+                Viajeros
+            </a>
+
+            <div class="nav-search">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
+                    <circle cx="6.5" cy="6.5" r="4" />
+                    <path d="M10 10l3 3" stroke-linecap="round" />
+                </svg>
+                <input type="text" placeholder="Busca destinos, países, tips…">
+            </div>
+
+            <div class="nav-links">
+                <button class="nav-link" style="color:var(--primary); background:var(--primary-l)">Inicio</button>
+                <button class="nav-link">Explorar</button>
+                <button class="nav-link">Mapas</button>
+            </div>
+
+            <button class="btn-pub" onclick="alert('¡Publicar post!')">+ Publicar</button>
+
+            <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+                <span id="theme-icon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <div class="hero-band">
+        <div class="hero-title">Comparte tus rincones del mundo</div>
+        <div class="hero-sub">La comunidad de viajeros reales — sin filtros, sin agencias</div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-num">42.8K</div>
+                <div class="hero-stat-label">Viajeros</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">189K</div>
+                <div class="hero-stat-label">Posts</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">94</div>
+                <div class="hero-stat-label">Países</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ TAGS STRIP ═══ -->
+    <div class="tags-strip">
+        <div class="tags-inner">
+            <span style="font-size:11px; color:var(--text3); margin-right:4px; white-space:nowrap;">Destinos →</span>
+            <button class="dest-tag active"><span class="flag">🌍</span> Todos</button>
+            <button class="dest-tag"><span class="flag">🇯🇵</span> Japón</button>
+            <button class="dest-tag"><span class="flag">🇲🇦</span> Marruecos</button>
+            <button class="dest-tag"><span class="flag">🇵🇪</span> Perú</button>
+            <button class="dest-tag"><span class="flag">🇮🇩</span> Indonesia</button>
+            <button class="dest-tag"><span class="flag">🇮🇸</span> Islandia</button>
+            <button class="dest-tag"><span class="flag">🇪🇹</span> Etiopía</button>
+            <button class="dest-tag"><span class="flag">🇻🇳</span> Vietnam</button>
+            <button class="dest-tag"><span class="flag">🇲🇽</span> México</button>
+            <button class="dest-tag"><span class="flag">🇬🇷</span> Grecia</button>
+            <button class="dest-tag"><span class="flag">🇳🇴</span> Noruega</button>
+            <button class="dest-tag"><span class="flag">🇿🇦</span> Sudáfrica</button>
+            <button class="dest-tag"><span class="flag">🇨🇴</span> Colombia</button>
+            <button class="dest-tag"><span class="flag">🇳🇵</span> Nepal</button>
+        </div>
+    </div>
+
+    <!-- ═══ MAIN LAYOUT ═══ -->
+    <div class="layout">
+        <!-- FEED -->
+        <div>
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="sort-tabs">
+                    <button class="sort-tab active" onclick="setSort(this)">🔥 Popular</button>
+                    <button class="sort-tab" onclick="setSort(this)">✨ Nuevo</button>
+                    <button class="sort-tab" onclick="setSort(this)">📅 Esta semana</button>
+                    <button class="sort-tab" onclick="setSort(this)">🏆 Top histórico</button>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="setView('grid', this)" title="Grid">
+                        <svg fill="currentColor" viewBox="0 0 16 16">
+                            <rect x="1" y="1" width="6" height="6" rx="1" />
+                            <rect x="9" y="1" width="6" height="6" rx="1" />
+                            <rect x="1" y="9" width="6" height="6" rx="1" />
+                            <rect x="9" y="9" width="6" height="6" rx="1" />
+                        </svg>
+                    </button>
+                    <button class="view-btn" onclick="setView('list', this)" title="Lista">
+                        <svg fill="currentColor" viewBox="0 0 16 16">
+                            <rect x="1" y="2" width="14" height="2" rx="1" />
+                            <rect x="1" y="7" width="14" height="2" rx="1" />
+                            <rect x="1" y="12" width="14" height="2" rx="1" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Posts -->
+            <div id="posts-container" class="posts-grid"></div>
+
+            <div class="load-more">
+                <button class="btn-load" onclick="loadMore()">
+                    <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <path d="M8 3v10M3 8l5 5 5-5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Cargar más posts
+                </button>
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <!-- About -->
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">Sobre Viajeros</span>
+                </div>
+                <div class="about-body">
+                    Comunidad de exploradores reales. Comparte rutas, consejos y fotos de tus aventuras. Sin publicidad,
+                    sin tours patrocinados.
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <div class="about-stat-num">42.8K</div>
+                            <div class="about-stat-lbl">Miembros</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-num">1.2K</div>
+                            <div class="about-stat-lbl">Online ahora</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-num">94</div>
+                            <div class="about-stat-lbl">Países</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-num">Mar 2019</div>
+                            <div class="about-stat-lbl">Fundada</div>
+                        </div>
+                    </div>
+                    <button class="btn-join">Unirse a la comunidad</button>
+                </div>
+            </div>
+
+            <!-- Trending destinations -->
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">Destinos Trending</span>
+                    <button class="sidebar-all">Ver todos →</button>
+                </div>
+                <div class="dest-list">
+                    <div class="dest-item">
+                        <span class="dest-rank">1</span>
+                        <div class="dest-img">🏯</div>
+                        <div class="dest-info">
+                            <div class="dest-name">Japón</div>
+                            <div class="dest-count">2.4K posts esta semana</div>
+                        </div>
+                        <span class="dest-trend">↑ 34%</span>
+                    </div>
+                    <div class="dest-item">
+                        <span class="dest-rank">2</span>
+                        <div class="dest-img">🕌</div>
+                        <div class="dest-info">
+                            <div class="dest-name">Marruecos</div>
+                            <div class="dest-count">1.8K posts esta semana</div>
+                        </div>
+                        <span class="dest-trend">↑ 22%</span>
+                    </div>
+                    <div class="dest-item">
+                        <span class="dest-rank">3</span>
+                        <div class="dest-img">🦙</div>
+                        <div class="dest-info">
+                            <div class="dest-name">Perú</div>
+                            <div class="dest-count">1.2K posts esta semana</div>
+                        </div>
+                        <span class="dest-trend">↑ 18%</span>
+                    </div>
+                    <div class="dest-item">
+                        <span class="dest-rank">4</span>
+                        <div class="dest-img">🌋</div>
+                        <div class="dest-info">
+                            <div class="dest-name">Indonesia</div>
+                            <div class="dest-count">980 posts esta semana</div>
+                        </div>
+                        <span class="dest-trend">↑ 11%</span>
+                    </div>
+                    <div class="dest-item">
+                        <span class="dest-rank">5</span>
+                        <div class="dest-img">🧊</div>
+                        <div class="dest-info">
+                            <div class="dest-name">Islandia</div>
+                            <div class="dest-count">740 posts esta semana</div>
+                        </div>
+                        <span class="dest-trend">↑ 9%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top users -->
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">Viajeros del Mes</span>
+                    <button class="sidebar-all">Ver ranking →</button>
+                </div>
+                <div class="user-list">
+                    <div class="user-item">
+                        <div class="user-avatar" style="background:#DCE9F7;color:#1A5FA8">NF</div>
+                        <div class="user-info">
+                            <div class="user-name">nomada_felix</div>
+                            <div class="user-posts">48 posts · 12.4K puntos</div>
+                        </div>
+                        <span class="user-badge">🥇 Top</span>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-avatar" style="background:#D4EDF8;color:#0C5F8A">MC</div>
+                        <div class="user-info">
+                            <div class="user-name">mochilera_clara</div>
+                            <div class="user-posts">31 posts · 8.9K puntos</div>
+                        </div>
+                        <span class="user-badge">🥈</span>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-avatar" style="background:#FDE9D4;color:#C45E10">RT</div>
+                        <div class="user-info">
+                            <div class="user-name">ruta_transiberiana</div>
+                            <div class="user-posts">27 posts · 7.2K puntos</div>
+                        </div>
+                        <span class="user-badge">🥉</span>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-avatar" style="background:#E8F0F9;color:#0C4880">SB</div>
+                        <div class="user-info">
+                            <div class="user-name">sahara_blues</div>
+                            <div class="user-posts">22 posts · 5.8K puntos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+
+    <!-- ═══ SCRIPT ═══ -->
+    <script>
+        /* ── DATA ── */
+        const posts = [
+            {
+                id: 1,
+                title: 'Este pueblo de los Dolomitas no sale en ninguna guía — y prefiero que siga así',
+                country: '🇮🇹 Italia',
+                tags: ['Europa', 'Off-beat', 'Montaña'],
+                verified: true,
+                author: 'nomada_felix',
+                time: 'hace 3h',
+                votes: 847,
+                comments: 234,
+                emoji: '🏔',
+                color: '#D6E8F5',
+            },
+            {
+                id: 2,
+                title: 'Mercado flotante de Damnoen Saduak: guía sin tour y sin madrugones',
+                country: '🇹🇭 Tailandia',
+                tags: ['Asia', 'Gastronomía'],
+                verified: false,
+                author: 'mochilera_clara',
+                time: 'hace 7h',
+                votes: 512,
+                comments: 98,
+                emoji: '🛶',
+                color: '#C8E8D8',
+            },
+            {
+                id: 3,
+                title: '72h en Fez: el laberinto de la medina que te pierde y no quieres encontrar',
+                country: '🇲🇦 Marruecos',
+                tags: ['África', 'Cultura', 'Arquitectura'],
+                verified: true,
+                author: 'sahara_blues',
+                time: 'hace 12h',
+                votes: 1204,
+                comments: 387,
+                emoji: '🕌',
+                color: '#D8E8F5',
+            },
+            {
+                id: 4,
+                title: 'Trekking al Annapurna Base Camp sin agencia: todo lo que necesitas saber',
+                country: '🇳🇵 Nepal',
+                tags: ['Asia', 'Trekking', 'Aventura'],
+                verified: true,
+                author: 'ruta_transiberiana',
+                time: 'hace 1d',
+                votes: 2341,
+                comments: 512,
+                emoji: '🏔',
+                color: '#C0D8EE',
+            },
+            {
+                id: 5,
+                title: 'Las termas secretas de Islandia que no aparecen en ningún blog',
+                country: '🇮🇸 Islandia',
+                tags: ['Europa', 'Naturaleza'],
+                verified: false,
+                author: 'geysir_lover',
+                time: 'hace 2d',
+                votes: 678,
+                comments: 145,
+                emoji: '🧊',
+                color: '#B8D0EC',
+            },
+            {
+                id: 6,
+                title: 'Semana en Oaxaca: mezcal, tlayudas y el mercado que nunca cierra',
+                country: '🇲🇽 México',
+                tags: ['América', 'Gastronomía', 'Cultura'],
+                verified: false,
+                author: 'tortilla_viajera',
+                time: 'hace 3d',
+                votes: 891,
+                comments: 203,
+                emoji: '🌮',
+                color: '#F0E4C8',
+            },
+        ];
+
+        const extraPosts = [
+            {
+                id: 7,
+                title: 'Namibia en coche: 4.000 km de desierto y el cielo más grande del mundo',
+                country: '🇳🇦 Namibia',
+                tags: ['África', 'Road trip'],
+                verified: true,
+                author: 'kalahari_drive',
+                time: 'hace 4d',
+                votes: 1567,
+                comments: 298,
+                emoji: '🦒',
+                color: '#D0E4F4',
+            },
+            {
+                id: 8,
+                title: 'Hanói a Hội An en moto: ruta costera que cambió mi forma de viajar',
+                country: '🇻🇳 Vietnam',
+                tags: ['Asia', 'Moto', 'Costa'],
+                verified: false,
+                author: 'moto_nomada',
+                time: 'hace 5d',
+                votes: 743,
+                comments: 167,
+                emoji: '🏍',
+                color: '#C8E0F5',
+            },
+        ];
+
+        /* ── STATE ── */
+        let votes = {};
+        let currentView = 'grid';
+
+        /* ── RENDER ── */
+        function renderPosts(data) {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = data.map((p, i) => renderCard(p, i)).join('');
+        }
+
+        function renderCard(p, delay) {
+            const userVote = votes[p.id] || 0;
+            const displayVotes = p.votes + userVote;
+            const upClass = userVote === 1 ? 'voted-up' : 'up';
+            const dnClass = userVote === -1 ? 'voted-dn' : 'dn';
+
+            const tagsHTML = p.tags.map(t => `<span class="card-tag">${t}</span>`).join('');
+            const verifiedBadge = p.verified ? `<span class="card-tag verified">✓ Verificado</span>` : '';
+
+            return `
+    <article class="post-card" style="animation-delay:${delay * 0.07}s">
+      <div class="card-img">
+        <div class="card-img-placeholder" style="background:${p.color}">
+          <span style="filter:drop-shadow(0 2px 6px rgba(0,0,0,.15))">${p.emoji}</span>
+        </div>
+        <div class="card-country-badge">${p.country}</div>
+        <button class="card-save" title="Guardar">
+          <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2"><path d="M2 2h10v11l-5-3-5 3V2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">${tagsHTML}${verifiedBadge}</div>
+        <h2 class="card-title">${p.title}</h2>
+        <div class="card-meta">
+          <span>u/${p.author}</span>
+          <span class="sep">·</span>
+          <span>${p.time}</span>
+        </div>
+        <div class="card-footer">
+          <div class="vote-group">
+            <button class="vote-btn ${upClass}" onclick="vote(${p.id}, 1, this)" title="Upvote">
+              <svg fill="currentColor" viewBox="0 0 12 12"><path d="M6 1L11 9H1L6 1Z"/></svg>
+            </button>
+            <span class="vote-count" id="vc-${p.id}">${displayVotes}</span>
+            <button class="vote-btn ${dnClass}" onclick="vote(${p.id}, -1, this)" title="Downvote">
+              <svg fill="currentColor" viewBox="0 0 12 12"><path d="M6 11L1 3H11L6 11Z"/></svg>
+            </button>
+          </div>
+          <div class="card-actions">
+            <button class="card-action">
+              <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M2 2h10a1 1 0 011 1v6a1 1 0 01-1 1H8l-3 2V10H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              ${p.comments}
+            </button>
+            <button class="card-action">
+              <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M10 2l3 3-3 3M2 9a4 4 0 004-4h7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>`;
+        }
+
+        /* ── VOTE ── */
+        function vote(id, dir, btn) {
+            const prev = votes[id] || 0;
+            votes[id] = prev === dir ? 0 : dir;
+
+            const post = [...posts, ...extraPosts].find(p => p.id === id);
+            const display = post.votes + votes[id];
+            document.getElementById('vc-' + id).textContent = display;
+
+            // Animate
+            btn.classList.add('popping');
+            btn.addEventListener('animationend', () => btn.classList.remove('popping'), { once: true });
+
+            // Re-render this card's buttons
+            const card = btn.closest('.post-card');
+            const [upBtn, dnBtn] = card.querySelectorAll('.vote-btn');
+            upBtn.className = 'vote-btn ' + (votes[id] === 1 ? 'voted-up' : 'up');
+            dnBtn.className = 'vote-btn ' + (votes[id] === -1 ? 'voted-dn' : 'dn');
+        }
+
+        /* ── SORT TABS ── */
+        function setSort(btn) {
+            document.querySelectorAll('.sort-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        /* ── VIEW TOGGLE ── */
+        function setView(view, btn) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const container = document.getElementById('posts-container');
+            container.className = view === 'grid' ? 'posts-grid' : 'posts-list';
+        }
+
+        /* ── TAG FILTER ── */
+        document.querySelectorAll('.dest-tag').forEach(tag => {
+            tag.addEventListener('click', function () {
+                document.querySelectorAll('.dest-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        /* ── LOAD MORE ── */
+        let loaded = false;
+        function loadMore() {
+            if (!loaded) {
+                loaded = true;
+                const container = document.getElementById('posts-container');
+                container.innerHTML += extraPosts.map((p, i) => renderCard(p, i)).join('');
+                document.querySelector('.btn-load').textContent = '✓ Todo cargado';
+                document.querySelector('.btn-load').disabled = true;
+            }
+        }
+
+        /* ── THEME ── */
+        function toggleTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
+            document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀';
+        }
+
+        /* ── INIT ── */
+        renderPosts(posts);
+    </script>
+</body>
+
+</html>
