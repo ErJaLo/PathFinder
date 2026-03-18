@@ -27,7 +27,10 @@ erDiagram
         text two_factor_recovery_codes
         timestamp two_factor_confirmed_at
     }
-    USERS_COUNTRIES{
+    USERS_COUNTRIES_VISITED{
+	    int id PK
+	    int user_id FK
+	    int countries_id FK
     }
 	COUNTRIES{
 		varchar code PK
@@ -49,7 +52,11 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
-
+	POST_COUNTRIES{
+	    int id PK
+	    int post_id FK
+	    int countries_id FK
+    }
     POST_CATEGORIES {
         int id PK
         int post_id FK
@@ -83,7 +90,13 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
-
+	
+	NOTIFICATIONS{
+		int id PK
+		varchar message
+		int sender FK
+		int reciver FK
+	}
 
     USERS ||--o{ POST : "creates"
     USERS ||--o{ RATING : "rates"
@@ -94,6 +107,15 @@ erDiagram
     POST ||--o{ REPORTS : "receives"
 
     CATEGORIES ||--o{ POST_CATEGORIES : "has"
+    role_enum }o--|| USERS : "role_enum_types"
+    
+    USERS }o--|| USERS_COUNTRIES_VISITED : "has"
+    POST }o--|| POST_COUNTRIES : "has"
+    
+    USERS_COUNTRIES_VISITED }o--|| COUNTRIES : "contains"
+    POST_COUNTRIES }o--|| COUNTRIES : "contains"
+    USERS }o--|| NOTIFICATIONS : "sends"
+    USERS }o--|| NOTIFICATIONS : "recived"
    
 ```
 ```mermaid
