@@ -5,21 +5,36 @@ Añadir tabla paises (Nombre, Abreviacion=ID, nacionalidad, imagen)
 Añadir tabla intermedia usuario-paises
 ```mermaid
 erDiagram
+
+	role_enum {
+		varchar USER
+		varchar MOD
+		varchar ADMIN
+	}
     USERS {
         int id PK
         varchar name
         varchar email UK
         datetime email_verified_at
         varchar password
-        varchar remember_token
+		role_enum role
+		varchar img
         boolean active
+        varchar remember_token
         timestamp created_at
         timestamp updated_at
         text two_factor_secret
         text two_factor_recovery_codes
         timestamp two_factor_confirmed_at
     }
-
+    USERS_COUNTRIES{
+    }
+	COUNTRIES{
+		varchar code PK
+		varchar name
+		varchar nationality
+		varchar img
+	}
     POST {
         int id PK
         int user_id FK
@@ -28,6 +43,7 @@ erDiagram
         varchar image
         varchar latitude
         varchar longitude
+		varchar country_code FK
         boolean public
         boolean active
         timestamp created_at
@@ -68,6 +84,20 @@ erDiagram
         timestamp updated_at
     }
 
+
+    USERS ||--o{ POST : "creates"
+    USERS ||--o{ RATING : "rates"
+    USERS ||--o{ REPORTS : "reports"
+
+    POST ||--o{ POST_CATEGORIES : "has"
+    POST ||--o{ RATING : "receives"
+    POST ||--o{ REPORTS : "receives"
+
+    CATEGORIES ||--o{ POST_CATEGORIES : "has"
+   
+```
+```mermaid
+erDiagram
     PASSWORD_RESET_TOKENS {
         varchar email PK
         varchar token
@@ -128,18 +158,9 @@ erDiagram
         text exception
         timestamp failed_at
     }
-
+    
     USERS ||--o{ SESSIONS : "has"
     USERS ||--o{ PASSWORD_RESET_TOKENS : "has"
-    USERS ||--o{ POST : "creates"
-    USERS ||--o{ RATING : "rates"
-    USERS ||--o{ REPORTS : "reports"
-
-    POST ||--o{ POST_CATEGORIES : "has"
-    POST ||--o{ RATING : "receives"
-    POST ||--o{ REPORTS : "receives"
-
-    CATEGORIES ||--o{ POST_CATEGORIES : "has"
-
     JOB_BATCHES ||--o{ JOBS : "contains"
 ```
+    
