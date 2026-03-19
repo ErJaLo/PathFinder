@@ -32,7 +32,6 @@
             --success-l: #DCFCE7;
             --warning: #D97706;
             --warning-l: #FEF3C7;
-            --sidebar-w: 240px;
             --shadow: 0 1px 4px rgba(13, 31, 53, .07), 0 4px 16px rgba(13, 31, 53, .05);
             --r: 10px;
             --r-sm: 6px;
@@ -58,6 +57,7 @@
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             overflow-x: hidden;
         }
 
@@ -78,32 +78,29 @@
         }
 
         /* ══════════════════════════════
-           SIDEBAR
+           HEADER (was sidebar)
         ══════════════════════════════ */
-        .sidebar {
-            width: var(--sidebar-w);
-            min-height: 100vh;
+        .header {
+            width: 100%;
             background: var(--text);
             display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            position: fixed;
-            left: 0;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            height: 60px;
+            position: sticky;
             top: 0;
-            bottom: 0;
             z-index: 200;
-            transition: transform .3s cubic-bezier(.23, 1, .32, 1);
+            flex-shrink: 0;
         }
 
-        .sidebar-logo {
-            padding: 20px 20px 16px;
+        .header-logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, .08);
         }
 
-        .sidebar-logo-mark {
+        .header-logo-mark {
             width: 34px;
             height: 34px;
             background: var(--primary);
@@ -118,7 +115,7 @@
             flex-shrink: 0;
         }
 
-        .sidebar-logo-text {
+        .header-logo-text {
             font-family: 'Playfair Display', serif;
             font-size: 18px;
             font-weight: 700;
@@ -126,7 +123,7 @@
             letter-spacing: -0.3px;
         }
 
-        .sidebar-logo-badge {
+        .header-logo-badge {
             font-size: 9px;
             font-weight: 600;
             letter-spacing: .8px;
@@ -135,27 +132,26 @@
             margin-top: -2px;
         }
 
-        .sidebar-nav {
-            flex: 1;
-            padding: 12px 0;
-            overflow-y: auto;
-        }
-
-        .sidebar-section {
-            padding: 12px 16px 4px;
-            font-size: 9px;
-            font-weight: 600;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, .3);
-        }
-
-        .sidebar-item {
+        .header-nav {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 9px 16px;
-            margin: 1px 8px;
+            gap: 4px;
+        }
+
+        .header-section {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .3);
+            padding: 0 10px 0 16px;
+        }
+
+        .header-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
             border-radius: var(--r-sm);
             font-size: 13px;
             font-weight: 500;
@@ -163,76 +159,95 @@
             cursor: pointer;
             border: none;
             background: none;
-            width: calc(100% - 16px);
-            text-align: left;
+            white-space: nowrap;
             transition: background .15s, color .15s;
         }
 
-        .sidebar-item svg {
+        .header-item svg {
             width: 15px;
             height: 15px;
             flex-shrink: 0;
         }
 
-        .sidebar-item:hover {
+        .header-item:hover {
             background: rgba(255, 255, 255, .08);
             color: rgba(255, 255, 255, .9);
         }
 
-        .sidebar-item.active {
+        .header-item.active {
             background: var(--primary);
             color: #fff;
         }
 
-        .sidebar-footer {
-            padding: 12px 8px;
-            border-top: 1px solid rgba(255, 255, 255, .08);
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
 
-        .sidebar-user {
+        .header-back {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .5);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            background: none;
+            transition: all .15s;
+            white-space: nowrap;
+        }
+
+        .header-back:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, .4);
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .header-back svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .header-user {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 12px;
-            border-radius: var(--r-sm);
         }
 
-        .sidebar-user-ava {
-            width: 36px;
-            height: 36px;
+        .header-user-ava {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: var(--accent-l);
             color: var(--accent-h);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 700;
             flex-shrink: 0;
         }
 
-        .sidebar-user-name {
+        .header-user-name {
             font-size: 13px;
             font-weight: 500;
             color: rgba(255, 255, 255, .8);
         }
 
-        .sidebar-user-role {
+        .header-user-role {
             font-size: 11px;
             color: rgba(255, 255, 255, .4);
         }
 
-        /* Hamburger */
-        .sidebar-toggle {
+        /* Hamburger (mobile) */
+        .header-toggle {
             display: none;
-            position: fixed;
-            top: 14px;
-            left: 14px;
-            z-index: 300;
             width: 38px;
             height: 38px;
             border-radius: 9px;
-            background: var(--text);
+            background: rgba(255, 255, 255, .08);
             border: none;
             flex-direction: column;
             align-items: center;
@@ -241,7 +256,7 @@
             cursor: pointer;
         }
 
-        .sidebar-toggle .bar {
+        .header-toggle .bar {
             display: block;
             width: 16px;
             height: 1.5px;
@@ -251,33 +266,56 @@
             transform-origin: center;
         }
 
-        .sidebar-open .sidebar-toggle .bar:nth-child(1) {
+        .nav-open .header-toggle .bar:nth-child(1) {
             transform: translateY(6.5px) rotate(45deg);
         }
 
-        .sidebar-open .sidebar-toggle .bar:nth-child(2) {
+        .nav-open .header-toggle .bar:nth-child(2) {
             opacity: 0;
         }
 
-        .sidebar-open .sidebar-toggle .bar:nth-child(3) {
+        .nav-open .header-toggle .bar:nth-child(3) {
             transform: translateY(-6.5px) rotate(-45deg);
         }
 
-        .sidebar-overlay {
+        /* Mobile dropdown nav */
+        .header-nav-mobile {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--text);
+            padding: 8px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+            z-index: 199;
+        }
+
+        .nav-open .header-nav-mobile {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, .5);
+            top: 60px;
+            background: rgba(0, 0, 0, .4);
             z-index: 190;
+        }
+
+        .nav-open .header-overlay {
+            display: block;
         }
 
         /* ══════════════════════════════
            MAIN
         ══════════════════════════════ */
         .main {
-            margin-left: var(--sidebar-w);
             flex: 1;
-            min-height: 100vh;
+            min-height: calc(100vh - 60px);
             display: flex;
             flex-direction: column;
         }
@@ -286,13 +324,13 @@
             background: var(--surface);
             border-bottom: 1px solid var(--border);
             padding: 0 28px;
-            height: 56px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
             position: sticky;
-            top: 0;
+            top: 60px;
             z-index: 100;
         }
 
@@ -307,30 +345,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .topbar-link {
-            font-size: 12px;
-            color: var(--text3);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 12px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: none;
-            transition: all .15s;
-        }
-
-        .topbar-link:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-            background: var(--primary-l);
-        }
-
-        .topbar-link svg {
-            width: 12px;
-            height: 12px;
         }
 
         .content {
@@ -1137,28 +1151,26 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
+            .header-nav {
+                display: none;
             }
 
-            .sidebar-open .sidebar {
-                transform: translateX(0);
-            }
-
-            .sidebar-open .sidebar-overlay {
-                display: block;
-            }
-
-            .sidebar-toggle {
+            .header-toggle {
                 display: flex;
             }
 
-            .main {
-                margin-left: 0;
+            .header-user-name,
+            .header-user-role {
+                display: none;
+            }
+
+            .header {
+                padding: 0 14px;
             }
 
             .topbar {
-                padding: 0 16px 0 60px;
+                padding: 0 16px;
+                top: 60px;
             }
 
             .content {
@@ -1201,69 +1213,93 @@
 
 <body>
 
-    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Menú">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </button>
-    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+    <div class="header-overlay" onclick="closeNav()"></div>
 
-    <!-- ═══ SIDEBAR ═══ -->
-    <aside class="sidebar">
-        <div class="sidebar-logo">
-            <div class="sidebar-logo-mark">V</div>
+    <!-- ═══ HEADER ═══ -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-mark">V</div>
             <div>
-                <div class="sidebar-logo-text">Viatges</div>
-                <div class="sidebar-logo-badge">El meu perfil</div>
+                <div class="header-logo-text">Viatges</div>
+                <div class="header-logo-badge">El meu perfil</div>
             </div>
         </div>
-        <nav class="sidebar-nav">
-            <div class="sidebar-section">Compte</div>
-            <button class="sidebar-item active" onclick="showSection('profile', this)">
+
+        <nav class="header-nav">
+            <span class="header-section">Compte</span>
+            <button class="header-item active" onclick="showSection('profile', this)">
                 <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
                     <circle cx="8" cy="5" r="3" />
                     <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke-linecap="round" />
                 </svg>
                 Dades personals
             </button>
-            <button class="sidebar-item" onclick="showSection('security', this)">
+            <button class="header-item" onclick="showSection('security', this)">
                 <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
                     <rect x="3" y="7" width="10" height="7" rx="2" />
                     <path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round" />
                 </svg>
                 Contrasenya
             </button>
-            <div class="sidebar-section">Contingut</div>
-            <button class="sidebar-item" onclick="showSection('experiences', this)">
+            <span class="header-section">Contingut</span>
+            <button class="header-item" onclick="showSection('experiences', this)">
                 <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
                     <path d="M2 3h12M2 7h9M2 11h6" stroke-linecap="round" />
                 </svg>
                 Les meves experiències
             </button>
         </nav>
-        <div class="sidebar-footer">
-            <div class="sidebar-user">
-                <div class="sidebar-user-ava">RT</div>
+
+        <!-- Mobile dropdown nav -->
+        <div class="header-nav-mobile">
+            <button class="header-item active" onclick="showSection('profile', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="8" cy="5" r="3" />
+                    <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke-linecap="round" />
+                </svg>
+                Dades personals
+            </button>
+            <button class="header-item" onclick="showSection('security', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="7" width="10" height="7" rx="2" />
+                    <path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round" />
+                </svg>
+                Contrasenya
+            </button>
+            <button class="header-item" onclick="showSection('experiences', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <path d="M2 3h12M2 7h9M2 11h6" stroke-linecap="round" />
+                </svg>
+                Les meves experiències
+            </button>
+        </div>
+
+        <div class="header-right">
+            <a href="index.html" class="header-back">
+                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5">
+                    <path d="M9 2L4 6l5 4" stroke-linecap="round" />
+                </svg>
+                Tornar a la web
+            </a>
+            <div class="header-user">
+                <div class="header-user-ava">RT</div>
                 <div>
-                    <div class="sidebar-user-name">ruta_transiberiana</div>
-                    <div class="sidebar-user-role">Usuari registrat</div>
+                    <div class="header-user-name">ruta_transiberiana</div>
+                    <div class="header-user-role">Usuari registrat</div>
                 </div>
             </div>
+            <button class="header-toggle" onclick="toggleNav()" aria-label="Menú">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
         </div>
-    </aside>
+    </header>
 
     <!-- ═══ MAIN ═══ -->
     <div class="main">
         <div class="topbar">
             <span class="topbar-title" id="topbar-title">Dades personals</span>
-            <div class="topbar-right">
-                <a href="index.html" class="topbar-link">
-                    <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5">
-                        <path d="M9 2L4 6l5 4" stroke-linecap="round" />
-                    </svg>
-                    Tornar a la web
-                </a>
-            </div>
         </div>
 
         <div class="content">
@@ -1785,11 +1821,14 @@
             ['profile', 'security', 'experiences'].forEach(s => {
                 document.getElementById(`section-${s}`).style.display = s === name ? 'block' : 'none';
             });
-            document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            document.querySelectorAll('.header-item').forEach(b => b.classList.remove('active'));
+            // Activate matching items in both desktop and mobile navs
+            document.querySelectorAll('.header-item').forEach(b => {
+                if (b.textContent.trim() === btn.textContent.trim()) b.classList.add('active');
+            });
             document.getElementById('topbar-title').textContent = sectionTitles[name];
             if (name === 'experiences') filterExps();
-            closeSidebar();
+            closeNav();
         }
 
         /* ══════════════════════════════
@@ -1802,11 +1841,11 @@
         });
 
         /* ══════════════════════════════
-           SIDEBAR MÒBIL
+           MOBILE NAV
         ══════════════════════════════ */
-        function toggleSidebar() { document.body.classList.toggle('sidebar-open'); }
-        function closeSidebar() { document.body.classList.remove('sidebar-open'); }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSidebar(); document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open')); } });
+        function toggleNav() { document.body.classList.toggle('nav-open'); }
+        function closeNav() { document.body.classList.remove('nav-open'); }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeNav(); document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open')); } });
 
         /* ══════════════════════════════
            TOAST
