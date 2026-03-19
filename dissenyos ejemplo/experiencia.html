@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trekking al Annapurna — Viatges</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ══════════════════════════════
+           TOKENS
+        ══════════════════════════════ */
+        :root {
+            --bg: #F4F7FB;
+            --surface: #FFFFFF;
+            --surface2: #EDF3FA;
+            --border: #C8DAEE;
+            --border2: #A8C4E0;
+            --text: #0D1F35;
+            --text2: #2E5070;
+            --text3: #4E7099;
+            --primary: #1A5FA8;
+            --primary-h: #0C4880;
+            --primary-l: #DCE9F7;
+            --accent: #E87D2C;
+            --accent-h: #C45E10;
+            --accent-l: #FDE9D4;
+            --tag-bg: #DCE9F7;
+            --tag-text: #0C3D70;
+            --shadow: 0 1px 4px rgba(13, 31, 53, .07), 0 6px 20px rgba(13, 31, 53, .06);
+            --shadow-lg: 0 8px 40px rgba(13, 31, 53, .12);
+            --r: 12px;
+            --r-sm: 6px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* ══════════════════════════════
+           NAV
+        ══════════════════════════════ */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: color-mix(in srgb, var(--surface) 92%, transparent);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 21px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+            flex-shrink: 0;
+        }
+
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            color: #fff;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text3);
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: none;
+            transition: all .15s;
+            margin-left: 8px;
+        }
+
+        .nav-back:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-l);
+        }
+
+        .nav-back svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .btn-ghost {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text2);
+            padding: 7px 16px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: none;
+            transition: all .15s;
+        }
+
+        .btn-ghost:hover {
+            background: var(--primary-l);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            font-size: 13px;
+            font-weight: 500;
+            color: #fff;
+            padding: 7px 18px;
+            border-radius: 999px;
+            border: none;
+            background: var(--primary);
+            transition: background .15s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-h);
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+            background: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-left: auto;
+        }
+
+        .hamburger .bar {
+            display: block;
+            width: 16px;
+            height: 1.5px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: transform .3s, opacity .2s;
+            transform-origin: center;
+        }
+
+        .hamburger[aria-expanded="true"] .bar:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+
+        .hamburger[aria-expanded="true"] .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger[aria-expanded="true"] .bar:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: color-mix(in srgb, var(--surface) 97%, transparent);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            max-height: 0;
+            opacity: 0;
+            transition: max-height .35s cubic-bezier(.23, 1, .32, 1), opacity .25s;
+        }
+
+        .mobile-menu.open {
+            display: block;
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        .mobile-menu-inner {
+            padding: 14px 20px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-menu-inner .btn-ghost,
+        .mobile-menu-inner .btn-primary {
+            width: 100%;
+            text-align: center;
+            padding: 11px;
+            border-radius: var(--r);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 15, 26, .35);
+            z-index: 98;
+            backdrop-filter: blur(2px);
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .nav-right {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        /* ══════════════════════════════
+           HERO DE L'EXPERIÈNCIA
+        ══════════════════════════════ */
+        .exp-hero {
+            position: relative;
+            height: 420px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1A5FA8 0%, #0C4880 40%, #0a3060 100%);
+        }
+
+        .exp-hero-bg {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 160px;
+            filter: drop-shadow(0 16px 40px rgba(0, 0, 0, .3));
+            opacity: .6;
+            animation: heroFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes heroFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .exp-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(8, 15, 26, .85) 0%, rgba(8, 15, 26, .3) 50%, transparent 100%);
+        }
+
+        .exp-hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 32px 24px;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .exp-hero-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .exp-hero-tag {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 11px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .15);
+            color: #fff;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, .2);
+        }
+
+        .exp-hero-tag.accent {
+            background: var(--accent);
+            border-color: transparent;
+        }
+
+        .exp-hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(24px, 4vw, 42px);
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            max-width: 760px;
+            animation: fadeUp .5s ease both;
+        }
+
+        .exp-hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            color: rgba(255, 255, 255, .75);
+            font-size: 13px;
+        }
+
+        .exp-hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .exp-hero-meta-item svg {
+            width: 13px;
+            height: 13px;
+            opacity: .8;
+        }
+
+        .exp-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: rgba(34, 197, 94, .2);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, .3);
+        }
+
+        .exp-status .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ══════════════════════════════
+           LAYOUT PRINCIPAL
+        ══════════════════════════════ */
+        .exp-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* ══════════════════════════════
+           ARTICLE PRINCIPAL
+        ══════════════════════════════ */
+        .exp-main {}
+
+        /* Votació destacada */
+        .vote-bar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+        }
+
+        .vote-bar-label {
+            font-size: 13px;
+            color: var(--text2);
+            font-weight: 500;
+        }
+
+        .vote-big-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vote-big-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 999px;
+            border: 1.5px solid var(--border);
+            background: none;
+            transition: all .15s;
+            cursor: pointer;
+        }
+
+        .vote-big-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .vote-big-btn.up:hover,
+        .vote-big-btn.voted-up {
+            background: var(--accent-l);
+            border-color: var(--accent);
+            color: var(--accent-h);
+        }
+
+        .vote-big-btn.dn:hover,
+        .vote-big-btn.voted-dn {
+            background: var(--primary-l);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .vote-big-btn.voted-up {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .vote-big-btn.voted-dn {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            40% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .vote-big-btn.popping {
+            animation: pop .25s ease;
+        }
+
+        .vote-score {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 48px;
+            text-align: center;
+        }
+
+        .vote-bar-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text3);
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: none;
+            transition: all .15s;
+        }
+
+        .action-btn svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .action-btn:hover {
+            background: var(--surface2);
+            color: var(--text2);
+        }
+
+        .action-btn.report:hover {
+            background: #FEE2E2;
+            color: #DC2626;
+            border-color: #FCA5A5;
+        }
+
+        .action-btn.reported {
+            background: #FEE2E2;
+            color: #DC2626;
+            border-color: #FCA5A5;
+        }
+
+        /* Contingut de l'experiència */
+        .exp-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .exp-content-body {
+            padding: 28px 32px;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text2);
+        }
+
+        .exp-content-body h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 28px 0 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .exp-content-body h2:first-child {
+            margin-top: 0;
+        }
+
+        .exp-content-body p {
+            margin-bottom: 16px;
+        }
+
+        .exp-content-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .exp-content-body strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Info bloc: coordenades */
+        .exp-info-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: var(--surface2);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            padding: 14px 16px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        .exp-info-block svg {
+            width: 16px;
+            height: 16px;
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Mapa placeholder */
+        .exp-map {
+            height: 220px;
+            background: linear-gradient(135deg, #C0D8EE 0%, #8AB4D8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            border-top: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: filter .2s;
+        }
+
+        .exp-map:hover {
+            filter: brightness(1.05);
+        }
+
+        .exp-map-label {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, .9);
+            backdrop-filter: blur(6px);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--primary);
+            padding: 5px 14px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        /* Galeria d'imatges */
+        .exp-gallery {
+            padding: 0 32px 28px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .exp-gallery-item {
+            border-radius: var(--r-sm);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .exp-gallery-item:first-child {
+            grid-row: span 2;
+        }
+
+        .exp-gallery-img {
+            width: 100%;
+            height: 100%;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            transition: transform .3s;
+        }
+
+        .exp-gallery-item:hover .exp-gallery-img {
+            transform: scale(1.04);
+        }
+
+        .exp-gallery-item:hover::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(26, 95, 168, .15);
+        }
+
+        /* ══════════════════════════════
+           SIDEBAR
+        ══════════════════════════════ */
+        .exp-sidebar {
+            position: sticky;
+            top: 76px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .side-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .side-card-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            color: var(--text2);
+        }
+
+        .side-card-body {
+            padding: 16px;
+        }
+
+        /* Autor */
+        .author-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .author-ava {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent-l);
+            color: var(--accent-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .author-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .author-sub {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .author-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .author-stat {
+            background: var(--surface2);
+            border-radius: var(--r-sm);
+            padding: 8px;
+            text-align: center;
+        }
+
+        .author-stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .author-stat-lbl {
+            font-size: 10px;
+            color: var(--text3);
+        }
+
+        /* Detalls */
+        .detail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .detail-key {
+            color: var(--text3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .detail-key svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .detail-val {
+            color: var(--text);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .detail-val .tag-pill {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            margin: 2px;
+        }
+
+        /* ══════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════ */
+        @media (max-width: 900px) {
+            .exp-layout {
+                grid-template-columns: 1fr;
+                padding: 20px 20px;
+                gap: 20px;
+            }
+
+            .exp-sidebar {
+                position: static;
+            }
+
+            .exp-hero {
+                height: 320px;
+            }
+
+            .exp-hero-bg {
+                font-size: 110px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .exp-layout {
+                padding: 16px;
+            }
+
+            .exp-hero {
+                height: 260px;
+            }
+
+            .exp-hero-content {
+                padding: 20px 16px;
+            }
+
+            .exp-hero-bg {
+                font-size: 80px;
+            }
+
+            .exp-content-body {
+                padding: 20px;
+            }
+
+            .exp-gallery {
+                padding: 0 20px 20px;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+
+            .exp-gallery-item:first-child {
+                grid-row: auto;
+                grid-column: span 2;
+            }
+
+            .vote-bar {
+                gap: 10px;
+            }
+
+            .vote-bar-actions {
+                margin-left: 0;
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .exp-hero-title {
+                font-size: 20px;
+            }
+
+            .vote-big-btn {
+                padding: 7px 12px;
+                font-size: 13px;
+            }
+        }
+
+        /* ══════════════════════════════
+           FOOTER
+        ══════════════════════════════ */
+        .site-footer {
+            margin-top: 40px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo-text {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .footer-logo-mark {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .footer-sep {
+            color: var(--border2);
+            font-size: 13px;
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: var(--text3);
+            transition: color .15s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 540px) {
+            .footer-inner {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                padding: 14px 16px;
+            }
+
+            .footer-left {
+                justify-content: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+    <!-- ═══ NAV ═══ -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-mark">V</div>
+                Viatges
+            </a>
+            <button class="nav-back" onclick="history.back()">
+                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2">
+                    <path d="M9 2L4 7l5 5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Tornar
+            </button>
+            <div class="nav-right">
+                <button class="btn-ghost">Iniciar sessió</button>
+                <button class="btn-primary">Registrar-se</button>
+            </div>
+            <button class="hamburger" id="hamburger" aria-expanded="false" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu">
+            <div class="mobile-menu-inner">
+                <button class="btn-ghost" onclick="closeMenu()">Iniciar sessió</button>
+                <button class="btn-primary" onclick="closeMenu()">Registrar-se</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <div class="exp-hero">
+        <div class="exp-hero-bg">🏔</div>
+        <div class="exp-hero-content">
+            <div class="exp-hero-tags">
+                <span class="exp-hero-tag accent">Muntanyisme</span>
+                <span class="exp-hero-tag">Aventura</span>
+                <span class="exp-hero-tag">Asia</span>
+                <span class="exp-status"><span class="dot"></span> Publicada</span>
+            </div>
+            <h1 class="exp-hero-title">
+                Trekking al Annapurna Base Camp sense agència: tot el que necessites saber
+            </h1>
+            <div class="exp-hero-meta">
+                <span class="exp-hero-meta-item">
+                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="7" cy="5" r="2.5" />
+                        <path d="M3 12c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke-linecap="round" />
+                    </svg>
+                    u/ruta_transiberiana
+                </span>
+                <span class="exp-hero-meta-item">
+                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="2" width="10" height="10" rx="2" />
+                        <path d="M2 6h10M5 2v2M9 2v2" stroke-linecap="round" />
+                    </svg>
+                    15 de març de 2025
+                </span>
+                <span class="exp-hero-meta-item">
+                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="7" cy="6" r="3" />
+                        <path d="M7 1v1M7 10v1M1 6h1M11 6h1" stroke-linecap="round" />
+                    </svg>
+                    🇳🇵 Nepal
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ LAYOUT ═══ -->
+    <div class="exp-layout">
+
+        <!-- ARTICLE PRINCIPAL -->
+        <main class="exp-main">
+
+            <!-- Barra de votació -->
+            <div class="vote-bar">
+                <span class="vote-bar-label">Valora aquesta experiència:</span>
+                <div class="vote-big-group">
+                    <button class="vote-big-btn up" id="btn-up" onclick="voteExp(1)">
+                        <svg fill="currentColor" viewBox="0 0 14 14">
+                            <path d="M7 1L13 11H1L7 1Z" />
+                        </svg>
+                        Útil
+                    </button>
+                    <span class="vote-score" id="vote-score">2.3K</span>
+                    <button class="vote-big-btn dn" id="btn-dn" onclick="voteExp(-1)">
+                        <svg fill="currentColor" viewBox="0 0 14 14">
+                            <path d="M7 13L1 3H13L7 13Z" />
+                        </svg>
+                        No útil
+                    </button>
+                </div>
+                <div class="vote-bar-actions">
+
+                    <button class="action-btn report" id="btn-report" onclick="reportExp()">
+                        <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                            <path d="M7 2v5M7 9.5v.5" stroke-linecap="round" />
+                            <circle cx="7" cy="7" r="5.5" />
+                        </svg>
+                        Reportar abús
+                    </button>
+                </div>
+            </div>
+
+            <div class="exp-map" onclick="alert('Obre Google Maps / Leaflet')">
+                🗺
+                <div class="exp-map-label">📍 Annapurna Base Camp — Nepal (28.5310° N, 83.8777° E)</div>
+            </div>
+
+            <!-- Cos de l'experiència -->
+            <div class="exp-content">
+                <div class="exp-content-body">
+                    <h2>El punt de partida: Pokhara</h2>
+                    <p>
+                        Tot va començar a Pokhara, la porta d'entrada als Himalaies per a la majoria de trekkers.
+                        Després de dos dies aclimatant-me i comprant els permisos necessaris —el TIMS card i el permís
+                        de l'Annapurna Conservation Area (ACAP)—, vaig estar a punt per emprendre el camí sense cap guia
+                        ni agència.
+                    </p>
+                    <p>
+                        <strong>El cost total dels permisos va ser d'aproximadament 35 USD.</strong> Podeu comprar-los
+                        directament a les oficines de Pokhara sense cap complicació. Porteu passaport i dues fotos.
+                    </p>
+
+                    <h2>La ruta: 10 dies d'anada i tornada</h2>
+                    <p>
+                        La ruta clàssica comença a Nayapul i passa per Tikhedhunga, Ghorepani, Tadapani, Chhomrong i
+                        Dovan fins arribar al Base Camp a 4.130 metres d'altitud. El camí és ben senyalitzat i no
+                        necessites GPS, tot i que una aplicació com Maps.me offline és molt útil.
+                    </p>
+                    <div class="exp-info-block">
+                        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="8" cy="7" r="3" />
+                            <path d="M8 1v1M8 12v1M1 7h1M12 7h1" stroke-linecap="round" />
+                        </svg>
+                        <div>
+                            <strong>Consell clau:</strong> Reserveu els teahouses per endavant durant la temporada alta
+                            (octubre–novembre i març–abril). La demanda és altíssima i molts llocs s'esgoten setmanes
+                            abans.
+                        </div>
+                    </div>
+                    <p>
+                        Els teahouses ofereixen allotjament i menjar a preus molt raonables. Un dormitori compartit
+                        costa entre 3 i 8 USD la nit, i un àpat complet —sopa de dal bhat inclosa— entre 5 i 12 USD.
+                        Molts teahouses ofereixen habitació gratuïta si menges allà.
+                    </p>
+
+                    <h2>El moment màgic: l'alba al Poon Hill</h2>
+                    <p>
+                        Sense cap dubte, el moment que més recordaré va ser l'alba al mirador de Poon Hill (3.210 m).
+                        Vam pujar dues hores de nit amb frontal, entre el fred i les estrelles, per arribar a la cima
+                        just quan el sol sortia i il·luminava el Dhaulagiri i l'Annapurna South amb una llum ataronjada
+                        que semblava irreal.
+                    </p>
+                    <p>
+                        Ni una foto et pot preparar per a aquell moment. Porteu roba d'abric, molt d'abric.
+                    </p>
+                </div>
+
+                <!-- Galeria -->
+                <div class="exp-gallery">
+                    <div class="exp-gallery-item">
+                        <div class="exp-gallery-img"
+                            style="background:linear-gradient(135deg,#C0D8EE,#8AB4D4);min-height:200px">🏔</div>
+                    </div>
+                    <div class="exp-gallery-item">
+                        <div class="exp-gallery-img" style="background:linear-gradient(135deg,#D0E8D0,#8AC8A8)">🌄</div>
+                    </div>
+                    <div class="exp-gallery-item">
+                        <div class="exp-gallery-img" style="background:linear-gradient(135deg,#E8D8C0,#C8A880)">🏕</div>
+                    </div>
+                    <div class="exp-gallery-item">
+                        <div class="exp-gallery-img" style="background:linear-gradient(135deg,#D8C0E8,#A880C8)">🌟</div>
+                    </div>
+                    <div class="exp-gallery-item">
+                        <div class="exp-gallery-img" style="background:linear-gradient(135deg,#C0E8E0,#80C8B8)">🦅</div>
+                    </div>
+                </div>
+
+                <!-- Mapa -->
+
+            </div>
+
+        </main>
+
+        <!-- SIDEBAR -->
+        <aside class="exp-sidebar">
+
+            <!-- Autor -->
+            <div class="side-card">
+                <div class="side-card-header">Autor</div>
+                <div class="side-card-body">
+                    <div class="author-block">
+                        <div class="author-ava">RT</div>
+                        <div>
+                            <div class="author-name">ruta_transiberiana</div>
+                            <div class="author-sub">Membre des del 2021</div>
+                        </div>
+                    </div>
+                    <div class="author-stats">
+                        <div class="author-stat">
+                            <div class="author-stat-num">27</div>
+                            <div class="author-stat-lbl">Experiències</div>
+                        </div>
+                        <div class="author-stat">
+                            <div class="author-stat-num">7.2K</div>
+                            <div class="author-stat-lbl">Punts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalls -->
+            <div class="side-card">
+                <div class="side-card-header">Detalls</div>
+                <div class="side-card-body">
+                    <div class="detail-list">
+                        <div class="detail-row">
+                            <span class="detail-key">
+                                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="10" height="10" rx="2" />
+                                    <path d="M2 6h10M5 2v2M9 2v2" stroke-linecap="round" />
+                                </svg>
+                                Publicació
+                            </span>
+                            <span class="detail-val">15 mar. 2025</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-key">
+                                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="7" cy="6" r="3" />
+                                    <path d="M7 10s-4 3.5-4 5h8c0-1.5-4-5-4-5z" />
+                                </svg>
+                                País
+                            </span>
+                            <span class="detail-val">🇳🇵 Nepal</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-key">
+                                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M7 1L13 12H1L7 1Z" />
+                                </svg>
+                                Puntuació
+                            </span>
+                            <span class="detail-val" style="color:var(--accent);font-weight:700">+2.3K</span>
+                        </div>
+                        <div class="detail-row">
+
+
+                            <span class="detail-val">512</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-key">
+                                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="7" cy="7" r="5" />
+                                    <path d="M5 7l2 2 3-3" stroke-linecap="round" />
+                                </svg>
+                                Estat
+                            </span>
+                            <span class="detail-val" style="color:#16a34a">● Publicada</span>
+                        </div>
+                        <div class="detail-row" style="flex-direction:column; gap:6px; align-items:flex-start;">
+                            <span class="detail-key">
+                                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M2 3h10M2 7h7M2 11h5" />
+                                </svg>
+                                Categories
+                            </span>
+                            <div>
+                                <span class="tag-pill">Muntanyisme</span>
+                                <span class="tag-pill">Aventura</span>
+                                <span class="tag-pill">Asia</span>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-key">
+                                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="7" cy="6" r="2.5" />
+                                    <path d="M7 1C4.2 1 2 3.2 2 6c0 3.5 5 7 5 7s5-3.5 5-7c0-2.8-2.2-5-5-5z" />
+                                </svg>
+                                Coordenades
+                            </span>
+                            <span class="detail-val" style="font-size:11px">28.5310°N, 83.8777°E</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span class="footer-logo-text">
+                    <span class="footer-logo-mark">V</span>
+                    Viatges
+                </span>
+                <span class="footer-sep">·</span>
+                <span class="footer-copy">&copy; 2025 Tots els drets reservats</span>
+            </div>
+            <nav class="footer-links">
+                <a href="#">Inici</a>
+                <a href="#">Explorar</a>
+                <a href="#">Contacte</a>
+                <a href="#">Avís legal</a>
+                <a href="#">Termes i condicions</a>
+                <a href="#">Política de cookies</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        /* ── VOTACIÓ ── */
+        let expVote = 0;
+        const baseScore = 2254;
+
+        function voteExp(dir) {
+            const prev = expVote;
+            expVote = prev === dir ? 0 : dir;
+
+            const score = baseScore + expVote;
+            document.getElementById('vote-score').textContent =
+                score >= 1000 ? (score / 1000).toFixed(1) + 'K' : score;
+
+            const up = document.getElementById('btn-up');
+            const dn = document.getElementById('btn-dn');
+            up.className = 'vote-big-btn up' + (expVote === 1 ? ' voted-up' : '');
+            dn.className = 'vote-big-btn dn' + (expVote === -1 ? ' voted-dn' : '');
+
+            const btn = dir === 1 ? up : dn;
+            btn.classList.add('popping');
+            btn.addEventListener('animationend', () => btn.classList.remove('popping'), { once: true });
+        }
+
+        /* ── REPORTAR ── */
+        function reportExp() {
+            const btn = document.getElementById('btn-report');
+            if (btn.classList.contains('reported')) return;
+            btn.classList.add('reported');
+            btn.innerHTML = `<svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M3 7l3 3 5-5" stroke-linecap="round"/></svg> Reportat`;
+            btn.disabled = true;
+        }
+
+        /* ── MOBILE MENU ── */
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('hamburger');
+            const ov = document.getElementById('overlay');
+            const open = menu.classList.contains('open');
+            if (open) { closeMenu(); } else {
+                menu.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                ov.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeMenu() {
+            document.getElementById('mobile-menu').classList.remove('open');
+            document.getElementById('hamburger').setAttribute('aria-expanded', 'false');
+            document.getElementById('overlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+    </script>
+</body>
+
+</html>
