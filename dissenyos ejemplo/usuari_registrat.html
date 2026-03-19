@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El meu perfil — Viatges</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F0F4F8;
+            --surface: #FFFFFF;
+            --surface2: #EDF3FA;
+            --border: #D0DBE8;
+            --border2: #A8C4E0;
+            --text: #0D1F35;
+            --text2: #2E5070;
+            --text3: #4E7099;
+            --primary: #1A5FA8;
+            --primary-h: #0C4880;
+            --primary-l: #DCE9F7;
+            --accent: #E87D2C;
+            --accent-l: #FDE9D4;
+            --accent-h: #C45E10;
+            --danger: #DC2626;
+            --danger-l: #FEE2E2;
+            --danger-h: #991B1B;
+            --success: #16A34A;
+            --success-l: #DCFCE7;
+            --warning: #D97706;
+            --warning-l: #FEF3C7;
+            --sidebar-w: 240px;
+            --shadow: 0 1px 4px rgba(13, 31, 53, .07), 0 4px 16px rgba(13, 31, 53, .05);
+            --r: 10px;
+            --r-sm: 6px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* ══════════════════════════════
+           SIDEBAR
+        ══════════════════════════════ */
+        .sidebar {
+            width: var(--sidebar-w);
+            min-height: 100vh;
+            background: var(--text);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 200;
+            transition: transform .3s cubic-bezier(.23, 1, .32, 1);
+        }
+
+        .sidebar-logo {
+            padding: 20px 20px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sidebar-logo-mark {
+            width: 34px;
+            height: 34px;
+            background: var(--primary);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-logo-badge {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-top: -2px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 12px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            padding: 12px 16px 4px;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            margin: 1px 8px;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .6);
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: calc(100% - 16px);
+            text-align: left;
+            transition: background .15s, color .15s;
+        }
+
+        .sidebar-item svg {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, .08);
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .sidebar-item.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .sidebar-footer {
+            padding: 12px 8px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--r-sm);
+        }
+
+        .sidebar-user-ava {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-l);
+            color: var(--accent-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .sidebar-user-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .8);
+        }
+
+        .sidebar-user-role {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        /* Hamburger */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 300;
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: var(--text);
+            border: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .sidebar-toggle .bar {
+            display: block;
+            width: 16px;
+            height: 1.5px;
+            background: #fff;
+            border-radius: 2px;
+            transition: transform .3s, opacity .2s;
+            transform-origin: center;
+        }
+
+        .sidebar-open .sidebar-toggle .bar:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+
+        .sidebar-open .sidebar-toggle .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .sidebar-open .sidebar-toggle .bar:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 190;
+        }
+
+        /* ══════════════════════════════
+           MAIN
+        ══════════════════════════════ */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 28px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topbar-link {
+            font-size: 12px;
+            color: var(--text3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: none;
+            transition: all .15s;
+        }
+
+        .topbar-link:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-l);
+        }
+
+        .topbar-link svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .content {
+            padding: 28px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        /* ══════════════════════════════
+           STATS ROW
+        ══════════════════════════════ */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 18px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-lbl {
+            font-size: 12px;
+            color: var(--text3);
+            margin-top: 3px;
+        }
+
+        /* ══════════════════════════════
+           PANEL
+        ══════════════════════════════ */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title svg {
+            width: 16px;
+            height: 16px;
+            color: var(--primary);
+        }
+
+        .panel-body {
+            padding: 24px;
+        }
+
+        /* ══════════════════════════════
+           FORMULARI DADES PERSONALS
+        ══════════════════════════════ */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text2);
+            letter-spacing: .3px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            height: 38px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+            transition: border-color .2s, background .2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--primary);
+            background: var(--surface);
+        }
+
+        .form-input:disabled,
+        .form-select:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .form-textarea {
+            height: 90px;
+            padding: 10px 12px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: var(--text3);
+            margin-top: 2px;
+        }
+
+        /* Avatar block */
+        .avatar-block {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .avatar-big {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--accent-l);
+            color: var(--accent-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .avatar-change {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .avatar-change:hover {
+            background: var(--primary-h);
+        }
+
+        .avatar-change svg {
+            width: 11px;
+            height: 11px;
+            color: #fff;
+        }
+
+        .avatar-info-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .avatar-info-sub {
+            font-size: 12px;
+            color: var(--text3);
+            margin-top: 2px;
+        }
+
+        /* Botons formulari */
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-save {
+            padding: 9px 22px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background .15s, transform .1s;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-h);
+        }
+
+        .btn-save:active {
+            transform: scale(.97);
+        }
+
+        .btn-save svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .btn-outline {
+            padding: 9px 18px;
+            background: none;
+            color: var(--text2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            transition: all .15s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--border2);
+            background: var(--surface2);
+        }
+
+        /* Zona de perill */
+        .danger-zone {
+            border: 1px solid var(--danger-l);
+            border-radius: var(--r);
+            overflow: hidden;
+            margin-top: 24px;
+        }
+
+        .danger-zone-header {
+            padding: 12px 20px;
+            background: var(--danger-l);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--danger);
+            letter-spacing: .3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .danger-zone-body {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .danger-zone-desc {
+            font-size: 13px;
+            color: var(--text2);
+            max-width: 420px;
+        }
+
+        .btn-danger {
+            padding: 8px 18px;
+            background: none;
+            color: var(--danger);
+            border: 1.5px solid var(--danger);
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            transition: all .15s;
+            white-space: nowrap;
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        /* ══════════════════════════════
+           EXPERIÈNCIES
+        ══════════════════════════════ */
+        .exp-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 0 12px;
+            height: 34px;
+            flex: 1;
+            min-width: 160px;
+            background: var(--bg);
+            transition: border-color .2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+        }
+
+        .search-box svg {
+            width: 13px;
+            height: 13px;
+            color: var(--text3);
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text3);
+        }
+
+        .filter-select {
+            height: 34px;
+            padding: 0 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--bg);
+            color: var(--text2);
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color .2s;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-new-exp {
+            height: 34px;
+            padding: 0 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background .15s;
+            white-space: nowrap;
+        }
+
+        .btn-new-exp:hover {
+            background: var(--accent-h);
+        }
+
+        .btn-new-exp svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .exp-table-wrap {
+            overflow-x: auto;
+        }
+
+        .exp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .exp-table th {
+            text-align: left;
+            padding: 10px 14px;
+            background: var(--bg);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            color: var(--text3);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .exp-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .exp-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .exp-table tr:hover td {
+            background: var(--surface2);
+        }
+
+        .exp-table tr.deleted-row td {
+            opacity: .4;
+        }
+
+        .exp-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exp-emoji {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .exp-cell-title {
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .exp-cell-tags {
+            display: flex;
+            gap: 4px;
+            margin-top: 3px;
+            flex-wrap: wrap;
+        }
+
+        .tag-pill {
+            font-size: 10px;
+            padding: 1px 7px;
+            border-radius: 999px;
+            background: var(--primary-l);
+            color: var(--primary);
+        }
+
+        .badge-status {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .badge-status .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .badge-status.published {
+            background: var(--success-l);
+            color: var(--success);
+        }
+
+        .badge-status.published .dot {
+            background: var(--success);
+        }
+
+        .badge-status.draft {
+            background: var(--warning-l);
+            color: var(--warning);
+        }
+
+        .badge-status.draft .dot {
+            background: var(--warning);
+        }
+
+        .badge-status.rejected {
+            background: var(--danger-l);
+            color: var(--danger);
+        }
+
+        .badge-status.rejected .dot {
+            background: var(--danger);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .tbl-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            transition: all .15s;
+        }
+
+        .tbl-btn svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .tbl-btn:hover {
+            border-color: var(--border2);
+            color: var(--text2);
+            background: var(--surface2);
+        }
+
+        .tbl-btn.primary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-l);
+        }
+
+        .tbl-btn.danger:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: var(--danger-l);
+        }
+
+        .tbl-btn:disabled {
+            opacity: .3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .vote-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .vote-up {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .vote-dn {
+            color: var(--text3);
+        }
+
+        /* ══════════════════════════════
+           MODAL EDITAR / ELIMINAR
+        ══════════════════════════════ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 15, 26, .5);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+            padding: 16px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--r);
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
+            animation: modalIn .2s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(.94) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px 24px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .modal-close {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            transition: all .15s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .modal-close svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        /* Modal confirmació eliminar */
+        .confirm-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--danger-l);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+
+        .confirm-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .confirm-desc {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+
+        .confirm-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .btn-cancel {
+            padding: 9px 18px;
+            background: none;
+            color: var(--text2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            transition: background .15s;
+        }
+
+        .btn-cancel:hover {
+            background: var(--bg);
+        }
+
+        .btn-confirm-del {
+            padding: 9px 18px;
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            transition: background .15s;
+        }
+
+        .btn-confirm-del:hover {
+            background: var(--danger-h);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--text);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 12px 18px;
+            border-radius: var(--r-sm);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 600;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity .2s, transform .2s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.danger {
+            background: var(--danger);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+        }
+
+        /* ══════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════ */
+        @media (max-width: 1024px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .sidebar-open .sidebar-overlay {
+                display: block;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .topbar {
+                padding: 0 16px 0 60px;
+            }
+
+            .content {
+                padding: 16px;
+                gap: 20px;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .stat-num {
+                font-size: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .exp-table th:nth-child(3),
+            .exp-table td:nth-child(3),
+            .exp-table th:nth-child(4),
+            .exp-table td:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Menú">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-mark">V</div>
+            <div>
+                <div class="sidebar-logo-text">Viatges</div>
+                <div class="sidebar-logo-badge">El meu perfil</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">Compte</div>
+            <button class="sidebar-item active" onclick="showSection('profile', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="8" cy="5" r="3" />
+                    <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke-linecap="round" />
+                </svg>
+                Dades personals
+            </button>
+            <button class="sidebar-item" onclick="showSection('security', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="7" width="10" height="7" rx="2" />
+                    <path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round" />
+                </svg>
+                Contrasenya
+            </button>
+            <div class="sidebar-section">Contingut</div>
+            <button class="sidebar-item" onclick="showSection('experiences', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <path d="M2 3h12M2 7h9M2 11h6" stroke-linecap="round" />
+                </svg>
+                Les meves experiències
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="sidebar-user-ava">RT</div>
+                <div>
+                    <div class="sidebar-user-name">ruta_transiberiana</div>
+                    <div class="sidebar-user-role">Usuari registrat</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN ═══ -->
+    <div class="main">
+        <div class="topbar">
+            <span class="topbar-title" id="topbar-title">Dades personals</span>
+            <div class="topbar-right">
+                <a href="index.html" class="topbar-link">
+                    <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 2L4 6l5 4" stroke-linecap="round" />
+                    </svg>
+                    Tornar a la web
+                </a>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#FDE9D4">✍️</div>
+                    <div>
+                        <div class="stat-num">5</div>
+                        <div class="stat-lbl">Experiències</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#DCE9F7">👍</div>
+                    <div>
+                        <div class="stat-num">4.7K</div>
+                        <div class="stat-lbl">Vots rebuts</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#DCFCE7">💬</div>
+                    <div>
+                        <div class="stat-num">312</div>
+                        <div class="stat-lbl">Comentaris</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#FEF3C7">🏆</div>
+                    <div>
+                        <div class="stat-num">7.2K</div>
+                        <div class="stat-lbl">Punts totals</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SECCIÓ: PERFIL ═══ -->
+            <div id="section-profile">
+                <div class="panel">
+                    <!-- Avatar -->
+                    <div class="avatar-block">
+                        <div class="avatar-big">
+                            RT
+                            <div class="avatar-change" title="Canviar foto">
+                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M8 2l2 2-6 6H2V8L8 2z" stroke-linecap="round" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="avatar-info-name">ruta_transiberiana</div>
+                            <div class="avatar-info-sub">Membre des del 9 mar. 2021 · 27 experiències publicades</div>
+                        </div>
+                    </div>
+
+                    <div class="panel-header" style="border-top: 1px solid var(--border)">
+                        <span class="panel-title">
+                            <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="8" cy="5" r="3" />
+                                <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke-linecap="round" />
+                            </svg>
+                            Informació personal
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <form onsubmit="saveProfile(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Nom d'usuari</label>
+                                    <input class="form-input" type="text" value="ruta_transiberiana" disabled>
+                                    <span class="form-hint">El nom d'usuari no es pot modificar.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Correu electrònic</label>
+                                    <input class="form-input" id="f-email" type="email" value="ruta@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nom</label>
+                                    <input class="form-input" id="f-name" type="text" value="Jordi"
+                                        placeholder="El teu nom">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Cognoms</label>
+                                    <input class="form-input" id="f-surname" type="text" value="Martínez"
+                                        placeholder="Els teus cognoms">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">País d'origen</label>
+                                    <select class="form-select" id="f-country">
+                                        <option>Catalunya</option>
+                                        <option>Espanya</option>
+                                        <option>França</option>
+                                        <option>Alemanya</option>
+                                        <option>Altres</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Web personal</label>
+                                    <input class="form-input" id="f-web" type="url" placeholder="https://…">
+                                </div>
+                                <div class="form-group full">
+                                    <label class="form-label">Biografia</label>
+                                    <textarea class="form-textarea" id="f-bio"
+                                        placeholder="Explica qui ets i on has viatjat…">Viatger empedreït. He trepitjat 38 països i segueixo sumant. Especialista en rutes de muntanya sense agència.</textarea>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-save">
+                                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2">
+                                        <path d="M2 7l4 4 6-6" stroke-linecap="round" />
+                                    </svg>
+                                    Guardar canvis
+                                </button>
+                                <button type="button" class="btn-outline" onclick="resetProfile()">Descartar</button>
+                            </div>
+                        </form>
+
+                        <!-- Zona de perill -->
+                        <div class="danger-zone">
+                            <div class="danger-zone-header">
+                                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5" width="13"
+                                    height="13">
+                                    <path d="M7 2v5M7 9.5V10" stroke-linecap="round" />
+                                    <circle cx="7" cy="7" r="5.5" />
+                                </svg>
+                                Zona de perill
+                            </div>
+                            <div class="danger-zone-body">
+                                <div class="danger-zone-desc">
+                                    Eliminar el compte és una acció permanent i irreversible. Totes les teves
+                                    experiències i dades s'eliminaran definitivament.
+                                </div>
+                                <button class="btn-danger" onclick="openDeleteAccount()">Eliminar compte</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SECCIÓ: CONTRASENYA ═══ -->
+            <div id="section-security" style="display:none">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="7" width="10" height="7" rx="2" />
+                                <path d="M5 7V5a3 3 0 016 0v2" stroke-linecap="round" />
+                            </svg>
+                            Canviar contrasenya
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <form onsubmit="savePassword(event)">
+                            <div class="form-grid" style="max-width:480px">
+                                <div class="form-group full">
+                                    <label class="form-label">Contrasenya actual</label>
+                                    <input class="form-input" id="f-pass-old" type="password" placeholder="••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nova contrasenya</label>
+                                    <input class="form-input" id="f-pass-new" type="password" placeholder="••••••••">
+                                    <span class="form-hint">Mínim 8 caràcters.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Confirmar nova contrasenya</label>
+                                    <input class="form-input" id="f-pass-confirm" type="password"
+                                        placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-save">
+                                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2">
+                                        <path d="M2 7l4 4 6-6" stroke-linecap="round" />
+                                    </svg>
+                                    Actualitzar contrasenya
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SECCIÓ: EXPERIÈNCIES ═══ -->
+            <div id="section-experiences" style="display:none">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                                <path d="M2 3h12M2 7h9M2 11h6" stroke-linecap="round" />
+                            </svg>
+                            Les meves experiències
+                        </span>
+                        <div class="exp-toolbar">
+                            <div class="search-box">
+                                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
+                                    <circle cx="6.5" cy="6.5" r="4" />
+                                    <path d="M10 10l3 3" stroke-linecap="round" />
+                                </svg>
+                                <input type="text" id="exp-search" placeholder="Cerca per títol…"
+                                    oninput="filterExps()">
+                            </div>
+                            <select class="filter-select" id="exp-filter" onchange="filterExps()">
+                                <option value="">Tots els estats</option>
+                                <option value="published">Publicades</option>
+                                <option value="draft">Esborranys</option>
+                                <option value="rejected">Rebutjades</option>
+                            </select>
+                            <button class="btn-new-exp" onclick="openNewExp()">
+                                <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2">
+                                    <path d="M7 2v10M2 7h10" stroke-linecap="round" />
+                                </svg>
+                                Nova experiència
+                            </button>
+                        </div>
+                    </div>
+                    <div class="exp-table-wrap">
+                        <table class="exp-table">
+                            <thead>
+                                <tr>
+                                    <th>Experiència</th>
+                                    <th>Estat</th>
+                                    <th>Vots</th>
+                                    <th>Data</th>
+                                    <th>Accions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="exp-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══ MODAL EDITAR EXPERIÈNCIA ═══ -->
+    <div class="modal-overlay" id="modal-edit">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title" id="modal-edit-title">Editar experiència</span>
+                <button class="modal-close" onclick="closeModal('modal-edit')">
+                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2">
+                        <path d="M2 2l10 10M12 2L2 12" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label class="form-label">Títol</label>
+                        <input class="form-input" id="edit-title" type="text" placeholder="Títol de l'experiència">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Categoria</label>
+                        <select class="form-select" id="edit-cat">
+                            <option>Aventura</option>
+                            <option>Muntanyisme</option>
+                            <option>Familiar</option>
+                            <option>Històric</option>
+                            <option>Romàntic</option>
+                            <option>Gastronomia</option>
+                            <option>Naturalesa</option>
+                            <option>Cultura</option>
+                            <option>Road trip</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estat</label>
+                        <select class="form-select" id="edit-status">
+                            <option value="published">Publicada</option>
+                            <option value="draft">Esborrany</option>
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <label class="form-label">Descripció</label>
+                        <textarea class="form-textarea" id="edit-desc" style="height:120px"
+                            placeholder="Descriu la teva experiència…"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-edit')">Cancel·lar</button>
+                <button class="btn-save" onclick="saveExp()">
+                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2">
+                        <path d="M2 7l4 4 6-6" stroke-linecap="round" />
+                    </svg>
+                    Guardar canvis
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ MODAL ELIMINAR EXPERIÈNCIA ═══ -->
+    <div class="modal-overlay" id="modal-delete">
+        <div class="modal" style="max-width:400px">
+            <div class="modal-body" style="padding:28px">
+                <div class="confirm-icon">🗑</div>
+                <div class="confirm-title">Eliminar experiència</div>
+                <div class="confirm-desc">
+                    Estàs a punt d'eliminar l'experiència <span class="confirm-name" id="del-exp-name"></span>. Aquesta
+                    acció és irreversible.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-delete')">Cancel·lar</button>
+                <button class="btn-confirm-del" onclick="confirmDeleteExp()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ MODAL ELIMINAR COMPTE ═══ -->
+    <div class="modal-overlay" id="modal-delete-account">
+        <div class="modal" style="max-width:400px">
+            <div class="modal-body" style="padding:28px">
+                <div class="confirm-icon">⚠️</div>
+                <div class="confirm-title">Eliminar compte</div>
+                <div class="confirm-desc">
+                    Estàs a punt d'eliminar permanentment el teu compte i totes les teves dades. Escriu
+                    <strong>ELIMINAR</strong> per confirmar.
+                    <input class="form-input" id="delete-confirm-text" type="text" placeholder="Escriu ELIMINAR"
+                        style="margin-top:14px">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('modal-delete-account')">Cancel·lar</button>
+                <button class="btn-confirm-del" onclick="confirmDeleteAccount()">Eliminar compte</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        /* ══════════════════════════════
+           DATA
+        ══════════════════════════════ */
+        let experiences = [
+            { id: 1, emoji: '🏔', bg: '#C0D8EE', title: 'Trekking al Annapurna Base Camp sense agència', cat: 'Muntanyisme', status: 'published', up: 2341, down: 87, date: '15 mar. 2025', desc: 'Tot el que necessites saber per fer el trekking al camp base de l\'Annapurna sense cap agència.' },
+            { id: 2, emoji: '🕌', bg: '#D8E8F5', title: '72h a Fes: el laberint de la medina', cat: 'Cultura', status: 'published', up: 1204, down: 134, date: '2 feb. 2025', desc: 'Perdre\'s per la medina de Fes és l\'experiència més intensa que he viscut.' },
+            { id: 3, emoji: '🧊', bg: '#B8D0EC', title: 'Les termes secretes d\'Islandia', cat: 'Naturalesa', status: 'draft', up: 0, down: 0, date: '10 gen. 2025', desc: 'Estic preparant aquesta entrada sobre les piscines naturals que no apareixen als blogs.' },
+            { id: 4, emoji: '🏔', bg: '#D6E8F5', title: 'Dolomites: el poble que no surt a les guies', cat: 'Aventura', status: 'published', up: 847, down: 42, date: '5 des. 2024', desc: 'Un racó amagat dels Alps italians que prefereixo mantenir en secret.' },
+            { id: 5, emoji: '🌋', bg: '#E8D8D0', title: 'Volcà Bromo: pujar sense guia oficial', cat: 'Aventura', status: 'rejected', up: 0, down: 0, date: '20 nov. 2024', desc: 'Experiència rebutjada per contingut que no compleix les normes de la comunitat.' },
+        ];
+        let nextExpId = 6;
+        let pendingDeleteExpId = null;
+        let editingExpId = null;
+
+        /* ══════════════════════════════
+           RENDER EXPERIÈNCIES
+        ══════════════════════════════ */
+        function renderExps(data) {
+            const tbody = document.getElementById('exp-tbody');
+            if (!data.length) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text3)">
+                    <div style="font-size:32px;margin-bottom:10px">✍️</div>
+                    Encara no tens experiències. Crea la primera!
+                </td></tr>`;
+                return;
+            }
+            tbody.innerHTML = data.map(e => {
+                const statusMap = { published: ['Publicada', 'published'], draft: ['Esborrany', 'draft'], rejected: ['Rebutjada', 'rejected'] };
+                const [label, cls] = statusMap[e.status];
+                const isRej = e.status === 'rejected';
+                return `
+                <tr id="exp-row-${e.id}" class="${isRej ? 'deleted-row' : ''}">
+                    <td>
+                        <div class="exp-cell">
+                            <div class="exp-emoji" style="background:${e.bg}">${e.emoji}</div>
+                            <div>
+                                <div class="exp-cell-title">${e.title}</div>
+                                <div class="exp-cell-tags">
+                                    <span class="tag-pill">${e.cat}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge-status ${cls}"><span class="dot"></span>${label}</span></td>
+                    <td>
+                        <div class="vote-cell">
+                            <span class="vote-up">▲ ${e.up.toLocaleString()}</span>
+                            <span class="vote-dn">▼ ${e.down}</span>
+                        </div>
+                    </td>
+                    <td style="white-space:nowrap;color:var(--text3)">${e.date}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="tbl-btn primary" title="Editar" onclick="openEditExp(${e.id})" ${isRej ? 'disabled' : ''}>
+                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M8 2l2 2-6 6H2V8L8 2z" stroke-linecap="round"/></svg>
+                            </button>
+                            <button class="tbl-btn" title="Veure" onclick="window.open('experiencia.html','_blank')">
+                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4.5"/><circle cx="6" cy="6" r="1.5" fill="currentColor" stroke="none"/></svg>
+                            </button>
+                            <button class="tbl-btn danger" title="Eliminar" onclick="openDeleteExp(${e.id})">
+                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M2 3h8M4 3V2h4v1M5 5v4M7 5v4" stroke-linecap="round"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function filterExps() {
+            const q = document.getElementById('exp-search').value.toLowerCase();
+            const st = document.getElementById('exp-filter').value;
+            renderExps(experiences.filter(e =>
+                (!q || e.title.toLowerCase().includes(q)) &&
+                (!st || e.status === st)
+            ));
+        }
+
+        /* ══════════════════════════════
+           EDITAR EXPERIÈNCIA
+        ══════════════════════════════ */
+        function openEditExp(id) {
+            editingExpId = id;
+            const e = experiences.find(x => x.id === id);
+            document.getElementById('modal-edit-title').textContent = 'Editar experiència';
+            document.getElementById('edit-title').value = e.title;
+            document.getElementById('edit-cat').value = e.cat;
+            document.getElementById('edit-status').value = e.status;
+            document.getElementById('edit-desc').value = e.desc;
+            openModal('modal-edit');
+        }
+
+        function openNewExp() {
+            editingExpId = null;
+            document.getElementById('modal-edit-title').textContent = 'Nova experiència';
+            document.getElementById('edit-title').value = '';
+            document.getElementById('edit-cat').value = 'Aventura';
+            document.getElementById('edit-status').value = 'draft';
+            document.getElementById('edit-desc').value = '';
+            openModal('modal-edit');
+        }
+
+        function saveExp() {
+            const title = document.getElementById('edit-title').value.trim();
+            if (!title) { showToast('El títol és obligatori', 'warning'); return; }
+            const cat = document.getElementById('edit-cat').value;
+            const status = document.getElementById('edit-status').value;
+            const desc = document.getElementById('edit-desc').value;
+
+            if (editingExpId) {
+                const e = experiences.find(x => x.id === editingExpId);
+                e.title = title; e.cat = cat; e.status = status; e.desc = desc;
+                showToast('Experiència actualitzada', 'success');
+            } else {
+                const emojis = ['🏔', '🏝', '🌋', '🕌', '🏛', '🗺', '⛰', '🌿'];
+                const cols = ['#C0D8EE', '#D8E8F5', '#D8E8D0', '#E8D8C0', '#F0E4C8'];
+                experiences.unshift({
+                    id: nextExpId++, emoji: emojis[Math.floor(Math.random() * emojis.length)],
+                    bg: cols[Math.floor(Math.random() * cols.length)],
+                    title, cat, status, up: 0, down: 0, date: 'Avui', desc
+                });
+                showToast('Experiència creada', 'success');
+            }
+            closeModal('modal-edit');
+            filterExps();
+        }
+
+        /* ══════════════════════════════
+           ELIMINAR EXPERIÈNCIA
+        ══════════════════════════════ */
+        function openDeleteExp(id) {
+            pendingDeleteExpId = id;
+            const e = experiences.find(x => x.id === id);
+            document.getElementById('del-exp-name').textContent = `"${e.title}"`;
+            openModal('modal-delete');
+        }
+
+        function confirmDeleteExp() {
+            experiences = experiences.filter(x => x.id !== pendingDeleteExpId);
+            closeModal('modal-delete');
+            filterExps();
+            showToast('Experiència eliminada', 'danger');
+        }
+
+        /* ══════════════════════════════
+           FORMULARI PERFIL
+        ══════════════════════════════ */
+        function saveProfile(e) {
+            e.preventDefault();
+            showToast('Dades personals actualitzades', 'success');
+        }
+        function resetProfile() {
+            document.getElementById('f-email').value = 'ruta@example.com';
+            document.getElementById('f-name').value = 'Jordi';
+            document.getElementById('f-surname').value = 'Martínez';
+            document.getElementById('f-bio').value = 'Viatger empedreït. He trepitjat 38 països i segueixo sumant. Especialista en rutes de muntanya sense agència.';
+            showToast('Canvis descartats', '');
+        }
+
+        function savePassword(e) {
+            e.preventDefault();
+            const nw = document.getElementById('f-pass-new').value;
+            const cf = document.getElementById('f-pass-confirm').value;
+            if (!document.getElementById('f-pass-old').value) { showToast('Introdueix la contrasenya actual', 'warning'); return; }
+            if (nw.length < 8) { showToast('La nova contrasenya ha de tenir mínim 8 caràcters', 'warning'); return; }
+            if (nw !== cf) { showToast('Les contrasenyes no coincideixen', 'danger'); return; }
+            showToast('Contrasenya actualitzada', 'success');
+            document.getElementById('f-pass-old').value = '';
+            document.getElementById('f-pass-new').value = '';
+            document.getElementById('f-pass-confirm').value = '';
+        }
+
+        function openDeleteAccount() { openModal('modal-delete-account'); }
+        function confirmDeleteAccount() {
+            const val = document.getElementById('delete-confirm-text').value.trim();
+            if (val !== 'ELIMINAR') { showToast('Escriu ELIMINAR per confirmar', 'danger'); return; }
+            showToast('Compte eliminat. Redirigint…', 'danger');
+            setTimeout(() => window.location.href = 'index.html', 2000);
+        }
+
+        /* ══════════════════════════════
+           NAVEGACIÓ
+        ══════════════════════════════ */
+        const sectionTitles = { profile: 'Dades personals', security: 'Contrasenya', experiences: 'Les meves experiències' };
+        function showSection(name, btn) {
+            ['profile', 'security', 'experiences'].forEach(s => {
+                document.getElementById(`section-${s}`).style.display = s === name ? 'block' : 'none';
+            });
+            document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('topbar-title').textContent = sectionTitles[name];
+            if (name === 'experiences') filterExps();
+            closeSidebar();
+        }
+
+        /* ══════════════════════════════
+           MODALS
+        ══════════════════════════════ */
+        function openModal(id) { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+        document.querySelectorAll('.modal-overlay').forEach(el => {
+            el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+        });
+
+        /* ══════════════════════════════
+           SIDEBAR MÒBIL
+        ══════════════════════════════ */
+        function toggleSidebar() { document.body.classList.toggle('sidebar-open'); }
+        function closeSidebar() { document.body.classList.remove('sidebar-open'); }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSidebar(); document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open')); } });
+
+        /* ══════════════════════════════
+           TOAST
+        ══════════════════════════════ */
+        let toastTimer;
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `toast ${type} show`;
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        /* ══════════════════════════════
+           INIT
+        ══════════════════════════════ */
+        filterExps();
+    </script>
+</body>
+
+</html>
