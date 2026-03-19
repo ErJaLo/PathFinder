@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Guia Tailwind CSS al projecte.md",
-                "mode": "source",
+                "file": "Pathfinder BD.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Guia Tailwind CSS al projecte"
+              "title": "Pathfinder BD"
             }
           }
         ]
@@ -186,12 +186,20 @@
   },
   "active": "ce6bc1ed37c9cf2c",
   "lastOpenFiles": [
+    "Pathfinder BD.md.tmp.8365.1773937699294",
     "Planning del projecte.md",
     "Guia Tailwind CSS al projecte.md",
-    "Guia Tailwind CSS al projecte.md.tmp.18477.1773933924953",
-    "Planning del projecte.md.tmp.18477.1773933772883",
     "Explicacio tecnica Laravel Inertia React.md",
+    "Sin título.md",
     "Pathfinder BD.md",
-    "Bienvenido.md"
+    "Bienvenido.md",
+    "home/jlopez/vscode/workspace/THOS/viatges/obsidian",
+    "home/jlopez/vscode/workspace/THOS/viatges",
+    "home/jlopez/vscode/workspace/THOS",
+    "home/jlopez/vscode/workspace",
+    "home/jlopez/vscode",
+    "home/jlopez",
+    "home",
+    "Sin título.base"
   ]
 }
