@@ -48,6 +48,8 @@
 
             --shadow: 0 1px 3px rgba(13, 31, 53, .07), 0 4px 16px rgba(13, 31, 53, .05);
             --shadow-hover: 0 4px 20px rgba(26, 95, 168, .20);
+
+            --nav-h: 56px;
         }
 
         [data-theme="dark"] {
@@ -108,7 +110,6 @@
             min-height: 100vh;
         }
 
-        /* grain texture overlay */
         body::before {
             content: '';
             position: fixed;
@@ -142,23 +143,23 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: var(--surface);
+            background: color-mix(in srgb, var(--surface) 90%, transparent);
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            background: color-mix(in srgb, var(--surface) 90%, transparent);
         }
 
         .nav-inner {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 20px;
-            height: 56px;
+            height: var(--nav-h);
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 16px;
         }
 
+        /* ── Logo ── */
         .logo {
             display: flex;
             align-items: center;
@@ -180,12 +181,12 @@
             align-items: center;
             justify-content: center;
             font-size: 16px;
-            line-height: 1;
             font-family: 'Playfair Display', serif;
             color: #fff;
             font-weight: 700;
         }
 
+        /* ── Search ── */
         .nav-search {
             flex: 1;
             max-width: 400px;
@@ -225,6 +226,7 @@
             color: var(--text3);
         }
 
+        /* ── Desktop nav links ── */
         .nav-links {
             display: flex;
             gap: 4px;
@@ -247,6 +249,7 @@
             color: var(--text);
         }
 
+        /* ── Publicar btn ── */
         .btn-pub {
             background: var(--accent);
             color: #fff;
@@ -256,6 +259,8 @@
             border-radius: 999px;
             border: none;
             transition: background .15s, transform .1s;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .btn-pub:hover {
@@ -266,6 +271,7 @@
             transform: scale(.97);
         }
 
+        /* ── Theme toggle ── */
         .theme-toggle {
             width: 36px;
             height: 36px;
@@ -281,6 +287,221 @@
         }
 
         .theme-toggle:hover {
+            background: var(--border);
+        }
+
+        /* ══════════════════════════════
+   HAMBURGER BUTTON
+══════════════════════════════ */
+        .hamburger {
+            display: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+            background: var(--bg2);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            flex-shrink: 0;
+            transition: background .15s, border-color .15s;
+            padding: 0;
+            margin-left: auto;
+        }
+
+        .hamburger:hover {
+            background: var(--border);
+            border-color: var(--border2);
+        }
+
+        .hamburger .bar {
+            display: block;
+            width: 16px;
+            height: 1.5px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: transform .3s cubic-bezier(.23, 1, .32, 1), opacity .2s, width .3s;
+            transform-origin: center;
+        }
+
+        /* Animate to X when open */
+        .hamburger[aria-expanded="true"] .bar:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+
+        .hamburger[aria-expanded="true"] .bar:nth-child(2) {
+            opacity: 0;
+            width: 0;
+        }
+
+        .hamburger[aria-expanded="true"] .bar:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        /* ══════════════════════════════
+   MOBILE DRAWER
+══════════════════════════════ */
+        .mobile-menu {
+            display: none;
+            /* hidden by default; shown via JS class */
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: color-mix(in srgb, var(--surface) 97%, transparent);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(13, 31, 53, .12);
+            z-index: 99;
+            overflow: hidden;
+
+            /* Slide-down animation */
+            max-height: 0;
+            opacity: 0;
+            transition: max-height .4s cubic-bezier(.23, 1, .32, 1), opacity .3s ease;
+        }
+
+        .mobile-menu.open {
+            display: block;
+            max-height: 420px;
+            opacity: 1;
+        }
+
+        .mobile-menu-inner {
+            padding: 16px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* ── Mobile search (full width) ── */
+        .mobile-search {
+            display: flex;
+            align-items: center;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0 14px;
+            gap: 8px;
+            height: 40px;
+            margin-bottom: 10px;
+            transition: border-color .2s;
+        }
+
+        .mobile-search:focus-within {
+            border-color: var(--primary);
+        }
+
+        .mobile-search svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            color: var(--text3);
+        }
+
+        .mobile-search input {
+            background: none;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .mobile-search input::placeholder {
+            color: var(--text3);
+        }
+
+        /* ── Mobile nav links ── */
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text2);
+            padding: 11px 14px;
+            border-radius: var(--r);
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            transition: background .15s, color .15s;
+        }
+
+        .mobile-nav-link:hover {
+            background: var(--bg2);
+            color: var(--text);
+        }
+
+        .mobile-nav-link.active {
+            background: var(--primary-l);
+            color: var(--primary);
+        }
+
+        .mobile-nav-link .icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: var(--bg2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .mobile-nav-link.active .icon {
+            background: var(--primary-l);
+        }
+
+        /* ── Divider ── */
+        .mobile-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 6px 0;
+        }
+
+        /* ── Mobile action row ── */
+        .mobile-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .mobile-btn-pub {
+            flex: 1;
+            background: var(--accent);
+            color: #fff;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 11px;
+            border-radius: var(--r);
+            border: none;
+            transition: background .15s;
+        }
+
+        .mobile-btn-pub:hover {
+            background: var(--accent-h);
+        }
+
+        .mobile-theme-toggle {
+            width: 44px;
+            border-radius: var(--r);
+            border: 1px solid var(--border);
+            background: var(--bg2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: background .15s;
+        }
+
+        .mobile-theme-toggle:hover {
             background: var(--border);
         }
 
@@ -417,7 +638,126 @@
         }
 
         /* ══════════════════════════════
-   TOOLBAR
+   TOOLBAR MILLORAT
+══════════════════════════════ */
+        .toolbar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .toolbar-top {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .toolbar-search {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0 14px;
+            height: 36px;
+            transition: border-color .2s;
+        }
+
+        .toolbar-search:focus-within {
+            border-color: var(--primary);
+        }
+
+        .toolbar-search svg {
+            width: 13px;
+            height: 13px;
+            color: var(--text3);
+            flex-shrink: 0;
+        }
+
+        .toolbar-search input {
+            background: none;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .toolbar-search input::placeholder {
+            color: var(--text3);
+        }
+
+        .toolbar-cat select {
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--surface);
+            color: var(--text2);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color .2s;
+        }
+
+        .toolbar-cat select:focus {
+            border-color: var(--primary);
+        }
+
+        .toolbar-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        /* Report button */
+        .card-report {
+            color: var(--text3) !important;
+            margin-left: auto;
+        }
+
+        .card-report:hover {
+            background: #FEE2E2 !important;
+            color: #DC2626 !important;
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text3);
+            font-size: 14px;
+        }
+
+        .no-results-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        /* Responsive toolbar */
+        @media (max-width: 640px) {
+            .toolbar-top {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar-cat select {
+                width: 100%;
+            }
+
+            .toolbar-bottom {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* ══════════════════════════════
+   TOOLBAR (original, mantenir)
 ══════════════════════════════ */
         .toolbar {
             display: flex;
@@ -493,7 +833,7 @@
         }
 
         /* ══════════════════════════════
-   GRID VIEW (Pinterest-style)
+   GRID VIEW
 ══════════════════════════════ */
         .posts-grid {
             columns: 2;
@@ -505,19 +845,8 @@
             margin-bottom: 14px;
         }
 
-        /* LIST VIEW */
         .posts-list .post-card {
             margin-bottom: 10px;
-        }
-
-        .posts-list .post-card .card-img {
-            width: 120px;
-            height: 100px;
-            flex-shrink: 0;
-        }
-
-        .posts-list .post-card .card-body {
-            flex: 1;
         }
 
         /* ══════════════════════════════
@@ -576,7 +905,6 @@
             animation-delay: .30s;
         }
 
-        /* grid card */
         .post-card .card-img {
             width: 100%;
             aspect-ratio: 4/3;
@@ -652,7 +980,6 @@
             height: 13px;
         }
 
-        /* card body */
         .card-body {
             padding: 13px 14px 12px;
         }
@@ -862,7 +1189,6 @@
             text-decoration: underline;
         }
 
-        /* trending destinations */
         .dest-list {
             padding: 8px 0;
         }
@@ -925,7 +1251,6 @@
             padding-left: 13px;
         }
 
-        /* top users */
         .user-list {
             padding: 8px 0;
         }
@@ -978,7 +1303,6 @@
             font-weight: 500;
         }
 
-        /* about widget */
         .about-body {
             padding: 14px 16px;
             font-size: 13px;
@@ -1033,38 +1357,6 @@
         }
 
         /* ══════════════════════════════
-   MOBILE RESPONSIVE
-══════════════════════════════ */
-        @media (max-width: 900px) {
-            .layout {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                position: static;
-                display: none;
-            }
-
-            .hero-stats {
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .posts-grid {
-                columns: 1;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero-band {
-                padding: 24px 16px;
-            }
-        }
-
-        /* ══════════════════════════════
    VOTE ANIMATION
 ══════════════════════════════ */
         @keyframes pop {
@@ -1112,19 +1404,318 @@
             background: var(--accent);
             color: #fff;
         }
+
+        .btn-login {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: none;
+            transition: all .15s;
+        }
+
+        .btn-login:hover {
+            background: var(--bg2);
+            color: var(--text);
+            border-color: var(--border2);
+        }
+
+        .btn-signin {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--primary);
+            background: var(--primary-l);
+            transition: all .15s;
+        }
+
+        .btn-signin:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+
+        /* ── Tablet (≤ 900px) ── */
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 20px;
+            }
+
+            .posts-grid {
+                columns: 2;
+            }
+        }
+
+        /* ── Nav hamburger (≤ 768px) ── */
+        @media (max-width: 768px) {
+
+            .nav-search,
+            .nav-links,
+            .btn-pub,
+            .btn-login,
+            .btn-signin,
+            .theme-toggle {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+                margin-left: auto;
+            }
+        }
+
+        /* ── Mòbil (≤ 640px) ── */
+        @media (max-width: 640px) {
+
+            /* Hero */
+            .hero-band {
+                padding: 24px 16px;
+            }
+
+            .hero-stat-num {
+                font-size: 18px;
+            }
+
+            .hero-stats {
+                gap: 16px;
+            }
+
+            /* Layout padding */
+            .layout {
+                padding: 16px;
+            }
+
+            /* Posts: columna única */
+            .posts-grid {
+                columns: 1;
+            }
+
+            /* Posts list view: imatge més petita */
+            .posts-list .card-img {
+                width: 90px;
+                height: 90px;
+            }
+
+            .card-title {
+                font-size: 14px;
+            }
+
+            /* Toolbar: sort tabs scrollable, view toggle ocult */
+            .toolbar {
+                gap: 8px;
+            }
+
+            .sort-tabs {
+                overflow-x: auto;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 2px;
+                flex: 1;
+            }
+
+            .sort-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .sort-tab {
+                white-space: nowrap;
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+
+            .view-toggle {
+                flex-shrink: 0;
+            }
+
+            /* Tags strip */
+            .tags-inner {
+                padding: 8px 14px;
+            }
+
+            /* Card footer: comprimir una mica */
+            .card-footer {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+        }
+
+        /* ── Mòbil petit (≤ 400px) ── */
+        @media (max-width: 400px) {
+            .hero-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 14px;
+            }
+
+            .hero-stat {
+                min-width: 60px;
+                text-align: center;
+            }
+
+            .sort-tab {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+
+            .card-actions {
+                gap: 4px;
+            }
+        }
+
+        /* Overlay when menu is open */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 15, 26, .4);
+            z-index: 98;
+            backdrop-filter: blur(2px);
+            animation: fadeIn .2s ease;
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+        .site-footer {
+            margin-top: 40px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo-text {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .footer-logo-mark {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .footer-sep {
+            color: var(--border2);
+            font-size: 13px;
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: var(--text3);
+            text-decoration: none;
+            transition: color .15s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 540px) {
+            .footer-inner {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                padding: 14px 16px;
+            }
+
+            .footer-left {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
     </style>
 </head>
 
 <body>
 
+    <!-- ═══ OVERLAY ═══ -->
+    <div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+
     <!-- ═══ NAV ═══ -->
     <nav class="nav">
         <div class="nav-inner">
+            <!-- Logo -->
             <a href="#" class="logo">
-                <div class="logo-mark">V</div>
-                Viajeros
+                <div class="logo-mark">P</div>
+                PathFinder
             </a>
 
+            <!-- Desktop search -->
             <div class="nav-search">
                 <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
                     <circle cx="6.5" cy="6.5" r="4" />
@@ -1133,17 +1724,61 @@
                 <input type="text" placeholder="Busca destinos, países, tips…">
             </div>
 
+            <!-- Desktop links -->
             <div class="nav-links">
                 <button class="nav-link" style="color:var(--primary); background:var(--primary-l)">Inicio</button>
                 <button class="nav-link">Explorar</button>
                 <button class="nav-link">Mapas</button>
             </div>
 
+            <!-- Desktop CTA -->
             <button class="btn-pub" onclick="alert('¡Publicar post!')">+ Publicar</button>
 
+            <!-- Desktop theme toggle -->
             <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
                 <span id="theme-icon">🌙</span>
             </button>
+
+            <!-- Hamburger (mobile only) -->
+            <button class="hamburger" id="hamburger" aria-expanded="false" aria-label="Abrir menú"
+                onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Menú móvil">
+            <div class="mobile-menu-inner">
+
+                <!-- Mobile search -->
+                <div class="mobile-search">
+                    <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
+                        <circle cx="6.5" cy="6.5" r="4" />
+                        <path d="M10 10l3 3" stroke-linecap="round" />
+                    </svg>
+                    <input type="text" placeholder="Busca destinos, países, tips…">
+                </div>
+
+                <!-- Nav links (sense icones) -->
+                <button class="mobile-nav-link active" onclick="closeMenu()">Inicio</button>
+                <button class="mobile-nav-link" onclick="closeMenu()">Explorar</button>
+                <button class="mobile-nav-link" onclick="closeMenu()">Mapas</button>
+
+                <div class="mobile-divider"></div>
+
+                <!-- Actions row -->
+                <div class="mobile-actions">
+                    <button class="mobile-btn-pub" onclick="alert('¡Publicar post!'); closeMenu()">
+                        + Publicar post
+                    </button>
+                    <button class="mobile-theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+                        <span id="theme-icon-mobile">🌙</span>
+                    </button>
+                </div>
+
+            </div>
         </div>
     </nav>
 
@@ -1152,7 +1787,7 @@
         <div class="hero-title">Comparte tus rincones del mundo</div>
         <div class="hero-sub">La comunidad de viajeros reales — sin filtros, sin agencias</div>
         <div class="hero-stats">
-            <div class="hero-stat">
+            <!-- <div class="hero-stat">
                 <div class="hero-stat-num">42.8K</div>
                 <div class="hero-stat-label">Viajeros</div>
             </div>
@@ -1162,8 +1797,8 @@
             </div>
             <div class="hero-stat">
                 <div class="hero-stat-num">94</div>
-                <div class="hero-stat-label">Países</div>
-            </div>
+                <div class="hero-stat-label">Països</div>
+            </div> -->
         </div>
     </div>
 
@@ -1192,34 +1827,59 @@
     <div class="layout">
         <!-- FEED -->
         <div>
-            <!-- Toolbar -->
             <div class="toolbar">
-                <div class="sort-tabs">
-                    <button class="sort-tab active" onclick="setSort(this)">🔥 Popular</button>
-                    <button class="sort-tab" onclick="setSort(this)">✨ Nuevo</button>
-                    <button class="sort-tab" onclick="setSort(this)">📅 Esta semana</button>
-                    <button class="sort-tab" onclick="setSort(this)">🏆 Top histórico</button>
+                <!-- Fila 1: Buscador + selector categoria -->
+                <div class="toolbar-top">
+                    <div class="toolbar-search">
+                        <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
+                            <circle cx="6.5" cy="6.5" r="4" />
+                            <path d="M10 10l3 3" stroke-linecap="round" />
+                        </svg>
+                        <input type="text" id="search-input" placeholder="Busca experiències…" oninput="filterPosts()">
+                    </div>
+                    <div class="toolbar-cat">
+                        <select id="cat-select" onchange="filterPosts()">
+                            <option value="">Totes les categories</option>
+                            <option value="Europa">Europa</option>
+                            <option value="Asia">Asia</option>
+                            <option value="África">África</option>
+                            <option value="América">América</option>
+                            <option value="Trekking">Trekking</option>
+                            <option value="Gastronomía">Gastronomia</option>
+                            <option value="Cultura">Cultura</option>
+                            <option value="Naturaleza">Naturalesa</option>
+                            <option value="Aventura">Aventura</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="view-toggle">
-                    <button class="view-btn active" onclick="setView('grid', this)" title="Grid">
-                        <svg fill="currentColor" viewBox="0 0 16 16">
-                            <rect x="1" y="1" width="6" height="6" rx="1" />
-                            <rect x="9" y="1" width="6" height="6" rx="1" />
-                            <rect x="1" y="9" width="6" height="6" rx="1" />
-                            <rect x="9" y="9" width="6" height="6" rx="1" />
-                        </svg>
-                    </button>
-                    <button class="view-btn" onclick="setView('list', this)" title="Lista">
-                        <svg fill="currentColor" viewBox="0 0 16 16">
-                            <rect x="1" y="2" width="14" height="2" rx="1" />
-                            <rect x="1" y="7" width="14" height="2" rx="1" />
-                            <rect x="1" y="12" width="14" height="2" rx="1" />
-                        </svg>
-                    </button>
+                <!-- Fila 2: Ordenació + vista -->
+                <div class="toolbar-bottom">
+                    <div class="sort-tabs">
+                        <button class="sort-tab active" onclick="setSort(this, 'popular')">🔥 Popular</button>
+                        <button class="sort-tab" onclick="setSort(this, 'new')">✨ Nuevo</button>
+                        <button class="sort-tab" onclick="setSort(this, 'date')">📅 Data</button>
+                        <button class="sort-tab" onclick="setSort(this, 'score')">🏆 Puntuació</button>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="view-btn active" onclick="setView('grid', this)" title="Grid">
+                            <svg fill="currentColor" viewBox="0 0 16 16">
+                                <rect x="1" y="1" width="6" height="6" rx="1" />
+                                <rect x="9" y="1" width="6" height="6" rx="1" />
+                                <rect x="1" y="9" width="6" height="6" rx="1" />
+                                <rect x="9" y="9" width="6" height="6" rx="1" />
+                            </svg>
+                        </button>
+                        <button class="view-btn" onclick="setView('list', this)" title="Lista">
+                            <svg fill="currentColor" viewBox="0 0 16 16">
+                                <rect x="1" y="2" width="14" height="2" rx="1" />
+                                <rect x="1" y="7" width="14" height="2" rx="1" />
+                                <rect x="1" y="12" width="14" height="2" rx="1" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Posts -->
             <div id="posts-container" class="posts-grid"></div>
 
             <div class="load-more">
@@ -1235,8 +1895,7 @@
         <!-- SIDEBAR -->
         <aside class="sidebar">
 
-            <!-- About -->
-            <div class="sidebar-card">
+            <!-- <div class="sidebar-card">
                 <div class="sidebar-header">
                     <span class="sidebar-title">Sobre Viajeros</span>
                 </div>
@@ -1263,64 +1922,52 @@
                     </div>
                     <button class="btn-join">Unirse a la comunidad</button>
                 </div>
-            </div>
+            </div> -->
 
-            <!-- Trending destinations -->
             <div class="sidebar-card">
                 <div class="sidebar-header">
                     <span class="sidebar-title">Destinos Trending</span>
                     <button class="sidebar-all">Ver todos →</button>
                 </div>
                 <div class="dest-list">
-                    <div class="dest-item">
-                        <span class="dest-rank">1</span>
+                    <div class="dest-item"><span class="dest-rank">1</span>
                         <div class="dest-img">🏯</div>
                         <div class="dest-info">
                             <div class="dest-name">Japón</div>
                             <div class="dest-count">2.4K posts esta semana</div>
-                        </div>
-                        <span class="dest-trend">↑ 34%</span>
+                        </div><span class="dest-trend">↑ 34%</span>
                     </div>
-                    <div class="dest-item">
-                        <span class="dest-rank">2</span>
+                    <div class="dest-item"><span class="dest-rank">2</span>
                         <div class="dest-img">🕌</div>
                         <div class="dest-info">
                             <div class="dest-name">Marruecos</div>
                             <div class="dest-count">1.8K posts esta semana</div>
-                        </div>
-                        <span class="dest-trend">↑ 22%</span>
+                        </div><span class="dest-trend">↑ 22%</span>
                     </div>
-                    <div class="dest-item">
-                        <span class="dest-rank">3</span>
+                    <div class="dest-item"><span class="dest-rank">3</span>
                         <div class="dest-img">🦙</div>
                         <div class="dest-info">
                             <div class="dest-name">Perú</div>
                             <div class="dest-count">1.2K posts esta semana</div>
-                        </div>
-                        <span class="dest-trend">↑ 18%</span>
+                        </div><span class="dest-trend">↑ 18%</span>
                     </div>
-                    <div class="dest-item">
-                        <span class="dest-rank">4</span>
+                    <div class="dest-item"><span class="dest-rank">4</span>
                         <div class="dest-img">🌋</div>
                         <div class="dest-info">
                             <div class="dest-name">Indonesia</div>
                             <div class="dest-count">980 posts esta semana</div>
-                        </div>
-                        <span class="dest-trend">↑ 11%</span>
+                        </div><span class="dest-trend">↑ 11%</span>
                     </div>
-                    <div class="dest-item">
-                        <span class="dest-rank">5</span>
+                    <div class="dest-item"><span class="dest-rank">5</span>
                         <div class="dest-img">🧊</div>
                         <div class="dest-info">
                             <div class="dest-name">Islandia</div>
                             <div class="dest-count">740 posts esta semana</div>
-                        </div>
-                        <span class="dest-trend">↑ 9%</span>
+                        </div><span class="dest-trend">↑ 9%</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Top users -->
             <div class="sidebar-card">
                 <div class="sidebar-header">
                     <span class="sidebar-title">Viajeros del Mes</span>
@@ -1332,24 +1979,21 @@
                         <div class="user-info">
                             <div class="user-name">nomada_felix</div>
                             <div class="user-posts">48 posts · 12.4K puntos</div>
-                        </div>
-                        <span class="user-badge">🥇 Top</span>
+                        </div><span class="user-badge">🥇 Top</span>
                     </div>
                     <div class="user-item">
                         <div class="user-avatar" style="background:#D4EDF8;color:#0C5F8A">MC</div>
                         <div class="user-info">
                             <div class="user-name">mochilera_clara</div>
                             <div class="user-posts">31 posts · 8.9K puntos</div>
-                        </div>
-                        <span class="user-badge">🥈</span>
+                        </div><span class="user-badge">🥈</span>
                     </div>
                     <div class="user-item">
                         <div class="user-avatar" style="background:#FDE9D4;color:#C45E10">RT</div>
                         <div class="user-info">
                             <div class="user-name">ruta_transiberiana</div>
                             <div class="user-posts">27 posts · 7.2K puntos</div>
-                        </div>
-                        <span class="user-badge">🥉</span>
+                        </div><span class="user-badge">🥉</span>
                     </div>
                     <div class="user-item">
                         <div class="user-avatar" style="background:#E8F0F9;color:#0C4880">SB</div>
@@ -1368,113 +2012,17 @@
     <script>
         /* ── DATA ── */
         const posts = [
-            {
-                id: 1,
-                title: 'Este pueblo de los Dolomitas no sale en ninguna guía — y prefiero que siga así',
-                country: '🇮🇹 Italia',
-                tags: ['Europa', 'Off-beat', 'Montaña'],
-                verified: true,
-                author: 'nomada_felix',
-                time: 'hace 3h',
-                votes: 847,
-                comments: 234,
-                emoji: '🏔',
-                color: '#D6E8F5',
-            },
-            {
-                id: 2,
-                title: 'Mercado flotante de Damnoen Saduak: guía sin tour y sin madrugones',
-                country: '🇹🇭 Tailandia',
-                tags: ['Asia', 'Gastronomía'],
-                verified: false,
-                author: 'mochilera_clara',
-                time: 'hace 7h',
-                votes: 512,
-                comments: 98,
-                emoji: '🛶',
-                color: '#C8E8D8',
-            },
-            {
-                id: 3,
-                title: '72h en Fez: el laberinto de la medina que te pierde y no quieres encontrar',
-                country: '🇲🇦 Marruecos',
-                tags: ['África', 'Cultura', 'Arquitectura'],
-                verified: true,
-                author: 'sahara_blues',
-                time: 'hace 12h',
-                votes: 1204,
-                comments: 387,
-                emoji: '🕌',
-                color: '#D8E8F5',
-            },
-            {
-                id: 4,
-                title: 'Trekking al Annapurna Base Camp sin agencia: todo lo que necesitas saber',
-                country: '🇳🇵 Nepal',
-                tags: ['Asia', 'Trekking', 'Aventura'],
-                verified: true,
-                author: 'ruta_transiberiana',
-                time: 'hace 1d',
-                votes: 2341,
-                comments: 512,
-                emoji: '🏔',
-                color: '#C0D8EE',
-            },
-            {
-                id: 5,
-                title: 'Las termas secretas de Islandia que no aparecen en ningún blog',
-                country: '🇮🇸 Islandia',
-                tags: ['Europa', 'Naturaleza'],
-                verified: false,
-                author: 'geysir_lover',
-                time: 'hace 2d',
-                votes: 678,
-                comments: 145,
-                emoji: '🧊',
-                color: '#B8D0EC',
-            },
-            {
-                id: 6,
-                title: 'Semana en Oaxaca: mezcal, tlayudas y el mercado que nunca cierra',
-                country: '🇲🇽 México',
-                tags: ['América', 'Gastronomía', 'Cultura'],
-                verified: false,
-                author: 'tortilla_viajera',
-                time: 'hace 3d',
-                votes: 891,
-                comments: 203,
-                emoji: '🌮',
-                color: '#F0E4C8',
-            },
+            { id: 1, title: 'Este pueblo de los Dolomitas no sale en ninguna guía — y prefiero que siga así', country: '🇮🇹 Italia', tags: ['Europa', 'Off-beat', 'Montaña'], verified: true, author: 'nomada_felix', time: 'hace 3h', votes: 847, comments: 234, emoji: '🏔', color: '#D6E8F5' },
+            { id: 2, title: 'Mercado flotante de Damnoen Saduak: guía sin tour y sin madrugones', country: '🇹🇭 Tailandia', tags: ['Asia', 'Gastronomía'], verified: false, author: 'mochilera_clara', time: 'hace 7h', votes: 512, comments: 98, emoji: '🛶', color: '#C8E8D8' },
+            { id: 3, title: '72h en Fez: el laberinto de la medina que te pierde y no quieres encontrar', country: '🇲🇦 Marruecos', tags: ['África', 'Cultura', 'Arquitectura'], verified: true, author: 'sahara_blues', time: 'hace 12h', votes: 1204, comments: 387, emoji: '🕌', color: '#D8E8F5' },
+            { id: 4, title: 'Trekking al Annapurna Base Camp sin agencia: todo lo que necesitas saber', country: '🇳🇵 Nepal', tags: ['Asia', 'Trekking', 'Aventura'], verified: true, author: 'ruta_transiberiana', time: 'hace 1d', votes: 2341, comments: 512, emoji: '🏔', color: '#C0D8EE' },
+            { id: 5, title: 'Las termas secretas de Islandia que no aparecen en ningún blog', country: '🇮🇸 Islandia', tags: ['Europa', 'Naturaleza'], verified: false, author: 'geysir_lover', time: 'hace 2d', votes: 678, comments: 145, emoji: '🧊', color: '#B8D0EC' },
+            { id: 6, title: 'Semana en Oaxaca: mezcal, tlayudas y el mercado que nunca cierra', country: '🇲🇽 México', tags: ['América', 'Gastronomía', 'Cultura'], verified: false, author: 'tortilla_viajera', time: 'hace 3d', votes: 891, comments: 203, emoji: '🌮', color: '#F0E4C8' },
         ];
 
         const extraPosts = [
-            {
-                id: 7,
-                title: 'Namibia en coche: 4.000 km de desierto y el cielo más grande del mundo',
-                country: '🇳🇦 Namibia',
-                tags: ['África', 'Road trip'],
-                verified: true,
-                author: 'kalahari_drive',
-                time: 'hace 4d',
-                votes: 1567,
-                comments: 298,
-                emoji: '🦒',
-                color: '#D0E4F4',
-            },
-            {
-                id: 8,
-                title: 'Hanói a Hội An en moto: ruta costera que cambió mi forma de viajar',
-                country: '🇻🇳 Vietnam',
-                tags: ['Asia', 'Moto', 'Costa'],
-                verified: false,
-                author: 'moto_nomada',
-                time: 'hace 5d',
-                votes: 743,
-                comments: 167,
-                emoji: '🏍',
-                color: '#C8E0F5',
-            },
+            { id: 7, title: 'Namibia en coche: 4.000 km de desierto y el cielo más grande del mundo', country: '🇳🇦 Namibia', tags: ['África', 'Road trip'], verified: true, author: 'kalahari_drive', time: 'hace 4d', votes: 1567, comments: 298, emoji: '🦒', color: '#D0E4F4' },
+            { id: 8, title: 'Hanói a Hội An en moto: ruta costera que cambió mi forma de viajar', country: '🇻🇳 Vietnam', tags: ['Asia', 'Moto', 'Costa'], verified: false, author: 'moto_nomada', time: 'hace 5d', votes: 743, comments: 167, emoji: '🏍', color: '#C8E0F5' },
         ];
 
         /* ── STATE ── */
@@ -1492,7 +2040,6 @@
             const displayVotes = p.votes + userVote;
             const upClass = userVote === 1 ? 'voted-up' : 'up';
             const dnClass = userVote === -1 ? 'voted-dn' : 'dn';
-
             const tagsHTML = p.tags.map(t => `<span class="card-tag">${t}</span>`).join('');
             const verifiedBadge = p.verified ? `<span class="card-tag verified">✓ Verificado</span>` : '';
 
@@ -1511,9 +2058,7 @@
         <div class="card-tags">${tagsHTML}${verifiedBadge}</div>
         <h2 class="card-title">${p.title}</h2>
         <div class="card-meta">
-          <span>u/${p.author}</span>
-          <span class="sep">·</span>
-          <span>${p.time}</span>
+          <span>u/${p.author}</span><span class="sep">·</span><span>${p.time}</span>
         </div>
         <div class="card-footer">
           <div class="vote-group">
@@ -1533,6 +2078,10 @@
             <button class="card-action">
               <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M10 2l3 3-3 3M2 9a4 4 0 004-4h7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
+            <button class="card-action card-report" onclick="reportPost(${p.id}, event)" title="Reportar abús">
+              <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M7 2v5M7 9v1.5" stroke-linecap="round"/><circle cx="7" cy="7" r="5.5"/></svg>
+              Reportar
+            </button>
           </div>
         </div>
       </div>
@@ -1543,26 +2092,64 @@
         function vote(id, dir, btn) {
             const prev = votes[id] || 0;
             votes[id] = prev === dir ? 0 : dir;
-
             const post = [...posts, ...extraPosts].find(p => p.id === id);
-            const display = post.votes + votes[id];
-            document.getElementById('vc-' + id).textContent = display;
-
-            // Animate
+            document.getElementById('vc-' + id).textContent = post.votes + votes[id];
             btn.classList.add('popping');
             btn.addEventListener('animationend', () => btn.classList.remove('popping'), { once: true });
-
-            // Re-render this card's buttons
             const card = btn.closest('.post-card');
             const [upBtn, dnBtn] = card.querySelectorAll('.vote-btn');
             upBtn.className = 'vote-btn ' + (votes[id] === 1 ? 'voted-up' : 'up');
             dnBtn.className = 'vote-btn ' + (votes[id] === -1 ? 'voted-dn' : 'dn');
         }
 
+        /* ── FILTER & SEARCH ── */
+        function filterPosts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const cat = document.getElementById('cat-select').value;
+            const all = [...posts, ...(loaded ? extraPosts : [])];
+
+            const filtered = all.filter(p => {
+                const matchText = !query ||
+                    p.title.toLowerCase().includes(query) ||
+                    p.author.toLowerCase().includes(query) ||
+                    p.country.toLowerCase().includes(query);
+                const matchCat = !cat || p.tags.includes(cat);
+                return matchText && matchCat;
+            });
+
+            const container = document.getElementById('posts-container');
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="no-results"><div class="no-results-icon">🔍</div>No s'han trobat experiències amb aquests filtres.</div>`;
+            } else {
+                container.innerHTML = filtered.map((p, i) => renderCard(p, i)).join('');
+            }
+        }
+
+        /* ── REPORT ── */
+        function reportPost(id, e) {
+            e.stopPropagation();
+            const btn = e.currentTarget;
+            btn.textContent = '✓ Reportat';
+            btn.style.color = '#DC2626';
+            btn.style.background = '#FEE2E2';
+            btn.disabled = true;
+        }
+
         /* ── SORT TABS ── */
-        function setSort(btn) {
+        function setSort(btn, type) {
             document.querySelectorAll('.sort-tab').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+
+            const all = [...posts, ...(loaded ? extraPosts : [])];
+            let sorted = [...all];
+            if (type === 'date') {
+                sorted.sort((a, b) => a.id - b.id);
+            } else if (type === 'score') {
+                sorted.sort((a, b) => (b.votes + (votes[b.id] || 0)) - (a.votes + (votes[a.id] || 0)));
+            } else if (type === 'new') {
+                sorted.sort((a, b) => b.id - a.id);
+            }
+            document.getElementById('posts-container').innerHTML = sorted.map((p, i) => renderCard(p, i)).join('');
         }
 
         /* ── VIEW TOGGLE ── */
@@ -1570,8 +2157,7 @@
             currentView = view;
             document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            const container = document.getElementById('posts-container');
-            container.className = view === 'grid' ? 'posts-grid' : 'posts-list';
+            document.getElementById('posts-container').className = view === 'grid' ? 'posts-grid' : 'posts-list';
         }
 
         /* ── TAG FILTER ── */
@@ -1598,12 +2184,67 @@
         function toggleTheme() {
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
-            document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀';
+            const icon = isDark ? '🌙' : '☀';
+            document.getElementById('theme-icon') && (document.getElementById('theme-icon').textContent = icon);
+            document.getElementById('theme-icon-mobile') && (document.getElementById('theme-icon-mobile').textContent = icon);
         }
+
+        /* ── MOBILE MENU ── */
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('hamburger');
+            const overlay = document.getElementById('menu-overlay');
+            const isOpen = menu.classList.contains('open');
+            if (isOpen) {
+                closeMenu();
+            } else {
+                menu.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('hamburger');
+            const overlay = document.getElementById('menu-overlay');
+            menu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close menu on Escape
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeMenu();
+        });
 
         /* ── INIT ── */
         renderPosts(posts);
     </script>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span class="footer-logo-text">
+                    <span class="footer-logo-mark">P</span>
+                    PathFinder
+                </span>
+                <span class="footer-sep">·</span>
+                <span class="footer-copy">&copy; 2025 Tots els drets reservats</span>
+            </div>
+            <nav class="footer-links" aria-label="Navegació peu de pàgina">
+                <a href="#">Inici</a>
+                <a href="#">Explorar</a>
+                <a href="#">Contacte</a>
+                <a href="#">Avís legal</a>
+                <a href="#">Termes i condicions</a>
+                <a href="#">Política de cookies</a>
+            </nav>
+        </div>
+    </footer>
 </body>
 
 </html>

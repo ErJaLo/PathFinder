@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administració — Viatges</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F0F4F8;
+            --surface: #FFFFFF;
+            --surface2: #EDF3FA;
+            --border: #D0DBE8;
+            --border2: #A8C4E0;
+            --text: #0D1F35;
+            --text2: #2E5070;
+            --text3: #4E7099;
+            --primary: #1A5FA8;
+            --primary-h: #0C4880;
+            --primary-l: #DCE9F7;
+            --accent: #E87D2C;
+            --accent-l: #FDE9D4;
+            --danger: #DC2626;
+            --danger-l: #FEE2E2;
+            --danger-h: #991B1B;
+            --success: #16A34A;
+            --success-l: #DCFCE7;
+            --warning: #D97706;
+            --warning-l: #FEF3C7;
+            --sidebar-w: 240px;
+            --shadow: 0 1px 4px rgba(13, 31, 53, .07), 0 4px 16px rgba(13, 31, 53, .05);
+            --r: 10px;
+            --r-sm: 6px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* ══════════════════════════════
+           SIDEBAR
+        ══════════════════════════════ */
+        .sidebar {
+            width: var(--sidebar-w);
+            min-height: 100vh;
+            background: var(--text);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 200;
+            transition: transform .3s cubic-bezier(.23, 1, .32, 1);
+        }
+
+        .sidebar-logo {
+            padding: 20px 20px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sidebar-logo-mark {
+            width: 34px;
+            height: 34px;
+            background: var(--primary);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-logo-badge {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-top: -2px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 12px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            padding: 12px 16px 4px;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            margin: 1px 8px;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .6);
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: calc(100% - 16px);
+            text-align: left;
+            transition: background .15s, color .15s;
+        }
+
+        .sidebar-item svg {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, .08);
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .sidebar-item.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .sidebar-item .badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 1px 6px;
+            border-radius: 999px;
+        }
+
+        .sidebar-item .badge.amber {
+            background: var(--warning);
+        }
+
+        .sidebar-footer {
+            padding: 12px 8px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sidebar-admin {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--r-sm);
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .sidebar-admin:hover {
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .sidebar-admin-ava {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .sidebar-admin-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .8);
+        }
+
+        .sidebar-admin-role {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        /* Hamburger per mòbil */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 300;
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: var(--text);
+            border: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .sidebar-toggle .bar {
+            display: block;
+            width: 16px;
+            height: 1.5px;
+            background: #fff;
+            border-radius: 2px;
+            transition: transform .3s, opacity .2s;
+            transform-origin: center;
+        }
+
+        .sidebar-open .sidebar-toggle .bar:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+
+        .sidebar-open .sidebar-toggle .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .sidebar-open .sidebar-toggle .bar:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 190;
+        }
+
+        /* ══════════════════════════════
+           MAIN CONTENT
+        ══════════════════════════════ */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 28px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topbar-link {
+            font-size: 12px;
+            color: var(--text3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: none;
+            transition: all .15s;
+        }
+
+        .topbar-link:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-l);
+        }
+
+        .topbar-link svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .content {
+            padding: 28px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        /* ══════════════════════════════
+           STATS ROW
+        ══════════════════════════════ */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 18px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-lbl {
+            font-size: 12px;
+            color: var(--text3);
+            margin-top: 3px;
+        }
+
+        .stat-delta {
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .stat-delta.up {
+            color: var(--success);
+        }
+
+        .stat-delta.dn {
+            color: var(--danger);
+        }
+
+        /* ══════════════════════════════
+           PANEL GENERIC
+        ══════════════════════════════ */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title svg {
+            width: 16px;
+            height: 16px;
+            color: var(--primary);
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        /* ══════════════════════════════
+           GRID 2 COL
+        ══════════════════════════════ */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* ══════════════════════════════
+           CATEGORIES
+        ══════════════════════════════ */
+        .cat-form {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .cat-input {
+            flex: 1;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--bg);
+            outline: none;
+            font-size: 13px;
+            color: var(--text);
+            transition: border-color .2s;
+        }
+
+        .cat-input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-add {
+            height: 36px;
+            padding: 0 16px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background .15s;
+        }
+
+        .btn-add:hover {
+            background: var(--primary-h);
+        }
+
+        .btn-add svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .cat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .cat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--bg);
+            transition: border-color .15s, background .15s;
+            animation: slideIn .2s ease;
+        }
+
+        .cat-item:hover {
+            border-color: var(--border2);
+            background: var(--surface2);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cat-item-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .cat-item-name {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .cat-item-count {
+            font-size: 11px;
+            color: var(--text3);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1px 8px;
+            border-radius: 999px;
+        }
+
+        .cat-item-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .cat-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            transition: all .15s;
+        }
+
+        .cat-btn svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .cat-btn.edit:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-l);
+        }
+
+        .cat-btn.del:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: var(--danger-l);
+        }
+
+        /* Edit inline */
+        .cat-item.editing .cat-item-name {
+            display: none;
+        }
+
+        .cat-item .cat-edit-input {
+            display: none;
+            flex: 1;
+            height: 26px;
+            padding: 0 8px;
+            border: 1px solid var(--primary);
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            outline: none;
+            background: var(--surface);
+        }
+
+        .cat-item.editing .cat-edit-input {
+            display: block;
+        }
+
+        .cat-btn.save {
+            display: none;
+        }
+
+        .cat-item.editing .cat-btn.save {
+            display: flex;
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .cat-item.editing .cat-btn.save:hover {
+            background: var(--success-l);
+        }
+
+        .cat-item.editing .cat-btn.edit {
+            display: none;
+        }
+
+        /* ══════════════════════════════
+           USERS TABLE
+        ══════════════════════════════ */
+        .user-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 0 12px;
+            height: 34px;
+            flex: 1;
+            min-width: 160px;
+            background: var(--bg);
+            transition: border-color .2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+        }
+
+        .search-box svg {
+            width: 13px;
+            height: 13px;
+            color: var(--text3);
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text3);
+        }
+
+        .filter-select {
+            height: 34px;
+            padding: 0 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--bg);
+            color: var(--text2);
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color .2s;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+        }
+
+        .users-table-wrap {
+            overflow-x: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .users-table th {
+            text-align: left;
+            padding: 10px 14px;
+            background: var(--bg);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            color: var(--text3);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .users-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .users-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .users-table tr:hover td {
+            background: var(--surface2);
+        }
+
+        .users-table tr.deleted td {
+            opacity: .4;
+            text-decoration: line-through;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-ava {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        .user-email {
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        .badge-role {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .badge-role.admin {
+            background: var(--primary-l);
+            color: var(--primary);
+        }
+
+        .badge-role.user {
+            background: var(--surface2);
+            color: var(--text3);
+            border: 1px solid var(--border);
+        }
+
+        .badge-status {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-status .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .badge-status.active {
+            background: var(--success-l);
+            color: var(--success);
+        }
+
+        .badge-status.active .dot {
+            background: var(--success);
+        }
+
+        .badge-status.inactive {
+            background: var(--bg);
+            color: var(--text3);
+            border: 1px solid var(--border);
+        }
+
+        .badge-status.inactive .dot {
+            background: var(--text3);
+        }
+
+        .badge-status.deleted {
+            background: var(--danger-l);
+            color: var(--danger);
+        }
+
+        .badge-status.deleted .dot {
+            background: var(--danger);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .tbl-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            transition: all .15s;
+        }
+
+        .tbl-btn svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .tbl-btn:hover {
+            border-color: var(--border2);
+            color: var(--text2);
+            background: var(--surface2);
+        }
+
+        .tbl-btn.danger:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: var(--danger-l);
+        }
+
+        .tbl-btn:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+        }
+
+        /* Confirmació de baixa */
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 15, 26, .5);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .confirm-overlay.open {
+            display: flex;
+        }
+
+        .confirm-modal {
+            background: var(--surface);
+            border-radius: var(--r);
+            padding: 28px;
+            max-width: 380px;
+            width: 90%;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
+            animation: modalIn .2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(.94) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .confirm-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--danger-l);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+
+        .confirm-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .confirm-desc {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .confirm-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .confirm-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            height: 38px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            background: none;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text2);
+            transition: background .15s;
+        }
+
+        .btn-cancel:hover {
+            background: var(--bg);
+        }
+
+        .btn-confirm-del {
+            flex: 1;
+            height: 38px;
+            border-radius: var(--r-sm);
+            border: none;
+            background: var(--danger);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background .15s;
+        }
+
+        .btn-confirm-del:hover {
+            background: var(--danger-h);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--text);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 12px 18px;
+            border-radius: var(--r-sm);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 600;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity .2s, transform .2s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.danger {
+            background: var(--danger);
+        }
+
+        /* ══════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════ */
+        @media (max-width: 1024px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .sidebar-open .sidebar-overlay {
+                display: block;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .topbar {
+                padding: 0 16px 0 60px;
+            }
+
+            .content {
+                padding: 16px;
+                gap: 20px;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .stat-num {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .users-table th:nth-child(3),
+            .users-table td:nth-child(3),
+            .users-table th:nth-child(4),
+            .users-table td:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══ SIDEBAR TOGGLE (mòbil) ═══ -->
+    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Menú">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-mark">V</div>
+            <div>
+                <div class="sidebar-logo-text">PathFinder</div>
+                <div class="sidebar-logo-badge">Administració</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">General</div>
+            <button class="sidebar-item" onclick="goTo('dashboard')">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <rect x="1" y="1" width="6" height="6" rx="1" />
+                    <rect x="9" y="1" width="6" height="6" rx="1" />
+                    <rect x="1" y="9" width="6" height="6" rx="1" />
+                    <rect x="9" y="9" width="6" height="6" rx="1" />
+                </svg>
+                Resum
+            </button>
+
+            <div class="sidebar-section">Contingut</div>
+            <button class="sidebar-item active" onclick="showSection('categories', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <path d="M2 4h12M2 8h8M2 12h5" stroke-linecap="round" />
+                </svg>
+                Gestió de categories
+            </button>
+            <button class="sidebar-item" onclick="showSection('reports', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <path d="M8 2v6M8 11v1" stroke-linecap="round" />
+                    <circle cx="8" cy="8" r="6.5" />
+                </svg>
+                Abusos reportats
+                <span class="badge">3</span>
+            </button>
+
+            <div class="sidebar-section">Usuaris</div>
+            <button class="sidebar-item" onclick="showSection('users', this)">
+                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="6" cy="5" r="3" />
+                    <path d="M1 14c0-3.3 2.2-6 5-6s5 2.7 5 6" />
+                    <circle cx="12" cy="5" r="2" />
+                    <path d="M14 14c0-2.2-1.3-4-3-4.5" stroke-linecap="round" />
+                </svg>
+                Baixa d'usuaris
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-admin">
+                <div class="sidebar-admin-ava">AD</div>
+                <div>
+                    <div class="sidebar-admin-name">admin</div>
+                    <div class="sidebar-admin-role">Administrador</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN ═══ -->
+    <div class="main">
+        <div class="topbar">
+            <span class="topbar-title" id="topbar-title">Gestió de categories</span>
+            <div class="topbar-right">
+                <a href="index.html" class="topbar-link">
+                    <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 2L4 6l5 4" stroke-linecap="round" />
+                    </svg>
+                    Tornar a la web
+                </a>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#DCE9F7">📁</div>
+                    <div>
+                        <div class="stat-num" id="stat-cats">9</div>
+                        <div class="stat-lbl">Categories</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#DCFCE7">👥</div>
+                    <div>
+                        <div class="stat-num">42.8K</div>
+                        <div class="stat-lbl">Usuaris registrats</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#FEE2E2">🚩</div>
+                    <div>
+                        <div class="stat-num">3</div>
+                        <div class="stat-lbl">Abusos pendents</div>
+                        <div class="stat-delta dn">Requereix atenció</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#FEF3C7">📝</div>
+                    <div>
+                        <div class="stat-num">189K</div>
+                        <div class="stat-lbl">Experiències</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SECCIÓ: CATEGORIES ═══ -->
+            <div id="section-categories">
+                <div class="two-col">
+
+                    <!-- Afegir categoria -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">
+                                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="6.5" />
+                                    <path d="M8 5v6M5 8h6" stroke-linecap="round" />
+                                </svg>
+                                Nova categoria
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="cat-form">
+                                <input class="cat-input" id="cat-new-input" type="text"
+                                    placeholder="Nom de la categoria…" maxlength="30"
+                                    onkeydown="if(event.key==='Enter') addCategory()">
+                                <button class="btn-add" onclick="addCategory()">
+                                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2">
+                                        <path d="M7 2v10M2 7h10" stroke-linecap="round" />
+                                    </svg>
+                                    Afegir
+                                </button>
+                            </div>
+                            <p style="font-size:12px;color:var(--text3)">Màxim 30 caràcters. Les categories s'apliquen a
+                                totes les experiències.</p>
+                        </div>
+                    </div>
+
+                    <!-- Llista de categories -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">
+                                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M2 4h12M2 8h8M2 12h5" stroke-linecap="round" />
+                                </svg>
+                                Categories actuals
+                            </span>
+                            <span style="font-size:12px;color:var(--text3)" id="cat-count-label">9 categories</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="cat-list" id="cat-list"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ═══ SECCIÓ: USUARIS ═══ -->
+            <div id="section-users" style="display:none">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="6" cy="5" r="3" />
+                                <path d="M1 14c0-3.3 2.2-6 5-6s5 2.7 5 6" />
+                            </svg>
+                            Gestió d'usuaris
+                        </span>
+                        <div class="user-toolbar">
+                            <div class="search-box">
+                                <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
+                                    <circle cx="6.5" cy="6.5" r="4" />
+                                    <path d="M10 10l3 3" stroke-linecap="round" />
+                                </svg>
+                                <input type="text" id="user-search" placeholder="Cerca per nom o email…"
+                                    oninput="filterUsers()">
+                            </div>
+                            <select class="filter-select" id="user-filter" onchange="filterUsers()">
+                                <option value="">Tots els estats</option>
+                                <option value="active">Actius</option>
+                                <option value="inactive">Inactius</option>
+                                <option value="deleted">Donats de baixa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="users-table-wrap">
+                        <table class="users-table" id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Usuari</th>
+                                    <th>Rol</th>
+                                    <th>Experiències</th>
+                                    <th>Registre</th>
+                                    <th>Estat</th>
+                                    <th>Accions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SECCIÓ: ABUSOS ═══ -->
+            <div id="section-reports" style="display:none">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
+                                <path d="M8 2v6M8 11v1" stroke-linecap="round" />
+                                <circle cx="8" cy="8" r="6.5" />
+                            </svg>
+                            Abusos reportats
+                        </span>
+                        <span style="font-size:12px;color:var(--text3)">3 pendents de revisió</span>
+                    </div>
+                    <div class="panel-body"
+                        style="color:var(--text3);font-size:13px;text-align:center;padding:40px 20px">
+                        <div style="font-size:36px;margin-bottom:12px">🚩</div>
+                        Secció d'abusos reportats (pendent d'implementació en fases posteriors).
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══ MODAL CONFIRMACIÓ BAIXA ═══ -->
+    <div class="confirm-overlay" id="confirm-overlay">
+        <div class="confirm-modal">
+            <div class="confirm-icon">🗑</div>
+            <div class="confirm-title">Donar de baixa l'usuari</div>
+            <div class="confirm-desc">
+                Estàs a punt de donar de baixa l'usuari <span class="confirm-name" id="confirm-username"></span>.
+                Aquesta acció desactivarà el seu compte. Les seves experiències es mantindran però quedaran associades a
+                un compte inactiu.
+            </div>
+            <div class="confirm-btns">
+                <button class="btn-cancel" onclick="closeConfirm()">Cancel·lar</button>
+                <button class="btn-confirm-del" onclick="confirmDelete()">Donar de baixa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ TOAST ═══ -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        /* ══════════════════════════════
+           DATA
+        ══════════════════════════════ */
+        let categories = [
+            { id: 1, name: 'Aventura', color: '#E87D2C', count: 2341 },
+            { id: 2, name: 'Muntanyisme', color: '#1A5FA8', count: 1890 },
+            { id: 3, name: 'Familiar', color: '#16A34A', count: 1204 },
+            { id: 4, name: 'Històric', color: '#D97706', count: 987 },
+            { id: 5, name: 'Romàntic', color: '#DC2626', count: 876 },
+            { id: 6, name: 'Gastronomia', color: '#7C3AED', count: 743 },
+            { id: 7, name: 'Naturalesa', color: '#059669', count: 612 },
+            { id: 8, name: 'Cultura', color: '#0891B2', count: 534 },
+            { id: 9, name: 'Road trip', color: '#4F46E5', count: 421 },
+        ];
+        let nextCatId = 10;
+
+        let users = [
+            { id: 1, name: 'nomada_felix', email: 'felix@example.com', role: 'user', posts: 48, joined: '12 gen. 2022', status: 'active', ava: 'NF', bg: '#DCE9F7', fg: '#1A5FA8' },
+            { id: 2, name: 'mochilera_clara', email: 'clara@example.com', role: 'user', posts: 31, joined: '3 feb. 2022', status: 'active', ava: 'MC', bg: '#DCFCE7', fg: '#16A34A' },
+            { id: 3, name: 'ruta_transiberiana', email: 'ruta@example.com', role: 'user', posts: 27, joined: '9 mar. 2021', status: 'active', ava: 'RT', bg: '#FDE9D4', fg: '#C45E10' },
+            { id: 4, name: 'sahara_blues', email: 'sahara@example.com', role: 'user', posts: 22, joined: '1 abr. 2023', status: 'active', ava: 'SB', bg: '#E0E7FF', fg: '#4338CA' },
+            { id: 5, name: 'geysir_lover', email: 'geysir@example.com', role: 'user', posts: 15, joined: '20 mai. 2023', status: 'inactive', ava: 'GL', bg: '#F0F4F8', fg: '#4E7099' },
+            { id: 6, name: 'tortilla_viajera', email: 'tortilla@example.com', role: 'user', posts: 12, joined: '7 jun. 2023', status: 'active', ava: 'TV', bg: '#FEF3C7', fg: '#D97706' },
+            { id: 7, name: 'kalahari_drive', email: 'kalahari@example.com', role: 'user', posts: 9, joined: '14 jul. 2023', status: 'deleted', ava: 'KD', bg: '#FEE2E2', fg: '#DC2626' },
+            { id: 8, name: 'admin', email: 'admin@viatges.cat', role: 'admin', posts: 0, joined: '1 gen. 2019', status: 'active', ava: 'AD', bg: '#1A5FA8', fg: '#fff' },
+        ];
+
+        let pendingDeleteId = null;
+
+        /* ══════════════════════════════
+           RENDER CATEGORIES
+        ══════════════════════════════ */
+        function renderCategories() {
+            const list = document.getElementById('cat-list');
+            list.innerHTML = categories.map(c => `
+                <div class="cat-item" id="cat-${c.id}">
+                    <div class="cat-item-dot" style="background:${c.color}"></div>
+                    <span class="cat-item-name">${c.name}</span>
+                    <input class="cat-edit-input" value="${c.name}" onkeydown="if(event.key==='Enter') saveCategory(${c.id})">
+                    <span class="cat-item-count">${c.count.toLocaleString()} exp.</span>
+                    <div class="cat-item-actions">
+                        <button class="cat-btn edit" onclick="editCategory(${c.id})" title="Editar">
+                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M8 2l2 2-6 6H2V8L8 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <button class="cat-btn save" onclick="saveCategory(${c.id})" title="Guardar">
+                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2"><path d="M2 6l3 3 5-5" stroke-linecap="round"/></svg>
+                        </button>
+                        <button class="cat-btn del" onclick="deleteCategory(${c.id})" title="Eliminar">
+                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M2 3h8M4 3V2h4v1M5 5v4M7 5v4" stroke-linecap="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('cat-count-label').textContent = `${categories.length} categories`;
+            document.getElementById('stat-cats').textContent = categories.length;
+        }
+
+        function addCategory() {
+            const input = document.getElementById('cat-new-input');
+            const name = input.value.trim();
+            if (!name) { showToast('Introdueix un nom per a la categoria', 'danger'); return; }
+            if (categories.find(c => c.name.toLowerCase() === name.toLowerCase())) {
+                showToast('Ja existeix una categoria amb aquest nom', 'danger'); return;
+            }
+            const colors = ['#E87D2C', '#1A5FA8', '#16A34A', '#D97706', '#DC2626', '#7C3AED', '#059669', '#0891B2', '#4F46E5', '#0F766E'];
+            categories.push({ id: nextCatId++, name, color: colors[Math.floor(Math.random() * colors.length)], count: 0 });
+            input.value = '';
+            renderCategories();
+            showToast(`Categoria "${name}" afegida`, 'success');
+        }
+
+        function editCategory(id) {
+            const el = document.getElementById(`cat-${id}`);
+            el.classList.add('editing');
+            el.querySelector('.cat-edit-input').focus();
+        }
+
+        function saveCategory(id) {
+            const el = document.getElementById(`cat-${id}`);
+            const input = el.querySelector('.cat-edit-input');
+            const newName = input.value.trim();
+            if (!newName) return;
+            const cat = categories.find(c => c.id === id);
+            cat.name = newName;
+            el.classList.remove('editing');
+            renderCategories();
+            showToast(`Categoria actualitzada`, 'success');
+        }
+
+        function deleteCategory(id) {
+            const cat = categories.find(c => c.id === id);
+            if (!confirm(`Eliminar la categoria "${cat.name}"? Les experiències no s'eliminaran.`)) return;
+            categories = categories.filter(c => c.id !== id);
+            renderCategories();
+            showToast(`Categoria "${cat.name}" eliminada`, 'danger');
+        }
+
+        /* ══════════════════════════════
+           RENDER USERS
+        ══════════════════════════════ */
+        function renderUsers(data) {
+            const tbody = document.getElementById('users-tbody');
+            tbody.innerHTML = data.map(u => {
+                const statusLabel = { active: 'Actiu', inactive: 'Inactiu', deleted: 'Baixa' }[u.status];
+                const isDeleted = u.status === 'deleted';
+                return `
+                <tr id="user-row-${u.id}" class="${isDeleted ? 'deleted' : ''}">
+                    <td>
+                        <div class="user-cell">
+                            <div class="user-ava" style="background:${u.bg};color:${u.fg}">${u.ava}</div>
+                            <div>
+                                <div class="user-name">u/${u.name}</div>
+                                <div class="user-email">${u.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge-role ${u.role}">${u.role === 'admin' ? 'Admin' : 'Usuari'}</span></td>
+                    <td>${u.posts}</td>
+                    <td>${u.joined}</td>
+                    <td>
+                        <span class="badge-status ${u.status}">
+                            <span class="dot"></span>${statusLabel}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="tbl-btn" title="Veure experiències" ${isDeleted ? 'disabled' : ''}>
+                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><path d="M9 9l2 2" stroke-linecap="round"/></svg>
+                            </button>
+                            <button class="tbl-btn danger" title="Donar de baixa"
+                                ${isDeleted || u.role === 'admin' ? 'disabled' : `onclick="openConfirm(${u.id})"`}>
+                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M2 3h8M4 3V2h4v1M5 5v4M7 5v4" stroke-linecap="round"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function filterUsers() {
+            const q = document.getElementById('user-search').value.toLowerCase();
+            const st = document.getElementById('user-filter').value;
+            const filtered = users.filter(u =>
+                (!q || u.name.includes(q) || u.email.includes(q)) &&
+                (!st || u.status === st)
+            );
+            renderUsers(filtered);
+        }
+
+        /* ══════════════════════════════
+           BAIXA D'USUARI
+        ══════════════════════════════ */
+        function openConfirm(id) {
+            pendingDeleteId = id;
+            const u = users.find(u => u.id === id);
+            document.getElementById('confirm-username').textContent = `u/${u.name}`;
+            document.getElementById('confirm-overlay').classList.add('open');
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirm-overlay').classList.remove('open');
+            pendingDeleteId = null;
+        }
+
+        function confirmDelete() {
+            const u = users.find(u => u.id === pendingDeleteId);
+            u.status = 'deleted';
+            closeConfirm();
+            filterUsers();
+            showToast(`Usuari u/${u.name} donat de baixa`, 'danger');
+        }
+
+        /* ══════════════════════════════
+           NAVEGACIÓ SECCIONS
+        ══════════════════════════════ */
+        const sectionTitles = {
+            categories: 'Gestió de categories',
+            users: 'Baixa d\'usuaris',
+            reports: 'Abusos reportats',
+        };
+
+        function showSection(name, btn) {
+            ['categories', 'users', 'reports'].forEach(s => {
+                document.getElementById(`section-${s}`).style.display = s === name ? 'block' : 'none';
+            });
+            document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('topbar-title').textContent = sectionTitles[name];
+            if (name === 'users') filterUsers();
+            closeSidebar();
+        }
+
+        function goTo(page) { window.location.href = page === 'dashboard' ? 'index.html' : page + '.html'; }
+
+        /* ══════════════════════════════
+           SIDEBAR MÒBIL
+        ══════════════════════════════ */
+        function toggleSidebar() { document.body.classList.toggle('sidebar-open'); }
+        function closeSidebar() { document.body.classList.remove('sidebar-open'); }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSidebar(); closeConfirm(); } });
+
+        /* ══════════════════════════════
+           TOAST
+        ══════════════════════════════ */
+        let toastTimer;
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `toast ${type} show`;
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        /* ══════════════════════════════
+           INIT
+        ══════════════════════════════ */
+        renderCategories();
+        renderUsers(users);
+    </script>
+</body>
+
+</html>
