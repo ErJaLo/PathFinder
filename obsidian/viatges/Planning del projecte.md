@@ -38,13 +38,13 @@ Configuració inicial del projecte: Laravel + Inertia + React 19. Estructura de 
 - [x] **Frontend:** Pàgines de settings creades (profile, security, appearance).
 
 ### Tasques pendents
-- [ ] **Backend:** Crear migracions de negoci: `experiencies`, `categories`, `votes`, `reports`.
-- [ ] **Backend:** Afegir camp `role` a la taula `users` (`enum: user, moderator, admin`, default: `user`).
-- [ ] **Backend:** Crear models Eloquent: `Experiencia`, `Category`, `Vote`, `Report`.
-- [ ] **Backend:** Crear seeders amb dades de prova (usuaris dels 3 rols, categories, experiències).
-- [ ] **Backend:** Middleware de rol (`CheckRole`) per protegir rutes d'administració.
+- [x] **Backend:** Crear migracions de negoci: `experiencies`, `categories`, `votes`, `reports`.
+- [x] **Backend:** Afegir camp `role` a la taula `users` (`enum: user, moderator, admin`, default: `user`).
+- [x] **Backend:** Crear models Eloquent: `Experiencia`, `Category`, `Vote`, `Report`.
+- [x] **Backend:** Crear seeders amb dades de prova (usuaris dels 3 rols, categories, experiències).
+- [x] **Backend:** Middleware de rol (`CheckRole`) per protegir rutes d'administració.
 - [ ] **Frontend:** Crear `MainLayout.tsx` (header, nav, footer amb copyright) — layout persistent per a la vista d'usuari.
-- [ ] **Frontend:** Crear `AdminLayout.tsx` — layout per a la vista d'administració (sidebar/tabs).
+- [x] **Frontend:** Crear `AdminLayout.tsx` — layout per a la vista d'administració (sidebar/tabs).
 - [ ] **Docs:** Diagrama relacional de la base de dades (PDF).
 - [ ] **Docs:** Esbós de l'estructura del lloc (PDF).
 - [ ] **Docs:** README.md amb integrants, objectiu i resum.
