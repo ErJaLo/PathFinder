@@ -23,6 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'img',
+        'active',
     ];
 
     /**
@@ -48,6 +51,52 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'active' => 'boolean',
         ];
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
+    public function countriesVisited()
+    {
+        return $this->belongsToMany(Country::class, 'user_country', 'user_id', 'country_code', 'id', 'code');
+    }
+
+    public function sentNotifications()
+    {
+        return $this->hasMany(Notification::class, 'sender_id');
+    }
+
+    public function receivedNotifications()
+    {
+        return $this->hasMany(Notification::class, 'receiver_id');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isModerator(): bool
+    {
+        return $this->role === 'moderator';
+    }
+
+    public function hasAdminAccess(): bool
+    {
+        return in_array($this->role, ['admin', 'moderator']);
     }
 }
