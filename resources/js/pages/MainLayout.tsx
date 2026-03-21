@@ -1,10 +1,14 @@
 import React from "react";
+import Header from "@/components/Header";
 
 function MainLayout() {
     return (
-        <div>
-            <p></p>
-        </div>
+        <>
+            <Header />
+            <div>
+                <p></p>
+            </div>
+        </>
     );
 }
 
