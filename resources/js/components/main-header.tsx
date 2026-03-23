@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { Map, Compass, User, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     DropdownMenu,
@@ -10,6 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { useInitials } from '@/hooks/use-initials';
 import { home, login, register } from '@/routes';
 import type { Auth } from '@/types';
@@ -24,6 +26,7 @@ export function MainHeader() {
     const user = auth?.user;
     const getInitials = useInitials();
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { theme, toggleTheme } = useTheme();
 
     return (
         <nav className="sticky top-0 z-50 border-b border-pf-border bg-pf-surface/92 backdrop-blur-sm dark:border-pf-border-dark dark:bg-pf-surface-dark/92">
@@ -37,6 +40,7 @@ export function MainHeader() {
                     />
                 </Link>
 
+
                 {/* Desktop nav */}
                 <div className="hidden items-center gap-1 md:flex">
                     {navItems.map((item) => (
@@ -49,7 +53,10 @@ export function MainHeader() {
                             {item.title}
                         </Link>
                     ))}
+                    
                 </div>
+
+
 
                 {/* Desktop user icon */}
                 <div className="hidden md:flex">
@@ -82,26 +89,35 @@ export function MainHeader() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <button className="flex h-9 w-9 items-center justify-center rounded-full text-pf-text-2 transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
-                                    <User className="h-5 w-5" />
-                                </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-48">
-                                <DropdownMenuItem asChild>
-                                    <Link href={login()} className="cursor-pointer">
-                                        Iniciar sessió
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link href={register()} className="cursor-pointer">
-                                        Registrar-se
-                                    </Link>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Link href={login()} className="flex h-12 w-12 items-center justify-center rounded-full text-pf-text-2 transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
+                            <User className="w-6 h-6" />
+                        </Link>
+
+                        // <DropdownMenu>
+                        //     <DropdownMenuTrigger asChild>
+                        //         <button className="flex h-9 w-9 items-center justify-center rounded-full text-pf-text-2 transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
+                        //             <User className="h-5 w-5"  />
+                        //         </button>
+                        //     </DropdownMenuTrigger>
+                        //     <DropdownMenuContent align="end" className="w-48">
+                        //         <DropdownMenuItem asChild>
+                        //             <Link href={login()} className="cursor-pointer">
+                        //                 Iniciar sessió
+                        //             </Link>
+                        //         </DropdownMenuItem>
+                        //         <DropdownMenuItem asChild>
+                        //             <Link href={register()} className="cursor-pointer">
+                        //                 Registrar-se
+                        //             </Link>
+                        //         </DropdownMenuItem>
+                        //     </DropdownMenuContent>
+                        // </DropdownMenu>
                     )}
+                    <button className="ml-4 p-3 rounded-full bg-blue-50 hover:bg-blue-200 transition" onClick={toggleTheme} title="Cambiar tema">
+                        {theme === 'dark'
+                            ? <HiOutlineSun className="w-6 h-6 text-blue-700" />
+                            : <HiOutlineMoon className="w-6 h-6 text-blue-700" />}
+                    </button>
                 </div>
 
                 {/* Mobile hamburger */}
@@ -135,6 +151,11 @@ export function MainHeader() {
                                     {item.title}
                                 </Link>
                             ))}
+                            <button className="ml-2 mt-2 self-start p-3 rounded-full bg-blue-50 hover:bg-blue-200 transition" onClick={toggleTheme} title="Cambiar tema">
+                                {theme === 'dark'
+                                    ? <HiOutlineSun className="w-6 h-6 text-blue-700" />
+                                    : <HiOutlineMoon className="w-6 h-6 text-blue-700" />}
+                            </button>
                             <div className="mt-2 flex gap-2 border-t border-pf-border pt-3 dark:border-pf-border-dark">
                                 {user ? (
                                     <Link
