@@ -29,7 +29,7 @@ export function MainHeader() {
     const { theme, toggleTheme } = useTheme();
 
     return (
-        <nav className="sticky top-0 z-50 border-b border-pf-border bg-pf-surface/92 backdrop-blur-sm dark:border-pf-border-dark dark:bg-pf-surface-dark/92">
+        <nav className="sticky top-0 z-50 border-b border-pf-border bg-pf-surface/90 backdrop-blur-sm dark:border-pf-border-dark dark:bg-pf-surface-dark/90">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
                 {/* Logo */}
                 <Link href={home()} className="flex-shrink-0">
@@ -47,23 +47,22 @@ export function MainHeader() {
                         <Link
                             key={item.title}
                             href={item.href}
-                            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-pf-text-2 transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark"
+                            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-pf-text-2 hover:bg-pf-primary-l hover:text-pf-primary transition-colors dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark"
                         >
                             <item.icon className="h-4 w-4" />
                             {item.title}
                         </Link>
                     ))}
-                    
                 </div>
 
 
 
                 {/* Desktop user icon */}
-                <div className="hidden md:flex">
+                <div className="hidden md:flex items-center gap-2">
                     {user ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-pf-primary-l dark:hover:bg-pf-primary-ldark">
+                                <button className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
                                     <Avatar className="h-8 w-8">
                                         <AvatarImage src={user.img ?? user.avatar} alt={user.name} />
                                         <AvatarFallback className="bg-pf-primary-l text-xs font-semibold text-pf-primary dark:bg-pf-primary-ldark dark:text-pf-primary-dark">
@@ -89,34 +88,18 @@ export function MainHeader() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
-                        <Link href={login()} className="flex h-12 w-12 items-center justify-center rounded-full text-pf-text-2 transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
+                        <Link href={login()} className="flex h-12 w-12 items-center justify-center rounded-full text-pf-text-2 hover:bg-pf-primary-l hover:text-pf-primary transition-colors dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
                             <User className="w-6 h-6" />
                         </Link>
-
-                        // <DropdownMenu>
-                        //     <DropdownMenuTrigger asChild>
-                        //         <button className="flex h-9 w-9 items-center justify-center rounded-full text-pf-text-2 transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
-                        //             <User className="h-5 w-5"  />
-                        //         </button>
-                        //     </DropdownMenuTrigger>
-                        //     <DropdownMenuContent align="end" className="w-48">
-                        //         <DropdownMenuItem asChild>
-                        //             <Link href={login()} className="cursor-pointer">
-                        //                 Iniciar sessió
-                        //             </Link>
-                        //         </DropdownMenuItem>
-                        //         <DropdownMenuItem asChild>
-                        //             <Link href={register()} className="cursor-pointer">
-                        //                 Registrar-se
-                        //             </Link>
-                        //         </DropdownMenuItem>
-                        //     </DropdownMenuContent>
-                        // </DropdownMenu>
                     )}
-                    <button className="ml-4 p-3 rounded-full bg-blue-50 hover:bg-blue-200 transition" onClick={toggleTheme} title="Cambiar tema">
+                    <button
+                        className="ml-4 p-3 rounded-full bg-pf-primary-l hover:bg-pf-primary/10 border border-pf-border transition dark:bg-pf-primary-ldark dark:hover:bg-pf-primary-dark/20 dark:border-pf-border-dark"
+                        onClick={toggleTheme}
+                        title="Cambiar tema"
+                    >
                         {theme === 'dark'
-                            ? <HiOutlineSun className="w-6 h-6 text-blue-700" />
-                            : <HiOutlineMoon className="w-6 h-6 text-blue-700" />}
+                            ? <HiOutlineSun className="w-6 h-6 text-pf-primary-dark" />
+                            : <HiOutlineMoon className="w-6 h-6 text-pf-primary" />}
                     </button>
                 </div>
 
@@ -151,10 +134,14 @@ export function MainHeader() {
                                     {item.title}
                                 </Link>
                             ))}
-                            <button className="ml-2 mt-2 self-start p-3 rounded-full bg-blue-50 hover:bg-blue-200 transition" onClick={toggleTheme} title="Cambiar tema">
+                            <button
+                                className="ml-2 mt-2 self-start p-3 rounded-full bg-pf-primary-l hover:bg-pf-primary/10 border border-pf-border transition dark:bg-pf-primary-ldark dark:hover:bg-pf-primary-dark/20 dark:border-pf-border-dark"
+                                onClick={toggleTheme}
+                                title="Cambiar tema"
+                            >
                                 {theme === 'dark'
-                                    ? <HiOutlineSun className="w-6 h-6 text-blue-700" />
-                                    : <HiOutlineMoon className="w-6 h-6 text-blue-700" />}
+                                    ? <HiOutlineSun className="w-6 h-6 text-pf-primary-dark" />
+                                    : <HiOutlineMoon className="w-6 h-6 text-pf-primary" />}
                             </button>
                             <div className="mt-2 flex gap-2 border-t border-pf-border pt-3 dark:border-pf-border-dark">
                                 {user ? (
