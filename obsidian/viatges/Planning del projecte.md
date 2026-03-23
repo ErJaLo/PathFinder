@@ -45,8 +45,8 @@ Configuració inicial del projecte: Laravel + Inertia + React 19. Estructura de 
 - [x] **Backend:** Middleware de rol (`CheckRole`) per protegir rutes d'administració.
 - [ ] **Frontend:** Crear `MainLayout.tsx` (header, nav, footer amb copyright) — layout persistent per a la vista d'usuari.
 - [x] **Frontend:** Crear `AdminLayout.tsx` — layout per a la vista d'administració (sidebar/tabs).
-- [ ] **Docs:** Diagrama relacional de la base de dades (PDF).
-- [ ] **Docs:** Esbós de l'estructura del lloc (PDF).
+- [ ] **Docs:** Diagrama relacional de la base de dades (Obsidian md). 
+- [ ] **Docs:** Esbós de l'estructura del lloc (/dissenyos ejemplo).
 - [ ] **Docs:** README.md amb integrants, objectiu i resum.
 
 ---

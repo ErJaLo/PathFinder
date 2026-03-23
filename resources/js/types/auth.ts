@@ -1,8 +1,13 @@
+export type UserRole = 'user' | 'moderator' | 'admin';
+
 export type User = {
     id: number;
     name: string;
     email: string;
     avatar?: string;
+    role: UserRole;
+    img?: string | null;
+    active: boolean;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
     created_at: string;
