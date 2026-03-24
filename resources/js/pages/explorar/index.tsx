@@ -379,12 +379,12 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                             <div
                                 className={
                                     view === 'grid'
-                                        ? 'columns-1 gap-3.5 sm:columns-2'
+                                        ? 'grid grid-cols-1 gap-3.5 sm:grid-cols-2'
                                         : 'flex flex-col gap-2.5'
                                 }
                             >
                                 {experiences.data.map((exp) => (
-                                    <div key={exp.id} className={view === 'grid' ? 'mb-3.5 break-inside-avoid' : ''}>
+                                    <div key={exp.id}>
                                         <ExperienceCard
                                             experience={exp}
                                             layout={view === 'list' ? 'horizontal' : 'vertical'}

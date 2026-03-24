@@ -53,7 +53,7 @@ export function ExperienceCard({ experience, size = 'default', layout = 'vertica
 
     return (
         <article
-            className={`group flex overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-pf-border-2 hover:shadow-lg dark:border-pf-border-dark dark:bg-pf-surface-dark dark:hover:border-pf-border-2dark ${
+            className={`group flex h-full overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-pf-border-2 hover:shadow-lg dark:border-pf-border-dark dark:bg-pf-surface-dark dark:hover:border-pf-border-2dark ${
                 isHorizontal ? 'h-[130px] flex-row' : 'flex-col max-sm:h-[120px] max-sm:flex-row'
             } ${className}`}
         >
@@ -102,7 +102,7 @@ export function ExperienceCard({ experience, size = 'default', layout = 'vertica
                 isHorizontal ? 'px-4 py-3' : `max-sm:px-3 max-sm:py-2.5 ${isLg ? 'px-5 pb-5 pt-4' : 'px-4 pb-4 pt-3.5'}`
             }`}>
                 <div className={isHorizontal ? 'flex items-start justify-between gap-2' : ''}>
-                    <h3 className={`line-clamp-2 font-semibold leading-snug text-pf-text dark:text-pf-text-dark ${
+                    <h3 className={`line-clamp-2 min-h-[2lh] font-semibold leading-snug text-pf-text dark:text-pf-text-dark ${
                         isHorizontal ? 'mb-1 text-[14px]' : `mb-2 max-sm:mb-1 max-sm:text-[13px] ${isLg ? 'text-base' : 'text-[15px]'}`
                     }`}>
                         {experience.title}
