@@ -1,5 +1,5 @@
-import { Head, useForm, router } from '@inertiajs/react';
-import { ImagePlus, X, Save, Send } from 'lucide-react';
+import { Head, useForm } from '@inertiajs/react';
+import { ImagePlus, X, Save, Send, MapPin } from 'lucide-react';
 import { useState, type FormEventHandler } from 'react';
 import MainLayout from '@/layouts/main-layout';
 import InputError from '@/components/input-error';
@@ -24,14 +24,13 @@ function countryFlag(code: string): string {
 export default function CrearExperiencia({ categories, countries }: Props) {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    const { data, setData, post, processing, errors, reset } = useForm<{
+    const { data, setData, post, processing, errors } = useForm<{
         title: string;
         content: string;
         experience_date: string;
         image: File | null;
         country_code: string;
-        latitude: string;
-        longitude: string;
+        location: string;
         categories: number[];
         status: 'draft' | 'published';
     }>({
@@ -40,8 +39,7 @@ export default function CrearExperiencia({ categories, countries }: Props) {
         experience_date: '',
         image: null,
         country_code: '',
-        latitude: '',
-        longitude: '',
+        location: '',
         categories: [],
         status: 'published',
     });
@@ -208,7 +206,7 @@ export default function CrearExperiencia({ categories, countries }: Props) {
                                 id="country_code"
                                 value={data.country_code}
                                 onChange={(e) => setData('country_code', e.target.value)}
-                                className="h-10 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+                                className="h-10 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm text-pf-text outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-pf-surface-dark dark:text-pf-text-dark [&>option]:bg-pf-surface [&>option]:text-pf-text dark:[&>option]:bg-pf-surface-dark dark:[&>option]:text-pf-text-dark"
                             >
                                 <option value="">Selecciona un pais...</option>
                                 {countries.map((c) => (
@@ -233,34 +231,24 @@ export default function CrearExperiencia({ categories, countries }: Props) {
                         </div>
                     </div>
 
-                    {/* ── Coordinates (optional) ── */}
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="latitude">Latitud</Label>
-                            <Input
-                                id="latitude"
-                                type="number"
-                                step="any"
-                                value={data.latitude}
-                                onChange={(e) => setData('latitude', e.target.value)}
-                                placeholder="Ex: 28.5973"
-                                className="h-10"
-                            />
-                            <InputError message={errors.latitude} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="longitude">Longitud</Label>
-                            <Input
-                                id="longitude"
-                                type="number"
-                                step="any"
-                                value={data.longitude}
-                                onChange={(e) => setData('longitude', e.target.value)}
-                                placeholder="Ex: 83.9311"
-                                className="h-10"
-                            />
-                            <InputError message={errors.longitude} />
-                        </div>
+                    {/* ── Location (approximate) ── */}
+                    <div className="space-y-2">
+                        <Label htmlFor="location">
+                            <MapPin className="mr-1 inline h-3.5 w-3.5" />
+                            Localitzacio
+                        </Label>
+                        <Input
+                            id="location"
+                            type="text"
+                            value={data.location}
+                            onChange={(e) => setData('location', e.target.value)}
+                            placeholder="Ex: Annapurna Base Camp, Nepal"
+                            className="h-10"
+                        />
+                        <p className="text-[11px] text-pf-text-3 dark:text-pf-text-3dark">
+                            Indica el lloc aproximat de l&apos;experiencia (ciutat, regio, punt d&apos;interes...)
+                        </p>
+                        <InputError message={errors.location} />
                     </div>
 
                     {/* ── Actions ── */}

@@ -100,8 +100,7 @@ class ExperienciaController extends Controller
             'content' => 'required|string',
             'experience_date' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
-            'latitude' => 'nullable|numeric|between:-90,90',
-            'longitude' => 'nullable|numeric|between:-180,180',
+            'location' => 'nullable|string|max:255',
             'country_code' => 'nullable|string|exists:countries,code',
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
@@ -119,8 +118,6 @@ class ExperienciaController extends Controller
             'content' => $validated['content'],
             'experience_date' => $validated['experience_date'] ?? null,
             'image' => $imagePath,
-            'latitude' => $validated['latitude'] ?? null,
-            'longitude' => $validated['longitude'] ?? null,
             'country_code' => $validated['country_code'] ?? null,
             'status' => $validated['status'],
         ]);
