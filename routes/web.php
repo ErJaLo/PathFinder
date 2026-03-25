@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/explorar', [ExperienciaController::class, 'index'])->name('explorar.index');
+Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');

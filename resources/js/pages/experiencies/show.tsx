@@ -1,0 +1,343 @@
+import { Head, Link } from '@inertiajs/react';
+import {
+    ArrowLeft,
+    ThumbsUp,
+    ThumbsDown,
+    AlertCircle,
+    Calendar,
+    MapPin,
+    Globe,
+    Tag,
+    CheckCircle,
+    User,
+} from 'lucide-react';
+import MainLayout from '@/layouts/main-layout';
+import type { Experience, ExperienceAuthorDetail } from '@/types';
+
+type Props = {
+    experience: Experience;
+    author: ExperienceAuthorDetail;
+};
+
+function countryFlag(code: string): string {
+    const base = 0x1f1e6 - 65;
+    const upper = code.toUpperCase();
+    return String.fromCodePoint(upper.charCodeAt(0) + base, upper.charCodeAt(1) + base);
+}
+
+function formatNum(n: number): string {
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return String(n);
+}
+
+function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function getInitials(name: string): string {
+    return name
+        .split(' ')
+        .map((w) => w[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+}
+
+const heroGradient = 'linear-gradient(135deg, #1A5FA8 0%, #0C4880 40%, #0a3060 100%)';
+
+export default function ShowExperiencia({ experience, author }: Props) {
+    const score = experience.ratings_up_count - experience.ratings_down_count;
+
+    return (
+        <MainLayout>
+            <Head title={`${experience.title} — PathFinder`} />
+
+            {/* ══════ HERO ══════ */}
+            <section className="relative -mx-6 -mt-8 overflow-hidden" style={{ height: 420 }}>
+                {experience.image ? (
+                    <img
+                        src={experience.image}
+                        alt={experience.title}
+                        className="h-full w-full object-cover"
+                    />
+                ) : (
+                    <div
+                        className="flex h-full w-full items-center justify-center text-[160px] opacity-60"
+                        style={{ background: heroGradient }}
+                    >
+                        🏔
+                    </div>
+                )}
+
+                {/* Gradient overlay */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+                {/* Content over hero */}
+                <div className="absolute inset-x-0 bottom-0 z-10 mx-auto max-w-7xl px-6 pb-8">
+                    {/* Tags */}
+                    <div className="mb-3 flex flex-wrap gap-2">
+                        {experience.categories.map((cat) => (
+                            <span
+                                key={cat.id}
+                                className="rounded-full border border-white/20 bg-white/15 px-3 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm"
+                            >
+                                {cat.name}
+                            </span>
+                        ))}
+                        {experience.main_country && (
+                            <span className="rounded-full bg-pf-accent px-3 py-0.5 text-[11px] font-medium text-white">
+                                {countryFlag(experience.main_country.code)} {experience.main_country.name}
+                            </span>
+                        )}
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-green-400/30 bg-green-500/20 px-2.5 py-0.5 text-[11px] font-medium text-green-300">
+                            <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+                            Publicada
+                        </span>
+                    </div>
+
+                    {/* Title */}
+                    <h1 className="animate-fade-up mb-3 max-w-3xl text-[clamp(24px,4vw,42px)] font-bold leading-[1.2] tracking-tight text-white">
+                        {experience.title}
+                    </h1>
+
+                    {/* Meta */}
+                    <div className="flex flex-wrap items-center gap-4 text-[13px] text-white/75">
+                        <span className="flex items-center gap-1.5">
+                            <User className="h-3.5 w-3.5 opacity-80" />
+                            {author.name}
+                        </span>
+                        {experience.experience_date && (
+                            <span className="flex items-center gap-1.5">
+                                <Calendar className="h-3.5 w-3.5 opacity-80" />
+                                {formatDate(experience.experience_date)}
+                            </span>
+                        )}
+                        {experience.main_country && (
+                            <span className="flex items-center gap-1.5">
+                                <Globe className="h-3.5 w-3.5 opacity-80" />
+                                {countryFlag(experience.main_country.code)} {experience.main_country.name}
+                            </span>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            {/* ══════ BACK BUTTON ══════ */}
+            <div className="mb-4 mt-6">
+                <Link
+                    href="/explorar"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-pf-border px-3.5 py-1.5 text-[13px] font-medium text-pf-text-3 transition-all hover:border-pf-primary hover:bg-pf-primary-l hover:text-pf-primary dark:border-pf-border-dark dark:text-pf-text-3dark dark:hover:border-pf-primary-dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark"
+                >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    Tornar
+                </Link>
+            </div>
+
+            {/* ══════ MAIN LAYOUT ══════ */}
+            <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[1fr_300px]">
+                {/* ── MAIN COLUMN ── */}
+                <div>
+                    {/* Map placeholder */}
+                    <div className="mb-6 overflow-hidden rounded-xl border border-pf-border dark:border-pf-border-dark">
+                        <div className="relative flex h-[200px] cursor-pointer items-center justify-center bg-gradient-to-br from-[#C0D8EE] to-[#8AB4D8] text-5xl transition-all hover:brightness-105 dark:from-[#1a3050] dark:to-[#0c2040]">
+                            🗺
+                            <div className="absolute inset-x-0 bottom-3 flex justify-center">
+                                <span className="rounded-full bg-white/90 px-4 py-1.5 text-xs font-medium text-pf-primary shadow-sm backdrop-blur-sm dark:bg-pf-surface-dark/90 dark:text-pf-primary-dark">
+                                    <MapPin className="mr-1 inline h-3 w-3" />
+                                    Mapa interactiu — properament
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Content */}
+                    <article className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
+                        <div className="prose-pf px-6 py-7 text-[15px] leading-[1.8] text-pf-text-2 sm:px-8 dark:text-pf-text-2dark">
+                            {experience.content.split('\n').map((paragraph, i) => {
+                                const trimmed = paragraph.trim();
+                                if (!trimmed) return null;
+                                return (
+                                    <p key={i} className="mb-4 last:mb-0">
+                                        {trimmed}
+                                    </p>
+                                );
+                            })}
+                        </div>
+                    </article>
+                </div>
+
+                {/* ── SIDEBAR ── */}
+                <aside className="sticky top-20 flex flex-col gap-4 max-lg:static">
+                    {/* Author card */}
+                    <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
+                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-pf-text-2 dark:border-pf-border-dark dark:text-pf-text-2dark">
+                            Autor
+                        </div>
+                        <div className="p-4">
+                            <div className="mb-3 flex items-center gap-3">
+                                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-pf-accent-l text-lg font-bold text-pf-accent-h dark:bg-pf-accent-ldark dark:text-pf-accent-dark">
+                                    {getInitials(author.name)}
+                                </div>
+                                <div>
+                                    <div className="text-sm font-medium text-pf-text dark:text-pf-text-dark">
+                                        {author.name}
+                                    </div>
+                                    <div className="text-[12px] text-pf-text-3 dark:text-pf-text-3dark">
+                                        Membre des de {new Date(author.created_at).getFullYear()}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                <div className="rounded-lg bg-pf-surface-2 p-2.5 text-center dark:bg-pf-surface-2dark">
+                                    <div className="text-base font-bold text-pf-primary dark:text-pf-primary-dark">
+                                        {author.posts_count}
+                                    </div>
+                                    <div className="text-[10px] text-pf-text-3 dark:text-pf-text-3dark">
+                                        Experiencies
+                                    </div>
+                                </div>
+                                <div className="rounded-lg bg-pf-surface-2 p-2.5 text-center dark:bg-pf-surface-2dark">
+                                    <div className="text-base font-bold text-pf-primary dark:text-pf-primary-dark">
+                                        {formatNum(author.score)}
+                                    </div>
+                                    <div className="text-[10px] text-pf-text-3 dark:text-pf-text-3dark">
+                                        Punts
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Valoracio card */}
+                    <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
+                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-pf-text-2 dark:border-pf-border-dark dark:text-pf-text-2dark">
+                            Valoracio
+                        </div>
+                        <div className="p-4">
+                            <div className="mb-3 flex items-center justify-center gap-3">
+                                <span className="flex items-center gap-1.5 rounded-full border border-pf-border px-3 py-1.5 text-sm font-medium text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark">
+                                    <ThumbsUp className="h-3.5 w-3.5" />
+                                    {formatNum(experience.ratings_up_count)}
+                                </span>
+                                <span className="text-xl font-bold text-pf-accent dark:text-pf-accent-dark">
+                                    {score >= 0 ? '+' : ''}{formatNum(score)}
+                                </span>
+                                <span className="flex items-center gap-1.5 rounded-full border border-pf-border px-3 py-1.5 text-sm font-medium text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark">
+                                    <ThumbsDown className="h-3.5 w-3.5" />
+                                    {formatNum(experience.ratings_down_count)}
+                                </span>
+                            </div>
+                            <div className="border-t border-pf-border pt-3 dark:border-pf-border-dark">
+                                <button
+                                    disabled
+                                    className="flex w-full items-center justify-center gap-1.5 rounded-full border border-pf-border py-1.5 text-xs font-medium text-pf-text-3 opacity-50 dark:border-pf-border-dark dark:text-pf-text-3dark"
+                                    title="Properament"
+                                >
+                                    <AlertCircle className="h-3.5 w-3.5" />
+                                    Reportar abus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Details card */}
+                    <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
+                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-pf-text-2 dark:border-pf-border-dark dark:text-pf-text-2dark">
+                            Detalls
+                        </div>
+                        <div className="flex flex-col gap-3 p-4 text-[13px]">
+                            {/* Publication date */}
+                            <div className="flex items-start justify-between gap-2">
+                                <span className="flex items-center gap-1.5 text-pf-text-3 dark:text-pf-text-3dark">
+                                    <Calendar className="h-3.5 w-3.5" />
+                                    Publicacio
+                                </span>
+                                <span className="font-medium text-pf-text dark:text-pf-text-dark">
+                                    {formatDate(experience.created_at)}
+                                </span>
+                            </div>
+
+                            {/* Experience date */}
+                            {experience.experience_date && (
+                                <div className="flex items-start justify-between gap-2">
+                                    <span className="flex items-center gap-1.5 text-pf-text-3 dark:text-pf-text-3dark">
+                                        <Calendar className="h-3.5 w-3.5" />
+                                        Data viatge
+                                    </span>
+                                    <span className="font-medium text-pf-text dark:text-pf-text-dark">
+                                        {formatDate(experience.experience_date)}
+                                    </span>
+                                </div>
+                            )}
+
+                            {/* Country */}
+                            {experience.main_country && (
+                                <div className="flex items-start justify-between gap-2">
+                                    <span className="flex items-center gap-1.5 text-pf-text-3 dark:text-pf-text-3dark">
+                                        <Globe className="h-3.5 w-3.5" />
+                                        Pais
+                                    </span>
+                                    <span className="font-medium text-pf-text dark:text-pf-text-dark">
+                                        {countryFlag(experience.main_country.code)} {experience.main_country.name}
+                                    </span>
+                                </div>
+                            )}
+
+                            {/* Score */}
+                            <div className="flex items-start justify-between gap-2">
+                                <span className="flex items-center gap-1.5 text-pf-text-3 dark:text-pf-text-3dark">
+                                    <ThumbsUp className="h-3.5 w-3.5" />
+                                    Puntuacio
+                                </span>
+                                <span className="font-bold text-pf-accent dark:text-pf-accent-dark">
+                                    {score >= 0 ? '+' : ''}{formatNum(score)}
+                                </span>
+                            </div>
+
+                            {/* Status */}
+                            <div className="flex items-start justify-between gap-2">
+                                <span className="flex items-center gap-1.5 text-pf-text-3 dark:text-pf-text-3dark">
+                                    <CheckCircle className="h-3.5 w-3.5" />
+                                    Estat
+                                </span>
+                                <span className="font-medium text-green-600 dark:text-green-400">
+                                    ● Publicada
+                                </span>
+                            </div>
+
+                            {/* Categories */}
+                            <div className="flex flex-col gap-2">
+                                <span className="flex items-center gap-1.5 text-pf-text-3 dark:text-pf-text-3dark">
+                                    <Tag className="h-3.5 w-3.5" />
+                                    Categories
+                                </span>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {experience.categories.map((cat) => (
+                                        <span
+                                            key={cat.id}
+                                            className="rounded-full bg-pf-tag-bg px-2.5 py-0.5 text-[11px] font-medium text-pf-tag-text dark:bg-pf-tag-bgdark dark:text-pf-tag-textdark"
+                                        >
+                                            {cat.name}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Coordinates placeholder */}
+                            <div className="flex items-start justify-between gap-2">
+                                <span className="flex items-center gap-1.5 text-pf-text-3 dark:text-pf-text-3dark">
+                                    <MapPin className="h-3.5 w-3.5" />
+                                    Coordenades
+                                </span>
+                                <span className="text-[11px] italic text-pf-text-3 dark:text-pf-text-3dark">
+                                    Properament
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </MainLayout>
+    );
+}
