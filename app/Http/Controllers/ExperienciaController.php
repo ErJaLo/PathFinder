@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ExperienciaController extends Controller
@@ -79,5 +80,57 @@ class ExperienciaController extends Controller
                 'sort' => $sort,
             ],
         ]);
+    }
+
+    public function create()
+    {
+        $categories = Category::orderBy('name')->get(['id', 'name']);
+        $countries = Country::orderBy('name')->get(['code', 'name']);
+
+        return Inertia::render('experiencies/crear', [
+            'categories' => $categories,
+            'countries' => $countries,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'experience_date' => 'nullable|date',
+            'image' => 'nullable|image|max:2048',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'country_code' => 'nullable|string|exists:countries,code',
+            'categories' => 'required|array|min:1',
+            'categories.*' => 'exists:categories,id',
+            'status' => 'required|in:draft,published',
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = '/storage/' . $request->file('image')->store('experiences', 'public');
+        }
+
+        $post = Post::create([
+            'user_id' => $request->user()->id,
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'experience_date' => $validated['experience_date'] ?? null,
+            'image' => $imagePath,
+            'latitude' => $validated['latitude'] ?? null,
+            'longitude' => $validated['longitude'] ?? null,
+            'country_code' => $validated['country_code'] ?? null,
+            'status' => $validated['status'],
+        ]);
+
+        $post->categories()->sync($validated['categories']);
+
+        if ($validated['status'] === 'published') {
+            return redirect()->route('explorar.index')->with('success', 'Experiencia publicada!');
+        }
+
+        return redirect()->route('experiencies.create')->with('success', 'Esborrany guardat!');
     }
 }
