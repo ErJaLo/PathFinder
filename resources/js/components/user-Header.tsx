@@ -1,7 +1,9 @@
 import { Link } from '@inertiajs/react';
 import React, { useState } from 'react';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
+import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import type { User } from '@/types/auth';
+
 
 type UserHeaderProps = {
   user: User;
@@ -21,7 +23,7 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
 
 
   return (
-    <header className="header w-full bg-pf-text text-white flex items-center justify-between px-4 md:px-6 h-16 sticky top-0 z-50 border-b border-pf-primary/20">
+    <header className="header w-full bg-pf-text dark:bg-pf-bg-dark text-white flex items-center justify-between px-4 md:px-6 h-16 sticky top-0 z-50 border-b border-pf-primary/20">
       <div className="header-logo flex items-center gap-3">
         <Link href="/" className="flex-shrink-0">
           <img
@@ -72,6 +74,15 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
           </svg>
           <span className="hidden xs:inline">Tornar a la web</span>
         </Link>
+        <button
+          className="ml-4 p-3 rounded-full bg-pf-primary-ldark hover:bg-pf-primary-dark/20 border border-pf-border-dark transition"
+          onClick={toggleTheme}
+          title="Cambiar tema"
+        >
+          {theme === 'dark'
+            ? <HiOutlineSun className="w-6 h-6 text-pf-primary-dark" />
+            : <HiOutlineMoon className="w-6 h-6 text-pf-primary-dark" />}
+        </button>
         <div className="header-user flex items-center gap-2">
           <div className="header-user-ava w-8 h-8 rounded-full bg-pf-accent-l flex items-center justify-center font-bold text-pf-accent text-sm">
             {initials}
@@ -81,6 +92,7 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
             <div className="header-user-role text-xs text-white/60">Usuari registrat</div>
           </div>
         </div>
+        
         {/* Mobile menu toggle */}
         <button
           className="header-toggle flex xl:hidden flex-col items-center justify-center w-10 h-10 rounded-lg bg-white/10 ml-2"
@@ -93,15 +105,7 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
           <span className={`bar block w-5 h-0.5 bg-white rounded transition-transform duration-300 ${mobileNavOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
         </button>
 
-        <button
-            className="ml-4 p-3 rounded-full bg-pf-primary-l hover:bg-pf-primary/10 border border-pf-border transition dark:bg-pf-primary-ldark dark:hover:bg-pf-primary-dark/20 dark:border-pf-border-dark"
-            onClick={toggleTheme}
-            title="Cambiar tema"
-        >
-            {theme === 'dark'
-                ? <HiOutlineSun className="w-6 h-6 text-pf-primary-dark" />
-                : <HiOutlineMoon className="w-6 h-6 text-pf-primary" />}
-        </button>
+
       </div>
 
       {/* Mobile nav  */}
