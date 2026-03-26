@@ -130,4 +130,36 @@ class ExperienciaController extends Controller
 
         return redirect()->route('experiencies.create')->with('success', 'Esborrany guardat!');
     }
+
+    public function show(Post $post)
+    {
+        $post->load(['categories:id,name', 'mainCountry:code,name']);
+        $post->loadCount([
+            'ratings as ratings_up_count' => fn ($q) => $q->where('value', 1),
+            'ratings as ratings_down_count' => fn ($q) => $q->where('value', -1),
+        ]);
+
+        // Author with stats
+        $author = User::where('id', $post->user_id)
+            ->withCount('posts')
+            ->first(['id', 'name', 'img', 'created_at']);
+
+        // Sum of positive ratings across all author's posts
+        $authorScore = Post::where('user_id', $post->user_id)
+            ->withCount(['ratings as up' => fn ($q) => $q->where('value', 1)])
+            ->get()
+            ->sum('up');
+
+        return Inertia::render('experiencies/show', [
+            'experience' => $post,
+            'author' => [
+                'id' => $author->id,
+                'name' => $author->name,
+                'img' => $author->img,
+                'created_at' => $author->created_at,
+                'posts_count' => $author->posts_count,
+                'score' => $authorScore,
+            ],
+        ]);
+    }
 }

@@ -60,7 +60,7 @@ export default function Home({ featured, experiences, canRegister }: Props) {
 
                 {/* Featured experience image */}
                 <div className="animate-fade-up-delay-1 relative mx-auto w-full max-w-[520px] lg:mx-0 lg:max-w-none">
-                    <div className="group relative cursor-pointer overflow-hidden rounded-2xl shadow-lg">
+                    <Link href={featured ? `/experiencies/${featured.id}` : '#'} className="group relative block cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                         {featured?.image ? (
                             <img
                                 src={featured.image}
@@ -102,7 +102,7 @@ export default function Home({ featured, experiences, canRegister }: Props) {
                                 </>
                             )}
                         </div>
-                    </div>
+                    </Link>
 
                     {/* Featured badge */}
                     <div className="animate-fade-up-delay-3 absolute -right-3 -top-3 flex items-center gap-2 rounded-xl border border-pf-border bg-pf-surface px-3.5 py-2.5 text-xs font-medium text-pf-text-2 shadow-sm max-lg:right-3 max-lg:top-3 dark:border-pf-border-dark dark:bg-pf-surface-dark dark:text-pf-text-2dark">

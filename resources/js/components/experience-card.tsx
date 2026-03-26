@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
 import type { Experience } from '@/types';
 
@@ -52,6 +53,7 @@ export function ExperienceCard({ experience, size = 'default', layout = 'vertica
     const isHorizontal = layout === 'horizontal';
 
     return (
+        <Link href={`/experiencies/${experience.id}`} className="block">
         <article
             className={`group flex h-full overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-pf-border-2 hover:shadow-lg dark:border-pf-border-dark dark:bg-pf-surface-dark dark:hover:border-pf-border-2dark ${
                 isHorizontal ? 'h-[130px] flex-row' : 'flex-col max-sm:h-[120px] max-sm:flex-row'
@@ -146,5 +148,6 @@ export function ExperienceCard({ experience, size = 'default', layout = 'vertica
                 </div>
             </div>
         </article>
+        </Link>
     );
 }

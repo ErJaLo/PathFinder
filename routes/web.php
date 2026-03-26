@@ -13,6 +13,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/experiencies', [ExperienciaController::class, 'store'])->name('experiencies.store');
 });
 
+Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
+
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
     Route::inertia('/', 'admin/index')->name('admin.index');
 });
