@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ExperienciaController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -17,6 +18,9 @@ Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name
 
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
     Route::inertia('/', 'admin/index')->name('admin.index');
+    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::patch('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';
