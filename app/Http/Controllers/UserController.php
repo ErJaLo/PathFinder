@@ -21,12 +21,11 @@ class UserController extends Controller
             COUNT(posts.user_id) as total_posts,
             CASE
                 WHEN users.active = 1 THEN 'active'
-                WHEN users.active = 0 AND users.suspended_at IS NOT NULL THEN 'deleted'
                 WHEN users.active = 0 THEN 'inactive'
             END as status
         ")
         ->leftJoin('posts', 'posts.user_id', '=', 'users.id')
-        ->groupBy('users.id', 'users.name', 'users.email', 'users.active', 'users.suspended_at')
+        ->groupBy('users.id', 'users.name', 'users.email', 'users.active')
         ->get();
         return Inertia::render('admin/users', compact('users'));
     }

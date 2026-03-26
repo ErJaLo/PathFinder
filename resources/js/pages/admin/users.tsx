@@ -39,15 +39,15 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-    active: 'bg-pf-accent-l text-pf-accent-h',
-    inactive: 'bg-pf-amber-l text-pf-amber-dark',
-    deleted: 'bg-pf-border-2 text-pf-border-dark line-through opacity-60',
+    active: 'bg-pf-accent-l text-pf-accent-h dark:bg-pf-accent-ldark dark:text-pf-accent-dark',
+    inactive: 'bg-pf-amber-l text-pf-amber-dark dark:bg-pf-amber-ldark dark:text-pf-amber-dark',
+    deleted: 'bg-pf-border-2 text-pf-border-dark line-through opacity-60 dark:bg-pf-border-2dark dark:text-pf-border-dark',
 };
 
 const DOT_STYLES: Record<string, string> = {
-    active: 'bg-pf-accent',
-    inactive: 'bg-pf-amber',
-    deleted: 'bg-pf-border-dark',
+    active: 'bg-pf-accent dark:bg-pf-accent-dark',
+    inactive: 'bg-pf-amber dark:bg-pf-amber-dark',
+    deleted: 'bg-pf-border-dark dark:bg-pf-border-2dark',
 };
 
 interface User {
@@ -70,14 +70,14 @@ function ConfirmModal({
     onConfirm: (id: number) => void;
 }) {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center dark:bg-black/40 backdrop-blur-sm">
-            <div className="w-full max-w-sm rounded-xl border dark:border-pf-border border-pf-border dark:bg-pf-surface bg-pf-surface p-6 shadow-2xl">
-                <h2 className="mb-1 text-lg font-semibold text-pf-text">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+            <div className="w-full max-w-sm rounded-xl border border-pf-border dark:border-pf-border-dark bg-pf-surface dark:bg-pf-surface-dark p-6 shadow-2xl">
+                <h2 className="mb-1 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
                     Donar de baixa
                 </h2>
-                <p className="mb-6 text-sm dark:text-pf-text-3">
+                <p className="mb-6 text-sm text-pf-text-3 dark:text-pf-text-3dark">
                     Segur que vols donar de baixa a{' '}
-                    <span className="font-medium dark:text-pf-text">
+                    <span className="font-medium text-pf-text dark:text-pf-text-dark">
                         {user.name}
                     </span>
                     ? Aquesta acció no es pot desfer.
@@ -85,7 +85,7 @@ function ConfirmModal({
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={onCancel}
-                        className="rounded-lg border dark:border-pf-border px-4 py-2 text-sm font-medium text-pf-text hover:dark:bg-pf-bg-2 hover:bg-pf-bg-2"
+                        className="rounded-lg border border-pf-border dark:border-pf-border-dark px-4 py-2 text-sm font-medium text-pf-text dark:text-pf-text-dark hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark"
                     >
                         Cancel·lar
                     </button>
@@ -103,7 +103,6 @@ function ConfirmModal({
 
 export default function AdminUsers() {
     const { users: initialUsers } = usePage().props as { users: User[] };
-    console.log('Initial users:', initialUsers); // Debug log to check the data structure
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [confirmUser, setConfirmUser] = useState<User | null>(null);
@@ -128,7 +127,7 @@ export default function AdminUsers() {
             ),
         );
         setConfirmUser(null);
-        // aquiii!!! router.patch(`/admin/users/${id}/deactivate`)
+        // TODO: router.patch(`/admin/users/${id}/deactivate`)
     }
 
     return (
@@ -147,22 +146,22 @@ export default function AdminUsers() {
             <div className="flex flex-1 flex-col gap-6 p-6">
                 {/* Page title */}
                 <div>
-                    <h1 className="text-2xl font-bold dark:text-pf-primary text-pf-primary">
+                    <h1 className="text-2xl font-bold text-pf-primary dark:text-pf-primary-dark">
                         Usuaris
                     </h1>
-                    <p className="text-sm dark:text-pf-text-3 text-pf-text-3">
+                    <p className="text-sm text-pf-text-3 dark:text-pf-text-3dark">
                         Gestiona els usuaris de la plataforma
                     </p>
                 </div>
 
                 {/* Panel */}
-                <div className="overflow-hidden rounded-xl border dark:border-pf-border border-pf-border dark:bg-pf-surface bg-pf-surface">
+                <div className="overflow-hidden rounded-xl border border-pf-border dark:border-pf-border-dark bg-pf-surface dark:bg-pf-surface-dark">
                     {/* ── Panel header ── */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 border-b dark:border-pf-border border-pf-border px-4 py-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-pf-border dark:border-pf-border-dark px-4 py-3">
                         {/* Title */}
-                        <span className="flex items-center gap-2 text-sm font-semibold dark:text-pf-text text-pf-text">
+                        <span className="flex items-center gap-2 text-sm font-semibold text-pf-text dark:text-pf-text-dark">
                             <svg
-                                className="h-4 w-4 dark:text-pf-primary text-pf-primary"
+                                className="h-4 w-4 text-pf-primary dark:text-pf-primary-dark"
                                 fill="none"
                                 viewBox="0 0 16 16"
                                 stroke="currentColor"
@@ -179,7 +178,7 @@ export default function AdminUsers() {
                             {/* Search */}
                             <div className="relative flex items-center">
                                 <svg
-                                    className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 dark:text-pf-text-3 text-pf-text-3"
+                                    className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-pf-text-3 dark:text-pf-text-3dark"
                                     fill="none"
                                     viewBox="0 0 16 16"
                                     stroke="currentColor"
@@ -196,7 +195,7 @@ export default function AdminUsers() {
                                     placeholder="Cerca per nom o email…"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    className="h-8 w-56 rounded-lg border pr-3 pl-8 text-sm focus:ring-2 focus:outline-none dark:border-pf-border border-pf-border dark:bg-pf-bg-2 bg-pf-bg-2 dark:text-pf-text text-pf-text placeholder:dark:text-pf-text-3 placeholder:text-pf-text-3 focus:dark:ring-pf-primary focus:ring-pf-primary"
+                                    className="h-8 w-56 rounded-lg border pr-3 pl-8 text-sm focus:ring-2 focus:outline-none border-pf-border dark:border-pf-border-dark bg-pf-bg-2 dark:bg-pf-bg-2dark text-pf-text dark:text-pf-text-dark placeholder:text-pf-text-3 placeholder:dark:text-pf-text-3dark focus:ring-pf-primary focus:dark:ring-pf-primary-dark"
                                 />
                             </div>
 
@@ -206,7 +205,7 @@ export default function AdminUsers() {
                                 onChange={(e) =>
                                     setStatusFilter(e.target.value)
                                 }
-                                className="h-8 rounded-lg border px-3 text-sm focus:ring-2 focus:outline-none dark:border-pf-border border-pf-border dark:bg-pf-bg-2 bg-pf-bg-2 dark:text-pf-text text-pf-text focus:dark:ring-pf-primary focus:ring-pf-primary"
+                                className="h-8 rounded-lg border px-3 text-sm focus:ring-2 focus:outline-none border-pf-border dark:border-pf-border-dark bg-pf-bg-2 dark:bg-pf-bg-2dark text-pf-text dark:text-pf-text-dark focus:ring-pf-primary focus:dark:ring-pf-primary-dark"
                             >
                                 <option value="">Tots els estats</option>
                                 <option value="active">Actius</option>
@@ -219,7 +218,7 @@ export default function AdminUsers() {
                     {/* ── Table ── */}
                     <table className="w-full text-sm">
                         <thead>
-                            <tr className="border-b text-left text-xs font-semibold tracking-wide uppercase dark:border-pf-border border-pf-border dark:bg-pf-surface-2 bg-pf-surface-2 dark:text-pf-text-3 text-pf-text-3">
+                            <tr className="border-b text-left text-xs font-semibold tracking-wide uppercase border-pf-border dark:border-pf-border-dark bg-pf-surface-2 dark:bg-pf-surface-2dark text-pf-text-3 dark:text-pf-text-3dark">
                                 <th className="px-4 py-3">Usuari</th>
                                 <th className="px-4 py-3">Rol</th>
                                 <th className="px-4 py-3">Experiències</th>
@@ -228,12 +227,12 @@ export default function AdminUsers() {
                                 <th className="px-4 py-3">Accions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y dark:divide-pf-border divide-pf-border">
+                        <tbody className="divide-y divide-pf-border dark:divide-pf-border-dark">
                             {filtered.length === 0 ? (
                                 <tr>
                                     <td
                                         colSpan={6}
-                                        className="px-4 py-10 text-center dark:text-pf-text-3 text-pf-text-3"
+                                        className="px-4 py-10 text-center text-pf-text-3 dark:text-pf-text-3dark"
                                     >
                                         No s'han trobat usuaris
                                     </td>
@@ -249,13 +248,13 @@ export default function AdminUsers() {
                                     return (
                                         <tr
                                             key={user.id}
-                                            className={`transition-colors dark:hover:bg-pf-bg-2 hover:bg-pf-bg-2 ${isDeleted ? 'opacity-50' : ''}`}
+                                            className={`transition-colors hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark ${isDeleted ? 'opacity-50' : ''}`}
                                         >
                                             {/* User cell */}
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center gap-3">
                                                     <div
-                                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-bold dark:border-pf-border border-pf-border"
+                                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-bold border-pf-border dark:border-pf-border-dark"
                                                         style={{
                                                             background: bg,
                                                             color: fg,
@@ -264,10 +263,10 @@ export default function AdminUsers() {
                                                         {initials}
                                                     </div>
                                                     <div>
-                                                        <div className="font-medium dark:text-pf-text text-pf-text">
+                                                        <div className="font-medium text-pf-text dark:text-pf-text-dark">
                                                             u/{user.name}
                                                         </div>
-                                                        <div className="text-xs dark:text-pf-text-3 text-pf-text-3">
+                                                        <div className="text-xs text-pf-text-3 dark:text-pf-text-3dark">
                                                             {user.email}
                                                         </div>
                                                     </div>
@@ -279,8 +278,8 @@ export default function AdminUsers() {
                                                 <span
                                                     className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ${
                                                         user.role === 'admin'
-                                                            ? 'dark:bg-pf-primary-l bg-pf-primary-l dark:text-pf-primary-h text-pf-primary-h'
-                                                            : 'dark:bg-pf-surface-2 bg-pf-surface-2 dark:text-pf-text-3 text-pf-text-3'
+                                                            ? 'bg-pf-primary-l dark:bg-pf-primary-ldark text-pf-primary-h dark:text-pf-primary-hdark'
+                                                            : 'bg-pf-surface-2 dark:bg-pf-surface-2dark text-pf-text-3 dark:text-pf-text-3dark'
                                                     }`}
                                                 >
                                                     {user.role === 'admin'
@@ -290,12 +289,12 @@ export default function AdminUsers() {
                                             </td>
 
                                             {/* Experiències */}
-                                            <td className="px-4 py-3 dark:text-pf-text-3 text-pf-text-3">
+                                            <td className="px-4 py-3 text-pf-text-3 dark:text-pf-text-3dark">
                                                 {user.posts ?? '—'}
                                             </td>
 
                                             {/* Date */}
-                                            <td className="px-4 py-3 dark:text-pf-text-3 text-pf-text-3">
+                                            <td className="px-4 py-3 text-pf-text-3 dark:text-pf-text-3dark">
                                                 {new Date(
                                                     user.created_at,
                                                 ).toLocaleDateString('ca-ES')}
@@ -319,7 +318,7 @@ export default function AdminUsers() {
                                                     <button
                                                         disabled={isDeleted}
                                                         title="Veure experiències"
-                                                        className="rounded-lg p-1.5 transition-colors disabled:cursor-not-allowed disabled:opacity-40 dark:text-pf-text-3 text-pf-text-3 dark:hover:bg-pf-bg-2 hover:bg-pf-bg-2 hover:dark:text-pf-text hover:text-pf-text"
+                                                        className="rounded-lg p-1.5 transition-colors disabled:cursor-not-allowed disabled:opacity-40 text-pf-text-3 dark:text-pf-text-3dark hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark hover:text-pf-text dark:hover:text-pf-text-dark"
                                                     >
                                                         <svg
                                                             className="h-4 w-4"
@@ -350,7 +349,7 @@ export default function AdminUsers() {
                                                         onClick={() =>
                                                             setConfirmUser(user)
                                                         }
-                                                        className="rounded-lg p-1.5 transition-colors disabled:cursor-not-allowed disabled:opacity-40 dark:text-pf-text-3 text-pf-text-3 hover:dark:bg-pf-bg-2 hover:bg-pf-bg-2 hover:dark:text-pf-accent-h hover:text-pf-accent-h" 
+                                                        className="rounded-lg p-1.5 transition-colors disabled:cursor-not-allowed disabled:opacity-40 text-pf-text-3 dark:text-pf-text-3dark hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark hover:text-pf-accent-h dark:hover:text-pf-accent-dark"
                                                     >
                                                         <svg
                                                             className="h-4 w-4"
@@ -376,7 +375,7 @@ export default function AdminUsers() {
                 </div>
 
                 {/* Footer count */}
-                <p className="text-right text-xs dark:text-pf-text-3 text-pf-text-3">
+                <p className="text-right text-xs text-pf-text-3 dark:text-pf-text-3dark">
                     {filtered.length} usuari{filtered.length !== 1 ? 's' : ''}
                 </p>
             </div>
