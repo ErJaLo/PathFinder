@@ -1,9 +1,9 @@
 import React from 'react'
 
-function summary() {
+function Summary() {
   return (
     <div>summary</div>
   )
 }
 
-export default summary
+export default Summary

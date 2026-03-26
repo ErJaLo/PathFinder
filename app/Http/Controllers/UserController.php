@@ -43,9 +43,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([ 'titol' => 'required', 'text' => 'required']);
+        return json_encode(['msg'=>'true']);
     }
 
+    /**
+     * Toggle the active status over the user
+     */
+    public function toggleActive(User $user)
+    {
+        // echo "test";
+        // exit;
+        $user->update([
+            'active' => !$user->active
+        ]);
+
+        return redirect()->back();
+    }
     /**
      * Display the specified resource.
      */

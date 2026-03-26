@@ -1,11 +1,11 @@
 import { Head } from '@inertiajs/react';
-import { usePage } from '@inertiajs/react';
+import { usePage, useForm } from '@inertiajs/react';
 import { useState, useMemo } from 'react';
+import { route } from 'ziggy-js';
 import Summary from '@/components/admin/summary';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem } from '@/types';
-
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Administració', href: '/admin' },
     { title: 'Usuaris', href: '/admin/users' },
@@ -35,13 +35,15 @@ function getInitials(name: string): string {
 const STATUS_LABEL: Record<string, string> = {
     active: 'Actiu',
     inactive: 'Inactiu',
-    deleted: 'Baixa',
+    // deleted: 'Baixa',
 };
 
 const STATUS_STYLES: Record<string, string> = {
     active: 'bg-pf-accent-l text-pf-accent-h dark:bg-pf-accent-ldark dark:text-pf-accent-dark',
-    inactive: 'bg-pf-amber-l text-pf-amber-dark dark:bg-pf-amber-ldark dark:text-pf-amber-dark',
-    deleted: 'bg-pf-border-2 text-pf-border-dark line-through opacity-60 dark:bg-pf-border-2dark dark:text-pf-border-dark',
+    inactive:
+        'bg-pf-amber-l text-pf-amber-dark dark:bg-pf-amber-ldark dark:text-pf-amber-dark',
+    deleted:
+        'bg-pf-border-2 text-pf-border-dark line-through opacity-60 dark:bg-pf-border-2dark dark:text-pf-border-dark',
 };
 
 const DOT_STYLES: Record<string, string> = {
@@ -71,7 +73,7 @@ function ConfirmModal({
 }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-            <div className="w-full max-w-sm rounded-xl border border-pf-border dark:border-pf-border-dark bg-pf-surface dark:bg-pf-surface-dark p-6 shadow-2xl">
+            <div className="w-full max-w-sm rounded-xl border border-pf-border bg-pf-surface p-6 shadow-2xl dark:border-pf-border-dark dark:bg-pf-surface-dark">
                 <h2 className="mb-1 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
                     Donar de baixa
                 </h2>
@@ -85,7 +87,7 @@ function ConfirmModal({
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={onCancel}
-                        className="rounded-lg border border-pf-border dark:border-pf-border-dark px-4 py-2 text-sm font-medium text-pf-text dark:text-pf-text-dark hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark"
+                        className="rounded-lg border border-pf-border px-4 py-2 text-sm font-medium text-pf-text hover:bg-pf-bg-2 dark:border-pf-border-dark dark:text-pf-text-dark dark:hover:bg-pf-bg-2dark"
                     >
                         Cancel·lar
                     </button>
@@ -120,6 +122,16 @@ export default function AdminUsers() {
         );
     }, [users, search, statusFilter]);
 
+    /**
+     * Using ziggy, we can define interlan routes, with that and the useForm, we can use all the
+     * form  petitions
+     *   get: (url: string, options?: UseFormSubmitOptions) => void;
+     *   patch: (url: string, options?: UseFormSubmitOptions) => void;
+     *   post: (url: string, options?: UseFormSubmitOptions) => void;
+     *   put: (url: string, options?: UseFormSubmitOptions) => void;
+     *   delete: (url: string, options?: UseFormSubmitOptions) => void;
+     */
+    const form = useForm();
     function handleDeactivate(id: number) {
         setUsers((prev) =>
             prev.map((u) =>
@@ -127,7 +139,7 @@ export default function AdminUsers() {
             ),
         );
         setConfirmUser(null);
-        // TODO: router.patch(`/admin/users/${id}/deactivate`)
+        form.patch(route('admin.users.toggleActive', { user: id }));
     }
 
     return (
@@ -155,9 +167,9 @@ export default function AdminUsers() {
                 </div>
 
                 {/* Panel */}
-                <div className="overflow-hidden rounded-xl border border-pf-border dark:border-pf-border-dark bg-pf-surface dark:bg-pf-surface-dark">
+                <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface dark:border-pf-border-dark dark:bg-pf-surface-dark">
                     {/* ── Panel header ── */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-pf-border dark:border-pf-border-dark px-4 py-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-pf-border px-4 py-3 dark:border-pf-border-dark">
                         {/* Title */}
                         <span className="flex items-center gap-2 text-sm font-semibold text-pf-text dark:text-pf-text-dark">
                             <svg
@@ -195,7 +207,7 @@ export default function AdminUsers() {
                                     placeholder="Cerca per nom o email…"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    className="h-8 w-56 rounded-lg border pr-3 pl-8 text-sm focus:ring-2 focus:outline-none border-pf-border dark:border-pf-border-dark bg-pf-bg-2 dark:bg-pf-bg-2dark text-pf-text dark:text-pf-text-dark placeholder:text-pf-text-3 placeholder:dark:text-pf-text-3dark focus:ring-pf-primary focus:dark:ring-pf-primary-dark"
+                                    className="h-8 w-56 rounded-lg border border-pf-border bg-pf-bg-2 pr-3 pl-8 text-sm text-pf-text placeholder:text-pf-text-3 focus:ring-2 focus:ring-pf-primary focus:outline-none dark:border-pf-border-dark dark:bg-pf-bg-2dark dark:text-pf-text-dark placeholder:dark:text-pf-text-3dark focus:dark:ring-pf-primary-dark"
                                 />
                             </div>
 
@@ -205,12 +217,12 @@ export default function AdminUsers() {
                                 onChange={(e) =>
                                     setStatusFilter(e.target.value)
                                 }
-                                className="h-8 rounded-lg border px-3 text-sm focus:ring-2 focus:outline-none border-pf-border dark:border-pf-border-dark bg-pf-bg-2 dark:bg-pf-bg-2dark text-pf-text dark:text-pf-text-dark focus:ring-pf-primary focus:dark:ring-pf-primary-dark"
+                                className="h-8 rounded-lg border border-pf-border bg-pf-bg-2 px-3 text-sm text-pf-text focus:ring-2 focus:ring-pf-primary focus:outline-none dark:border-pf-border-dark dark:bg-pf-bg-2dark dark:text-pf-text-dark focus:dark:ring-pf-primary-dark"
                             >
                                 <option value="">Tots els estats</option>
                                 <option value="active">Actius</option>
                                 <option value="inactive">Inactius</option>
-                                <option value="deleted">Donats de baixa</option>
+                                {/* <option value="deleted">Donats de baixa</option> */}
                             </select>
                         </div>
                     </div>
@@ -218,7 +230,7 @@ export default function AdminUsers() {
                     {/* ── Table ── */}
                     <table className="w-full text-sm">
                         <thead>
-                            <tr className="border-b text-left text-xs font-semibold tracking-wide uppercase border-pf-border dark:border-pf-border-dark bg-pf-surface-2 dark:bg-pf-surface-2dark text-pf-text-3 dark:text-pf-text-3dark">
+                            <tr className="border-b border-pf-border bg-pf-surface-2 text-left text-xs font-semibold tracking-wide text-pf-text-3 uppercase dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-3dark">
                                 <th className="px-4 py-3">Usuari</th>
                                 <th className="px-4 py-3">Rol</th>
                                 <th className="px-4 py-3">Experiències</th>
@@ -254,7 +266,7 @@ export default function AdminUsers() {
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center gap-3">
                                                     <div
-                                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-bold border-pf-border dark:border-pf-border-dark"
+                                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-pf-border text-xs font-bold dark:border-pf-border-dark"
                                                         style={{
                                                             background: bg,
                                                             color: fg,
@@ -278,8 +290,8 @@ export default function AdminUsers() {
                                                 <span
                                                     className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ${
                                                         user.role === 'admin'
-                                                            ? 'bg-pf-primary-l dark:bg-pf-primary-ldark text-pf-primary-h dark:text-pf-primary-hdark'
-                                                            : 'bg-pf-surface-2 dark:bg-pf-surface-2dark text-pf-text-3 dark:text-pf-text-3dark'
+                                                            ? 'bg-pf-primary-l text-pf-primary-h dark:bg-pf-primary-ldark dark:text-pf-primary-hdark'
+                                                            : 'bg-pf-surface-2 text-pf-text-3 dark:bg-pf-surface-2dark dark:text-pf-text-3dark'
                                                     }`}
                                                 >
                                                     {user.role === 'admin'
@@ -318,7 +330,7 @@ export default function AdminUsers() {
                                                     <button
                                                         disabled={isDeleted}
                                                         title="Veure experiències"
-                                                        className="rounded-lg p-1.5 transition-colors disabled:cursor-not-allowed disabled:opacity-40 text-pf-text-3 dark:text-pf-text-3dark hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark hover:text-pf-text dark:hover:text-pf-text-dark"
+                                                        className="rounded-lg p-1.5 text-pf-text-3 transition-colors hover:bg-pf-bg-2 hover:text-pf-text disabled:cursor-not-allowed disabled:opacity-40 dark:text-pf-text-3dark dark:hover:bg-pf-bg-2dark dark:hover:text-pf-text-dark"
                                                     >
                                                         <svg
                                                             className="h-4 w-4"
@@ -349,7 +361,7 @@ export default function AdminUsers() {
                                                         onClick={() =>
                                                             setConfirmUser(user)
                                                         }
-                                                        className="rounded-lg p-1.5 transition-colors disabled:cursor-not-allowed disabled:opacity-40 text-pf-text-3 dark:text-pf-text-3dark hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark hover:text-pf-accent-h dark:hover:text-pf-accent-dark"
+                                                        className="rounded-lg p-1.5 text-pf-text-3 transition-colors hover:bg-pf-bg-2 hover:text-pf-accent-h disabled:cursor-not-allowed disabled:opacity-40 dark:text-pf-text-3dark dark:hover:bg-pf-bg-2dark dark:hover:text-pf-accent-dark"
                                                     >
                                                         <svg
                                                             className="h-4 w-4"

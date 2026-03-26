@@ -12,7 +12,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
     Route::inertia('/', 'admin/index')->name('admin.index');
-    Route::get('users', [UserController::class, 'index'])->name('admin.users');
+    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::patch('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
 });
-    
-require __DIR__ . '/settings.php';
+
+require __DIR__.'/settings.php';
