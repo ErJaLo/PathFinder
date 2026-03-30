@@ -20,17 +20,12 @@ export default function DeleteUser() {
     const passwordInput = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="space-y-6">
-            <Heading
-                variant="small"
-                title="Delete account"
-                description="Delete your account and all of its resources"
-            />
+        <div className="space-y-4">
             <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10">
                 <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
-                    <p className="font-medium">Warning</p>
-                    <p className="text-sm">
-                        Please proceed with caution, this cannot be undone.
+                    <p className="font-medium font-serif uppercase tracking-wider text-xs">Avís</p>
+                    <p className="text-[13px]">
+                        Si procedeixes amb aquesta acció, no es podrà desfer. Tingues seguretat abans de continuar.
                     </p>
                 </div>
 
@@ -39,19 +34,19 @@ export default function DeleteUser() {
                         <Button
                             variant="destructive"
                             data-test="delete-user-button"
+                            className="bg-red-600 hover:bg-red-700 text-white"
                         >
-                            Delete account
+                            Eliminar compte
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogTitle>
-                            Are you sure you want to delete your account?
+                            Estàs segur que vols eliminar el teu compte?
                         </DialogTitle>
                         <DialogDescription>
-                            Once your account is deleted, all of its resources
-                            and data will also be permanently deleted. Please
-                            enter your password to confirm you would like to
-                            permanently delete your account.
+                            Una vegada eliminis el teu compte, totes les teves dades i
+                            recursos es perdran permanentment. Si us plau, introdueix
+                            la teva contrasenya per confirmar que vols procedir.
                         </DialogDescription>
 
                         <Form
@@ -77,7 +72,7 @@ export default function DeleteUser() {
                                             id="password"
                                             name="password"
                                             ref={passwordInput}
-                                            placeholder="Password"
+                                            placeholder="Contrasenya"
                                             autoComplete="current-password"
                                         />
 
@@ -92,7 +87,7 @@ export default function DeleteUser() {
                                                     resetAndClearErrors()
                                                 }
                                             >
-                                                Cancel
+                                                Cancel·lar
                                             </Button>
                                         </DialogClose>
 
@@ -104,8 +99,9 @@ export default function DeleteUser() {
                                             <button
                                                 type="submit"
                                                 data-test="confirm-delete-user-button"
+                                                className="bg-red-600 hover:bg-red-700 text-white"
                                             >
-                                                Delete account
+                                                Eliminar per sempre
                                             </button>
                                         </Button>
                                     </DialogFooter>

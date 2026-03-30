@@ -21,12 +21,30 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
         'role',
         'img',
         'active',
     ];
+
+    /**
+     * The attributes that should be appends to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'country_code',
+    ];
+
+    /**
+     * Get the user's home country code.
+     */
+    protected function getCountryCodeAttribute(): ?string
+    {
+        return $this->countriesVisited()->first()?->code;
+    }
 
     /**
      * The attributes that should be hidden for serialization.

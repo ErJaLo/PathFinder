@@ -84,7 +84,7 @@ export function MainHeader() {
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem asChild>
                                         <Link href="/settings/profile" className="cursor-pointer">
-                                            Configuració
+                                            Perfil d'usuari
                                         </Link>
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
