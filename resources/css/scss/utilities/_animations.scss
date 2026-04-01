@@ -1,0 +1,17 @@
+// _animations.scss
+
+@keyframes mobile-nav-slide-down {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-mobile-nav-slide-down {
+    animation: mobile-nav-slide-down 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}

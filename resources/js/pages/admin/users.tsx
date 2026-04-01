@@ -21,6 +21,7 @@ function getAvatarColors(name: string): { bg: string; fg: string } {
         { bg: '#ffedd5', fg: '#9a3412' },
     ];
     const idx = name.charCodeAt(0) % palette.length;
+
     return palette[idx];
 }
 
@@ -113,6 +114,7 @@ export default function AdminUsers() {
 
     const filtered = useMemo(() => {
         const q = search.toLowerCase();
+
         return users.filter(
             (u) =>
                 (!q ||
@@ -140,7 +142,7 @@ export default function AdminUsers() {
         );
         setConfirmUser(null);
         form.patch(route('admin.users.toggleActive', { user: id }));
-    }
+    } 
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
