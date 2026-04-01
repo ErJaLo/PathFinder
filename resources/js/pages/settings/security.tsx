@@ -229,9 +229,6 @@ export default function Security({
                                     ) : (
                                         <div className="space-y-6">
                                             <div className="flex items-start gap-4">
-                                                <div className="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-pf-primary-ldark/50 text-pf-primary-dark dark:bg-pf-primary-dark/20 dark:text-pf-primary-l">
-                                                    <ShieldCheck className="h-5 w-5" />
-                                                </div>
                                                 <p className="text-[13px] text-pf-text-2 dark:text-pf-text-2dark leading-relaxed">
                                                     Quan activis l'autenticació de doble factor, se't demanarà un codi segur durant l'inici de sessió. Pots obtenir aquest codi des de qualsevol aplicació compatible amb TOTP (com Google Authenticator o Authy).
                                                 </p>
