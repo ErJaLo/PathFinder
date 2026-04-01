@@ -1,7 +1,8 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import { Map, Compass, User, Menu, X, PenLine } from 'lucide-react';
 import { useState } from 'react';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
+import { route } from 'ziggy-js';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     DropdownMenu,
@@ -89,10 +90,11 @@ export function MainHeader() {
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
-                                    <Link href="/logout" method="post" as="button" className="w-full cursor-pointer">
-                                        Tancar sessió
-                                    </Link>
+                                <DropdownMenuItem 
+                                    className="w-full cursor-pointer"
+                                    onSelect={() => router.post(route('logout'))}
+                                >
+                                    Tancar sessió
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -164,15 +166,15 @@ export function MainHeader() {
                             </button>
                             <div className="mt-2 flex gap-2 border-t border-pf-border pt-3 dark:border-pf-border-dark">
                                 {user ? (
-                                    <Link
-                                        href="/logout"
-                                        method="post"
-                                        as="button"
+                                    <button
                                         className="flex-1 rounded-full border border-pf-border px-4 py-2 text-center text-sm font-medium text-pf-text-2 transition-colors hover:bg-pf-primary-l dark:border-pf-border-dark dark:text-pf-text-2dark"
-                                        onClick={() => setMobileOpen(false)}
+                                        onClick={() => {
+                                            router.post(route('logout'));
+                                            setMobileOpen(false);
+                                        }}
                                     >
                                         Tancar sessió
-                                    </Link>
+                                    </button>
                                 ) : (
                                     <>
                                         <Link

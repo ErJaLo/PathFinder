@@ -1,5 +1,6 @@
 import { Transition } from '@headlessui/react';
-import { Form, Link, usePage } from '@inertiajs/react';
+import { Form, Link, usePage, useForm } from '@inertiajs/react';
+
 import React, { useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
@@ -8,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { send } from '@/routes/verification';
+
 
 function countryFlag(code: string): string {
     if (!code || code.length !== 2) {
@@ -22,14 +24,22 @@ function countryFlag(code: string): string {
 
 export function UserForm({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage().props as any;
-    const [countries, setCountries] = useState([]);
+    const [countries, setCountries] = useState<any[]>([]);
     const [country, setCountry] = useState(typeof auth.user.country_code === 'string' ? auth.user.country_code : '');
 
+    const llocsForm = useForm();
+
     useEffect(() => {
-        fetch(route("llocs"))
-            .then(res => res.json())
-            .then(data => setCountries(data));
+        llocsForm.get(route("llocs"), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: (page: any) => {
+                setCountries(page.props.countries || []);
+            }
+        });
     }, []);
+
+    
 
     function resetFormulari(){
         const form = document.querySelector('form');
