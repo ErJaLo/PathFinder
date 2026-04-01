@@ -1,7 +1,8 @@
-import { Link, usePage } from '@inertiajs/react';
-import { Map, Compass, User, Menu, X } from 'lucide-react';
+import { Link, usePage, router } from '@inertiajs/react';
+import { Map, Compass, User, Menu, X, PenLine } from 'lucide-react';
 import { useState } from 'react';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
+import { route } from 'ziggy-js';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     DropdownMenu,
@@ -59,6 +60,15 @@ export function MainHeader() {
 
                 {/* Desktop user icon */}
                 <div className="hidden md:flex items-center gap-2">
+                    {user && (
+                        <Link
+                            href="/experiencies/crear"
+                            className="flex items-center gap-1.5 rounded-full bg-pf-accent px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-pf-accent-h hover:shadow-md active:scale-[0.97] dark:bg-pf-accent-dark"
+                        >
+                            <PenLine className="h-3.5 w-3.5" />
+                            Crear
+                        </Link>
+                    )}
                     {user ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -75,15 +85,16 @@ export function MainHeader() {
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem asChild>
                                         <Link href="/settings/profile" className="cursor-pointer">
-                                            Configuració
+                                            Perfil d'usuari
                                         </Link>
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
-                                    <Link href="/logout" method="post" as="button" className="w-full cursor-pointer">
-                                        Tancar sessió
-                                    </Link>
+                                <DropdownMenuItem 
+                                    className="w-full cursor-pointer"
+                                    onSelect={() => router.post(route('logout'))}
+                                >
+                                    Tancar sessió
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -134,6 +145,16 @@ export function MainHeader() {
                                     {item.title}
                                 </Link>
                             ))}
+                            {user && (
+                                <Link
+                                    href="/experiencies/crear"
+                                    className="flex items-center gap-2 rounded-lg bg-pf-accent px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-pf-accent-h dark:bg-pf-accent-dark"
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    <PenLine className="h-4 w-4" />
+                                    Crear experiencia
+                                </Link>
+                            )}
                             <button
                                 className="ml-2 mt-2 self-start p-3 rounded-full bg-pf-primary-l hover:bg-pf-primary/10 border border-pf-border transition dark:bg-pf-primary-ldark dark:hover:bg-pf-primary-dark/20 dark:border-pf-border-dark"
                                 onClick={toggleTheme}
@@ -145,15 +166,15 @@ export function MainHeader() {
                             </button>
                             <div className="mt-2 flex gap-2 border-t border-pf-border pt-3 dark:border-pf-border-dark">
                                 {user ? (
-                                    <Link
-                                        href="/logout"
-                                        method="post"
-                                        as="button"
+                                    <button
                                         className="flex-1 rounded-full border border-pf-border px-4 py-2 text-center text-sm font-medium text-pf-text-2 transition-colors hover:bg-pf-primary-l dark:border-pf-border-dark dark:text-pf-text-2dark"
-                                        onClick={() => setMobileOpen(false)}
+                                        onClick={() => {
+                                            router.post(route('logout'));
+                                            setMobileOpen(false);
+                                        }}
                                     >
                                         Tancar sessió
-                                    </Link>
+                                    </button>
                                 ) : (
                                     <>
                                         <Link

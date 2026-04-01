@@ -1,14 +1,24 @@
 <?php
 
+use App\Http\Controllers\ExperienciaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaisosController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/explorar', [ExperienciaController::class, 'index'])->name('explorar.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('/experiencies/crear', [ExperienciaController::class, 'create'])->name('experiencies.create');
+    Route::post('/experiencies', [ExperienciaController::class, 'store'])->name('experiencies.store');
 });
+
+Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
+
+
+Route::get("/llocs", [PaisosController::class, "llistarPaisos"])->name("llocs");
 
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
     Route::inertia('/', 'admin/index')->name('admin.index');
@@ -17,4 +27,4 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
