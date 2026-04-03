@@ -39,7 +39,7 @@ export function AdminSidebar() {
             ? [
                   {
                       title: 'Categories',
-                      href: '/admin/categories',
+                      href: '/admin/category',
                       icon: AlignLeft,
                   },
               ]
