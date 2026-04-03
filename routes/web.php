@@ -27,6 +27,10 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::patch('users', [UserController::class, 'store'])->name('admin.users.store');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
     Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
+    Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");
+    Route::post("category", [CategoryController::class, "store"])->name('admin.categories.store');
+    Route::get("category/{category}/edit", [CategoryController::class, "edit"])->name("admin.category.edit");
+    Route::put("category/{category}", [CategoryController::class, "update"])->name("admin.category.update");
 });
 
 require __DIR__ . '/settings.php';

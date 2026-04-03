@@ -1,6 +1,8 @@
 // import type { BreadcrumbItem } from '@/components/ui/breadcrumb';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage, Link } from '@inertiajs/react';
 import { useState } from 'react';
+import { route } from 'ziggy-js';
+import Routing from '@/actions/Illuminate/Routing';
 import Summary from '@/components/admin/summary';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem } from '@/types';
@@ -15,14 +17,12 @@ interface Category {
 }
 
 export default function CategoryPage() {
-    // Es pot accedir normalment a l'objecte 'category' enviat des del controlador
-    const { category: initialCategories = [] } = usePage().props as unknown as { category: Category[] };
 
-    const [categories, setCategories] = useState<Category[]>(initialCategories);
+    const { category: categories = [] } = usePage().props as unknown as { category: Category[] };
 
-    // Form per poder crear i esborrar categories fàcilment
-    const form = useForm({
+    const form = useForm<Partial<Category>>({
         name: '',
+        description: ''
     });
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -31,22 +31,17 @@ export default function CategoryPage() {
     ];
 
     function handleToggleStatus(id: number) {
-        setCategories((prev) =>
-            prev.map((cat) =>
-                cat.id === id ? { ...cat, status: 'deleted' } : cat
-            )
-        );
-        // Descomentar quan la ruta estigui preparada a web.php
-        // form.patch(route('admin.categories.toggleActive', { category: id }));
+        form.delete(route("admin.category.destroy", { category: id }), {
+            preserveScroll: true
+        });
     }
 
     function submitCategory(e: React.FormEvent) {
         e.preventDefault();
-        // Descomentar i adequar la ruta quan tinguis l'store() al controlador
-        // form.post(route('admin.categories.store'), {
-        //     onSuccess: () => form.reset(),
-        // });
-        console.log("Categoria a afegir:", form.data.name);
+        form.post(route('admin.categories.store'), {
+            preserveScroll: true,
+            onSuccess: () => form.reset(),
+        });
     }
 
     // Colors d'exemple per pintar les boles de les categories
@@ -83,6 +78,15 @@ export default function CategoryPage() {
                                         onChange={(e) => form.setData('name', e.target.value)}
                                         placeholder="Nom de la categoria..."
                                         maxLength={30}
+                                        className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300"
+                                        required
+                                    />
+                                    <input
+                                        type="text"
+                                        value={form.data.description}
+                                        onChange={(e) => form.setData('description', e.target.value)}
+                                        placeholder="Descripcio de la categoria..."
+                                        maxLength={90}
                                         className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300"
                                         required
                                     />
@@ -142,14 +146,15 @@ export default function CategoryPage() {
                                             
                                             {/* Accions */}
                                             <div className="flex gap-1.5">
-                                                <button
+                                                <Link
+                                                    href={route('admin.category.edit', { category: cat.id })}
                                                     title="Editar"
                                                     className="rounded border border-gray-200 bg-white p-1.5 text-gray-500 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:dark:text-blue-400"
                                                 >
                                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                                     </svg>
-                                                </button>
+                                                </Link>
                                                 <button
                                                     title="Eliminar"
                                                     onClick={() => handleToggleStatus(cat.id)}

@@ -31,24 +31,29 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * No es necesari perque ja es carrega a la vita inicial.
      */
-    public function create()
-    {
-        Inertia::render("");
-    }
+    // public function create()
+    // {
+    //     Inertia::render("");
+    // }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $validat = $request->validate(["name" => "required", "descrption" => "required"]);
-        $categoria = Category::create([
+        $validat = $request->validate([
+            "name" => "required|string|max:30|unique:categories,name",
+            "description" => "required|string|max:90"
+        ]);
+
+        Category::create([
             "name" => $validat["name"],
             "description" => $validat["description"]
         ]);
-        return Inertia::render("", compact(['msg' => 'true']));
+
+        return to_route("admin.category.index");
     }
 
     /**
@@ -66,7 +71,7 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         $categoria = Category::findOrFail($id);
-        return Inertia::render("", compact("categoria"));
+        return Inertia::render("admin/category-edit", compact("categoria"));
     }
 
     /**
@@ -74,10 +79,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validat = $request->validate(["name" => "required", "descrption" => "required"]);
-        $categoria = Category::update($validat);
+        $validat = $request->validate([
+            "name" => "required|string|max:30|unique:categories,name," . $id,
+            "description" => "required|string|max:90"
+        ]);
 
-        return Inertia::render("", compact("categoria"));
+        $categoria = Category::findOrFail($id);
+        $categoria->update($validat);
+
+        return to_route("admin.category.index");
     }
 
     /**
@@ -87,6 +97,6 @@ class CategoryController extends Controller
     {
         $categoria = Category::findOrFail($id);
         $categoria->delete();
-        return Inertia::render("");
+        return to_route("admin.category.index");
     }
 }
