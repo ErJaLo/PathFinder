@@ -1,11 +1,12 @@
-import { Head } from '@inertiajs/react';
-import { usePage, useForm } from '@inertiajs/react';
-import { useState, useMemo } from 'react';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import { useState, useMemo, useEffect } from 'react';
 import { route } from 'ziggy-js';
 import Summary from '@/components/admin/summary';
+import { DataPagination } from '@/components/ui/data-pagination';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem } from '@/types';
+
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Administració', href: '/admin' },
     { title: 'Usuaris', href: '/admin/users' },
@@ -105,24 +106,67 @@ function ConfirmModal({
 }
 
 export default function AdminUsers() {
-    const { users: initialUsers } = usePage().props as { users: User[] };
-    const [search, setSearch] = useState('');
-    const [statusFilter, setStatusFilter] = useState('');
+    const {
+        users: initialUsers,
+        total,
+        perPage,
+        page,
+        search: prevSearch = '',
+        status: prevStatus = '',
+    } = usePage().props as unknown as {
+        users: User[];
+        total: number;
+        perPage: number;
+        page: number;
+        search?: string;
+        status?: string;
+    };
+    console.log({ total, perPage, page });
+    const [search, setSearch] = useState(prevSearch);
+    const [statusFilter, setStatusFilter] = useState(prevStatus);
     const [confirmUser, setConfirmUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[]>(initialUsers);
     const { theme, toggleTheme } = useTheme();
 
-    const filtered = useMemo(() => {
-        const q = search.toLowerCase();
+    useEffect(() => {
+        setUsers(initialUsers);
+    }, [initialUsers]);
 
-        return users.filter(
-            (u) =>
-                (!q ||
-                    u.name.toLowerCase().includes(q) ||
-                    u.email.toLowerCase().includes(q)) &&
-                (!statusFilter || u.status === statusFilter),
-        );
-    }, [users, search, statusFilter]);
+    // const filtered = useMemo(() => {
+    //     const q = search.toLowerCase();
+
+    //     return users.filter(
+    //         (u) =>
+    //             (!q ||
+    //                 u.name.toLowerCase().includes(q) ||
+    //                 u.email.toLowerCase().includes(q)) &&
+    //             (!statusFilter || u.status === statusFilter),
+    //     );
+    // }, [users, search, statusFilter]);
+
+    const formPage = useForm({ page, perPage });
+
+    function goToPage(p: number) {
+        formPage.transform(() => ({ page: p, perPage }));
+        formPage.get(route('admin.users.index'), {
+            preserveScroll: true,
+            preserveState: true,
+        });
+    }
+
+    const formSearch = useForm({ search: '', status: '' });
+
+    function handleSearch() {
+        formSearch.transform(() => ({ 
+            page: 1,
+            perPage,
+            search,
+            status: statusFilter 
+        }));
+        formSearch.get(route('admin.users.index'), {
+            preserveScroll: true,
+        });
+    }
 
     /**
      * Using ziggy, we can define interlan routes, with that and the useForm, we can use all the
@@ -142,7 +186,7 @@ export default function AdminUsers() {
         );
         setConfirmUser(null);
         form.patch(route('admin.users.toggleActive', { user: id }));
-    } 
+    }
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
@@ -226,6 +270,13 @@ export default function AdminUsers() {
                                 <option value="inactive">Inactius</option>
                                 {/* <option value="deleted">Donats de baixa</option> */}
                             </select>
+                            {/* Botón buscar */}
+                            <button
+                                onClick={handleSearch}
+                                className="h-8 rounded-lg bg-pf-primary px-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                            >
+                                Cerca
+                            </button>
                         </div>
                     </div>
 
@@ -242,7 +293,7 @@ export default function AdminUsers() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-pf-border dark:divide-pf-border-dark">
-                            {filtered.length === 0 ? (
+                            {users.length === 0 ? (
                                 <tr>
                                     <td
                                         colSpan={6}
@@ -252,7 +303,7 @@ export default function AdminUsers() {
                                     </td>
                                 </tr>
                             ) : (
-                                filtered.map((user) => {
+                                users.map((user) => {
                                     const isDeleted = user.status === 'deleted';
                                     const { bg, fg } = getAvatarColors(
                                         user.name,
@@ -386,11 +437,17 @@ export default function AdminUsers() {
                             )}
                         </tbody>
                     </table>
+                    <DataPagination
+                        total={total}
+                        perPage={perPage}
+                        currentPage={page}
+                        onPageChange={goToPage}
+                    />
                 </div>
 
                 {/* Footer count */}
                 <p className="text-right text-xs text-pf-text-3 dark:text-pf-text-3dark">
-                    {filtered.length} usuari{filtered.length !== 1 ? 's' : ''}
+                    {users.length} usuari{users.length !== 1 ? 's' : ''}
                 </p>
             </div>
         </AdminLayout>

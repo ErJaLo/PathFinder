@@ -24,6 +24,10 @@ Route::get("/llocs", [PaisosController::class, "llistarPaisos"])->name("llocs");
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
     Route::inertia('/', 'admin/index')->name('admin.index');
     Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('users/getUsers/{x?}/{y?}', [UserController::class, 'getUsers'])
+        ->whereNumber('x')
+        ->whereNumber('y')
+        ->name('admin.users.getUsers');
     Route::patch('users', [UserController::class, 'store'])->name('admin.users.store');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
     Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
