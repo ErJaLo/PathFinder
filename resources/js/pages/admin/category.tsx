@@ -71,7 +71,7 @@ export default function CategoryPage() {
 
                             {/* Cos Form */}
                             <form onSubmit={submitCategory} className="px-5 py-5">
-                                <div className="flex flex-col sm:flex-row gap-3">
+                                <div className="flex flex-col gap-3">
                                     <input
                                         type="text"
                                         value={form.data.name}
@@ -81,26 +81,29 @@ export default function CategoryPage() {
                                         className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300"
                                         required
                                     />
-                                    <input
-                                        type="text"
+                                    <textarea
                                         value={form.data.description}
                                         onChange={(e) => form.setData('description', e.target.value)}
-                                        placeholder="Descripcio de la categoria..."
+                                        placeholder="Descripció de la categoria..."
                                         maxLength={90}
-                                        className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300"
+                                        rows={3}
+                                        className="w-full resize-none rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300"
                                         required
                                     />
-                                    <button
-                                        type="submit"
-                                        disabled={form.processing}
-                                        className="shrink-0 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-                                    >
-                                        + Afegir
-                                    </button>
+                                    <div className="flex flex-col sm:flex-row items-center justify-between mt-1 gap-4">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 m-0">
+                                            Màxim 30 caràcters. Les categories s'apliquen a totes les experiències.
+                                        </p>
+                                        <button
+                                            type="submit"
+                                            disabled={form.processing}
+                                            className="w-full sm:w-auto shrink-0 rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                                        >
+                                            + Afegir
+                                        </button>
+                                    </div>
                                 </div>
-                                <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                                    Màxim 30 caràcters. Les categories s'apliquen a totes les experiències.
-                                </p>
+                               
                             </form>
                         </div>
                     </div>
