@@ -9,7 +9,7 @@ Route::get('/explorar', [ExperienciaController::class, 'index'])->name('explorar
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
-    Route::get('/experiencies/meves', [ExperienciaController::class, 'meves'])->name('experiencies.meves');
+    Route::get('/settings/experiences', [ExperienciaController::class, 'meves'])->name('experiencies.meves');
     Route::get('/experiencies/{post}/editar', [ExperienciaController::class, 'edit'])->name('experiencies.edit');
     Route::put('/experiencies/{post}', [ExperienciaController::class, 'update'])->name('experiencies.update');
     Route::delete('/experiencies/{post}', [ExperienciaController::class, 'destroy'])->name('experiencies.destroy');

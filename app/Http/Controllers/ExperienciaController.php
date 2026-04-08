@@ -172,23 +172,28 @@ class ExperienciaController extends Controller
                 'ratings as ratings_down_count' => fn ($q) => $q->where('value', -1),
             ]);
 
-            if ($request->filled('search')) {
-                $query->search($request->search);
-            }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
 
-            $experiences = $query->latest()->paginate(12)->withQueryString();
+        if ($request->filled('search')) {
+            $query->search($request->search);
+        }
 
-            return Inertia::render('experiencies/meves', [
-                'experiences' => $experiences,
-                'filters' => [
-                    'search' => $request->input('search', ''),
-                ],
-            ]);
+        $experiences = $query->latest()->paginate(12)->withQueryString();
+
+        return Inertia::render('experiencies/meves', [
+            'experiences' => $experiences,
+            'filters' => [
+                'search' => $request->input('search', ''),
+                'status' => $request->input('status', ''),
+            ],
+        ]);
     }
 
     public function edit(Post $post)
     {
-        if ($post->user_id !== auth->id()){
+        if ($post->user_id !== auth()->id()) {
             abort(403);
         }
 

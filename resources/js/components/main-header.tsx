@@ -83,6 +83,11 @@ export function MainHeader() {
                             <DropdownMenuContent align="end" className="w-48">
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem asChild>
+                                        <Link href="/settings/experiences" className="cursor-pointer">
+                                            Experiencies
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
                                         <Link href="/settings/profile" className="cursor-pointer">
                                             Configuració
                                         </Link>
