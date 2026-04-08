@@ -17,8 +17,8 @@ class ExperienciaController extends Controller
         $query = Post::published()
             ->with(['user:id,name,img', 'categories:id,name', 'mainCountry:code,name'])
             ->withCount([
-                'ratings as ratings_up_count' => fn ($q) => $q->where('value', 1),
-                'ratings as ratings_down_count' => fn ($q) => $q->where('value', -1),
+                'ratings as ratings_up_count' => fn($q) => $q->where('value', 1),
+                'ratings as ratings_down_count' => fn($q) => $q->where('value', -1),
             ]);
 
         // Filter by category
@@ -135,8 +135,8 @@ class ExperienciaController extends Controller
     {
         $post->load(['categories:id,name', 'mainCountry:code,name']);
         $post->loadCount([
-            'ratings as ratings_up_count' => fn ($q) => $q->where('value', 1),
-            'ratings as ratings_down_count' => fn ($q) => $q->where('value', -1),
+            'ratings as ratings_up_count' => fn($q) => $q->where('value', 1),
+            'ratings as ratings_down_count' => fn($q) => $q->where('value', -1),
         ]);
 
         // Author with stats
@@ -146,7 +146,7 @@ class ExperienciaController extends Controller
 
         // Sum of positive ratings across all author's posts
         $authorScore = Post::where('user_id', $post->user_id)
-            ->withCount(['ratings as up' => fn ($q) => $q->where('value', 1)])
+            ->withCount(['ratings as up' => fn($q) => $q->where('value', 1)])
             ->get()
             ->sum('up');
 

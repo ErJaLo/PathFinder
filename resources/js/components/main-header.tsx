@@ -90,6 +90,20 @@ export function MainHeader() {
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
+                                
+                                {user.role === 'admin' && (
+                                    <>
+                                        <DropdownMenuGroup>
+                                            <DropdownMenuItem asChild>  
+                                                <Link href="/admin" className='cursor-pointer'>
+                                                    Pagina d'administrador
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuGroup>
+                                        <DropdownMenuSeparator />
+                                    </>
+                                )}
+
                                 <DropdownMenuItem 
                                     className="w-full cursor-pointer"
                                     onSelect={() => router.post(route('logout'))}
