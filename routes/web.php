@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaisosController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AdminStatsController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/explorar', [ExperienciaController::class, 'index'])->name('explorar.index');
@@ -35,6 +36,9 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::post("category", [CategoryController::class, "store"])->name('admin.categories.store');
     Route::get("category/{category}/edit", [CategoryController::class, "edit"])->name("admin.category.edit");
     Route::put("category/{category}", [CategoryController::class, "update"])->name("admin.category.update");
+
+    // Tota la lògica que hi havia aquí ara es delega al controlador AdminStatsController
+    Route::get("summary-stats", [AdminStatsController::class, 'summaryStats'])->name("admin.summaryStats");
 });
 
 require __DIR__ . '/settings.php';

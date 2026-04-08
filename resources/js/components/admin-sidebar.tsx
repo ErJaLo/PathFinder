@@ -1,4 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
+import {useForm} from '@inertiajs/react';
+
 import {
     AlertTriangle,
     ArrowLeft,
@@ -8,6 +10,8 @@ import {
     CircleAlert,
     AlignLeft,
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { route } from 'ziggy-js';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
@@ -29,6 +33,21 @@ export function AdminSidebar() {
     const user = auth?.user;
     const { isCurrentUrl } = useCurrentUrl();
 
+  const [totalReports, setTotalReports] = useState<number>(0);
+
+  const form_summary = useForm();
+
+  useEffect(() => {
+      form_summary.get(route("admin.summaryStats"), {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['totalReports'], 
+      onSuccess: (page: any) => {
+        setTotalReports(page.props.totalReports || 0);
+      }
+    });
+  }, []); 
+
     const isAdmin = user?.role === 'admin';
     
     const navResum: any[]=[
@@ -44,7 +63,7 @@ export function AdminSidebar() {
                   },
               ]
             : []),
-        { title: 'Abusos reportats', href: '/admin/reports', icon: CircleAlert, badge: '3' },
+        { title: 'Abusos reportats', href: '/admin/reports', icon: CircleAlert, badge: totalReports },
 
     ]
     const navUsuaris: any[]=[

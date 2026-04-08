@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+
 class UserController extends Controller
 {
     use PasswordValidationRules, ProfileValidationRules;
@@ -37,13 +39,17 @@ class UserController extends Controller
             ")
             ->leftJoin('posts', 'posts.user_id', '=', 'users.id')
             ->groupBy('users.id', 'users.name', 'users.email', 'users.role', 'users.active', 'users.created_at')
-            ->when($search !== '', fn($q) =>
+            ->when(
+                $search !== '',
+                fn($q) =>
                 $q->where(function ($searchQuery) use ($search) {
                     $searchQuery->where('users.name', 'like', "%{$search}%")
                         ->orWhere('users.email', 'like', "%{$search}%");
                 })
             )
-            ->when(in_array($status, ['active', 'inactive'], true), fn($q) =>
+            ->when(
+                in_array($status, ['active', 'inactive'], true),
+                fn($q) =>
                 $q->where('users.active', $status === 'active' ? 1 : 0)
             );
 
@@ -60,7 +66,7 @@ class UserController extends Controller
             'search' => $search,
         ]);
     }
-    
+
     /**
      * Show the form for creating a new resource.
      */
