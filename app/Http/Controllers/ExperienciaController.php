@@ -82,6 +82,8 @@ class ExperienciaController extends Controller
         ]);
     }
 
+    
+
     public function create()
     {
         $categories = Category::orderBy('name')->get(['id', 'name']);
@@ -161,5 +163,92 @@ class ExperienciaController extends Controller
                 'score' => $authorScore,
             ],
         ]);
+    }
+    public function meves(Request $request){
+        $query = Post::where('user_id', $request->user()->id)
+            ->with(['categories:id,name', 'mainCountry:code,name'])
+            ->withCount([
+                'ratings as ratings_up_count' => fn ($q) => $q->where('value', 1),
+                'ratings as ratings_down_count' => fn ($q) => $q->where('value', -1),
+            ]);
+
+            if ($request->filled('search')) {
+                $query->search($request->search);
+            }
+
+            $experiences = $query->latest()->paginate(12)->withQueryString();
+
+            return Inertia::render('experiencies/meves', [
+                'experiences' => $experiences,
+                'filters' => [
+                    'search' => $request->input('search', ''),
+                ],
+            ]);
+    }
+
+    public function edit(Post $post)
+    {
+        if ($post->user_id !== auth->id()){
+            abort(403);
+        }
+
+        $post->load('categories:id,name');
+        $categories = Category::orderBy('name')->get(['id','name']);
+        $countries = Country::orderBy('name')->get(['code','name']);
+
+        return Inertia::render('experiencies/editar', [
+            'experience' => $post,
+            'categories' => $categories,
+            'countries' => $countries,
+        ]);
+    }
+
+    public function update(Request $request, Post $post){
+        if ($post->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'experience_date' => 'nullable|date',
+            'image' => 'nullable|image|max:2048',
+            'location' => 'nullable|string|max:255',
+            'country_code' => 'nullable|string|exists:countries,code',
+            'categories' => 'required|array|min:1',
+            'categories.*' => 'exists:categories,id',
+            'status' => 'required|in:draft,published',
+        ]);
+
+        if ($request->hasFile('image')) {
+            // Eliminar imatge antiga
+            if ($post->image) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
+            }
+            $validated['image'] = '/storage/' . $request->file('image')->store('experiences', 'public');
+        } else {
+            unset($validated['image']); // Mantenir l'existent
+        }
+
+        unset($validated['categories']);
+        $post->update($validated);
+        $post->categories()->sync($request->categories);
+
+        return redirect()->route('experiencies.meves')->with('success', 'Experiencia actualitzada!');
+    }
+
+    public function destroy(Post $post)
+    {
+        if ($post->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if ($post->image) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
+        }
+
+        $post->delete();
+
+        return redirect()->route('experiencies.meves')->with('success', 'Experiencia eliminada.');
     }
 }
