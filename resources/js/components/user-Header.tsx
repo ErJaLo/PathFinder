@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import React, { useState } from 'react';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
+import { useCurrentUrl } from '@/hooks/use-current-url';
 import type { User } from '@/types/auth';
 
 
@@ -18,9 +19,8 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
     .map((n) => n[0])
     .join('')
     .toUpperCase();
-    const { theme, toggleTheme } = useTheme();
-    
-
+  const { theme, toggleTheme } = useTheme();
+  const { isCurrentUrl } = useCurrentUrl();
 
   return (
     <header className="header w-full bg-pf-text dark:bg-pf-bg-dark text-white flex items-center justify-between px-4 md:px-6 h-16 sticky top-0 z-50 border-b border-pf-primary/20">
@@ -34,21 +34,26 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
         </Link>
         <div>
           <div className="header-logo-text font-serif font-bold text-lg leading-tight">PathFinder</div>
-          <div className="header-logo-badge text-xs uppercase tracking-wider text-pf-accent mt-0.5">El meu perfil</div>
         </div>
       </div>
 
       {/* Desktop nav */}
       <nav className="header-nav hidden xl:flex items-center gap-2">
-        <span className="header-section text-xs uppercase tracking-wider text-white/40 px-3">Compte</span>
-        <Link href="/settings/profile" className="header-item active flex items-center gap-2 px-4 py-2 rounded-md text-white bg-pf-primary">
+        <span className="header-section text-xs uppercase tracking-wider text-white/40 px-3">El meu perfil</span>
+        <Link
+          href="/settings/profile"
+          className={`header-item flex items-center gap-2 px-4 py-2 rounded-md ${isCurrentUrl('/llocs') ? 'text-white bg-pf-primary' : 'text-white/70 hover:bg-pf-primary-l hover:text-white'}`}
+        >
           <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
             <circle cx="8" cy="5" r="3" />
             <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" strokeLinecap="round" />
           </svg>
           Dades personals
         </Link>
-        <Link href="/settings/security" className="header-item flex items-center gap-2 px-4 py-2 rounded-md text-white/70 hover:bg-pf-primary-l hover:text-white">
+        <Link
+          href="/settings/security"
+          className={`header-item flex items-center gap-2 px-4 py-2 rounded-md ${isCurrentUrl('/settings/security') ? 'text-white bg-pf-primary' : 'text-white/70 hover:bg-pf-primary-l hover:text-white'}`}
+        >
           <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
             <rect x="3" y="7" width="10" height="7" rx="2" />
             <path d="M5 7V5a3 3 0 016 0v2" strokeLinecap="round" />
@@ -56,7 +61,10 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
           Contrasenya
         </Link>
         <span className="header-section text-xs uppercase tracking-wider text-white/40 px-3">Contingut</span>
-        <Link href="/experiencies/meves" className="header-item flex items-center gap-2 px-4 py-2 rounded-md text-white/70 hover:bg-pf-primary-l hover:text-white">
+        <Link
+          href="/settings/experiences"
+          className={`header-item flex items-center gap-2 px-4 py-2 rounded-md ${isCurrentUrl('/settings/experiences') ? 'text-white bg-pf-primary' : 'text-white/70 hover:bg-pf-primary-l hover:text-white'}`}
+        >
           <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
             <path d="M2 3h12M2 7h9M2 11h6" strokeLinecap="round" />
           </svg>
@@ -68,12 +76,6 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
 
 
       <div className="header-right flex items-center gap-4">
-        <Link href="/" className="header-back flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 text-white/70 hover:text-white hover:bg-white/10 transition text-xs md:text-base">
-          <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth="1.5" className="w-3 h-3">
-            <path d="M9 2L4 6l5 4" strokeLinecap="round" />
-          </svg>
-          <span className="hidden xs:inline">Tornar a la web</span>
-        </Link>
         <button
           className="ml-4 p-3 rounded-full bg-pf-primary-ldark hover:bg-pf-primary-dark/20 border border-pf-border-dark transition"
           onClick={toggleTheme}
@@ -89,7 +91,6 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
           </div>
           <div className="hidden md:block">
             <div className="header-user-name text-sm font-medium text-white/90">{user.name}</div>
-            <div className="header-user-role text-xs text-white/60">Usuari registrat</div>
           </div>
         </div>
         
@@ -158,16 +159,6 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
               </Link>
             </div>
           </nav>
-          {/* Animation keyframes for slide down */}
-          <style>{`
-            @keyframes mobile-nav-slide-down {
-              0% { transform: translateY(-100%); opacity: 0; }
-              100% { transform: translateY(0); opacity: 1; }
-            }
-            .animate-mobile-nav-slide-down {
-              animation: mobile-nav-slide-down 0.35s cubic-bezier(0.4,0,0.2,1);
-            }
-          `}</style>
         </>
       )}
     </header>
