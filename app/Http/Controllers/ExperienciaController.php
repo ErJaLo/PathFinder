@@ -97,17 +97,21 @@ class ExperienciaController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+        $isDraft = $request->input('status') === 'draft';
+
+        $rules = [
+            'title' => $isDraft ? 'nullable|string|max:255' : 'required|string|max:255',
+            'content' => $isDraft ? 'nullable|string' : 'required|string',
             'experience_date' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
             'location' => 'nullable|string|max:255',
             'country_code' => 'nullable|string|exists:countries,code',
-            'categories' => 'required|array|min:1',
+            'categories' => $isDraft ? 'nullable|array' : 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'status' => 'required|in:draft,published',
-        ]);
+        ];
+
+        $validated = $request->validate($rules);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
@@ -116,21 +120,23 @@ class ExperienciaController extends Controller
 
         $post = Post::create([
             'user_id' => $request->user()->id,
-            'title' => $validated['title'],
-            'content' => $validated['content'],
+            'title' => $validated['title'] ?? '',
+            'content' => $validated['content'] ?? '',
             'experience_date' => $validated['experience_date'] ?? null,
             'image' => $imagePath,
             'country_code' => $validated['country_code'] ?? null,
             'status' => $validated['status'],
         ]);
 
-        $post->categories()->sync($validated['categories']);
+        if (!empty($validated['categories'])) {
+            $post->categories()->sync($validated['categories']);
+        }
 
         if ($validated['status'] === 'published') {
             return redirect()->route('explorar.index')->with('success', 'Experiencia publicada!');
         }
 
-        return redirect()->route('experiencies.create')->with('success', 'Esborrany guardat!');
+        return redirect()->route('experiencies.edit', $post)->with('success', 'Esborrany guardat!');
     }
 
     public function show(Post $post)
@@ -197,7 +203,7 @@ class ExperienciaController extends Controller
             abort(403);
         }
 
-        $post->load('categories:id,name');
+        $post->load(['categories:id,name', 'mainCountry:code,name']);
         $categories = Category::orderBy('name')->get(['id','name']);
         $countries = Country::orderBy('name')->get(['code','name']);
 
@@ -208,36 +214,44 @@ class ExperienciaController extends Controller
         ]);
     }
 
-    public function update(Request $request, Post $post){
+    public function update(Request $request, Post $post)
+    {
         if ($post->user_id !== auth()->id()) {
             abort(403);
         }
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+        $isDraft = $request->input('status') === 'draft';
+
+        $rules = [
+            'title' => $isDraft ? 'nullable|string|max:255' : 'required|string|max:255',
+            'content' => $isDraft ? 'nullable|string' : 'required|string',
             'experience_date' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
             'location' => 'nullable|string|max:255',
             'country_code' => 'nullable|string|exists:countries,code',
-            'categories' => 'required|array|min:1',
+            'categories' => $isDraft ? 'nullable|array' : 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'status' => 'required|in:draft,published',
-        ]);
+        ];
+
+        $validated = $request->validate($rules);
 
         if ($request->hasFile('image')) {
-            // Eliminar imatge antiga
             if ($post->image) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
             }
             $validated['image'] = '/storage/' . $request->file('image')->store('experiences', 'public');
         } else {
-            unset($validated['image']); // Mantenir l'existent
+            unset($validated['image']);
         }
 
+        $validated['title'] = $validated['title'] ?? $post->title ?? '';
+        $validated['content'] = $validated['content'] ?? $post->content ?? '';
+
+        $cats = $validated['categories'] ?? [];
         unset($validated['categories']);
         $post->update($validated);
-        $post->categories()->sync($request->categories);
+        $post->categories()->sync($cats);
 
         return redirect()->route('experiencies.meves')->with('success', 'Experiencia actualitzada!');
     }
