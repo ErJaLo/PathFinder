@@ -44,7 +44,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Explorador de fitxers"
+              "title": "Explorador de archivos"
             }
           },
           {
@@ -174,21 +174,22 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Obre el selector ràpid": false,
-      "graph:Obre la vista gràfica": false,
-      "canvas:Crea un llenç nou": false,
-      "daily-notes:Obre la nota d'avui": false,
-      "templates:Inserir plantilla": false,
-      "command-palette:Obre la paleta d'ordres": false,
-      "bases:Crea una base nova": false,
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Crear nueva base": false,
       "system3-relay:Relay": false
     }
   },
   "active": "ce6bc1ed37c9cf2c",
   "lastOpenFiles": [
+    "guia-meves-experiencies.md",
     "Pathfinder BD.md",
-    "Pathfinder BD.md.tmp.8365.1773937699294",
     "Planning del projecte.md",
+    "Pathfinder BD.md.tmp.8365.1773937699294",
     "Guia Tailwind CSS al projecte.md",
     "Explicacio tecnica Laravel Inertia React.md",
     "Sin título.md",

@@ -151,7 +151,7 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                 </svg>
                 Contrasenya
               </Link>
-              <Link href="/settings/experiences" className="header-item flex items-center gap-3 px-4 py-3 text-base rounded-lg text-white/80 hover:bg-pf-primary-l hover:text-white font-medium" onClick={() => setMobileNavOpen(false)}>
+              <Link href="/experiencies/meves" className="header-item flex items-center gap-3 px-4 py-3 text-base rounded-lg text-white/80 hover:bg-pf-primary-l hover:text-white font-medium" onClick={() => setMobileNavOpen(false)}>
                 <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
                   <path d="M2 3h12M2 7h9M2 11h6" strokeLinecap="round" />
                 </svg>
