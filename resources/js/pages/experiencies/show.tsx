@@ -1,4 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
+
 import {
     ArrowLeft,
     ThumbsUp,
@@ -22,26 +24,34 @@ type Props = {
 function countryFlag(code: string): string {
     const base = 0x1f1e6 - 65;
     const upper = code.toUpperCase();
+
     return String.fromCodePoint(upper.charCodeAt(0) + base, upper.charCodeAt(1) + base);
 }
 
 function formatNum(n: number): string {
     if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    
     return String(n);
 }
 
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
+    
     return date.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function getInitials(name: string): string {
     return name
-        .split(' ')
-        .map((w) => w[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+const form = useForm();
+function handleLike(value: number) {
+    form.patch(route('admin.expe.toggleActive', { user: id }));
 }
 
 const heroGradient = 'linear-gradient(135deg, #1A5FA8 0%, #0C4880 40%, #0a3060 100%)';
@@ -53,7 +63,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
         <MainLayout>
             <Head title={`${experience.title} — PathFinder`} />
 
-            {/* ══════ HERO ══════ */}
+            {/* ═════ HERO ══════ */}
             <section className="relative -mx-6 -mt-8 overflow-hidden" style={{ height: 420 }}>
                 {experience.image ? (
                     <img

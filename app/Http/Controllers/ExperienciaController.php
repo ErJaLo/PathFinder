@@ -270,4 +270,10 @@ class ExperienciaController extends Controller
 
         return redirect()->route('experiencies.meves')->with('success', 'Experiencia eliminada.');
     }
+
+    public function handleLike(Post $post){
+    
+
+
+    }
 }

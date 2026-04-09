@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/experiencies/{post}', [ExperienciaController::class, 'destroy'])->name('experiencies.destroy');
     Route::get('/experiencies/crear', [ExperienciaController::class, 'create'])->name('experiencies.create');
     Route::post('/experiencies', [ExperienciaController::class, 'store'])->name('experiencies.store');
+
 });
 
 Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
