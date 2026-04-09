@@ -14,7 +14,6 @@ class ReportsController extends Controller
      */
     public function index()
     {
-        // Ens desfem del selectRaw conflictiu i del groupBy innecessari.
         $reports = DB::table("reports")
             ->select(
                 "id",

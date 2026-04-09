@@ -4,26 +4,29 @@ import { useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
 
 function Summary() {
-  const [totalCategories, setTotalCategories] = useState<number>(0);
-  const [totalUsuaris, setTotaUsuaris] = useState<number>(0);
-  const [totalExperiencies, setTotalExperiencies] = useState<number>(0);
-  const [totalReports, setTotalReports] = useState<number>(0);
 
-  const form_summary = useForm();
+  const { auth, globalData } = usePage<{ auth: Auth, globalData: { totalReports: number, totalCategories:number, totalUsuaris:number, totalExperiencies:number } }>().props;
+  
+  // const [totalCategories, setTotalCategories] = useState<number>(0);
+  // const [totalUsuaris, setTotaUsuaris] = useState<number>(0);
+  // const [totalExperiencies, setTotalExperiencies] = useState<number>(0);
+  // const [totalReports, setTotalReports] = useState<number>(0);
 
-  useEffect(() => {
-      form_summary.get(route("admin.summaryStats"), {
-      preserveState: true,
-      preserveScroll: true,
-      only: ['totalCategories', 'totalUsuaris', 'totalExperiencies', 'totalReports'], 
-      onSuccess: (page: any) => {
-        setTotalCategories(page.props.totalCategories || 0);
-        setTotaUsuaris(page.props.totalUsuaris || 0);
-        setTotalExperiencies(page.props.totalExperiencies || 0);
-        setTotalReports(page.props.totalReports || 0);
-      }
-    });
-  }, []); 
+  // const form_summary = useForm();
+
+  // useEffect(() => {
+  //     form_summary.get(route("admin.summaryStats"), {
+  //     preserveState: true,
+  //     preserveScroll: true,
+  //     only: ['totalCategories', 'totalUsuaris', 'totalExperiencies', 'totalReports'], 
+  //     onSuccess: (page: any) => {
+  //       setTotalCategories(page.props.totalCategories || 0);
+  //       setTotaUsuaris(page.props.totalUsuaris || 0);
+  //       setTotalExperiencies(page.props.totalExperiencies || 0);
+  //       setTotalReports(page.props.totalReports || 0);
+  //     }
+  //   });
+  // }, []); 
 
   // Funció per donar format numèric curt (ex: 42.8K)
   const formatNumber = (num: number) => {
@@ -42,7 +45,7 @@ function Summary() {
           <Folder className="w-7 h-7 text-pf-amber dark:text-pf-amber-dark" strokeWidth={2} />
         </div>
         <div className="flex flex-col">
-          <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark leading-none transition-colors">{formatNumber(totalCategories)}</span>
+          <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark leading-none transition-colors">{formatNumber(globalData["totalCategories"])}</span>
           <span className="text-sm font-medium text-pf-text-2 dark:text-pf-text-2dark mt-1 transition-colors">Categories</span>
         </div>
       </div>
@@ -53,7 +56,7 @@ function Summary() {
           <Users className="w-7 h-7 text-pf-primary dark:text-pf-primary-dark" strokeWidth={2} />
         </div>
         <div className="flex flex-col">
-          <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark leading-none transition-colors">{formatNumber(totalUsuaris)}</span>
+          <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark leading-none transition-colors">{formatNumber(globalData["totalUsuaris"])}</span>
           <span className="text-sm font-medium text-pf-text-2 dark:text-pf-text-2dark mt-1 transition-colors">Usuaris registrats</span>
         </div>
       </div>
@@ -64,10 +67,10 @@ function Summary() {
           <Flag className="w-7 h-7 text-red-500 dark:text-red-400" strokeWidth={2} />
         </div>
         <div className="flex flex-col">
-          <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark leading-none transition-colors">{formatNumber(totalReports)}</span>
+          <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark leading-none transition-colors">{formatNumber(globalData["totalReports"])}</span>
           <span className="text-sm font-medium text-pf-text-2 dark:text-pf-text-2dark mt-1 transition-colors">Abusos pendents</span>
           {/* Mostrem advertència només si hi ha reportats */}
-          {totalReports > 0 ? (
+          {globalData["totalReports"] > 0 ? (
              <span className="text-[10px] font-bold text-red-500 dark:text-red-400 mt-1 uppercase tracking-wide transition-colors">Requereix atenció</span>
           ) : (
              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 mt-1 uppercase tracking-wide transition-colors">Tot net</span>
@@ -81,7 +84,7 @@ function Summary() {
           <FileText className="w-7 h-7 text-pf-primary dark:text-pf-primary-dark" strokeWidth={2} />
         </div>
         <div className="flex flex-col">
-          <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark leading-none transition-colors">{formatNumber(totalExperiencies)}</span>
+          <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark leading-none transition-colors">{formatNumber(globalData["totalExperiencies"])}</span>
           <span className="text-sm font-medium text-pf-text-2 dark:text-pf-text-2dark mt-1 transition-colors">Experiències</span>
         </div>
       </div>

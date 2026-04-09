@@ -29,25 +29,10 @@ import { home } from '@/routes';
 import type { Auth, NavItem } from '@/types';
 
 export function AdminSidebar() {
-    const { auth } = usePage<{ auth: Auth }>().props;
+    const { auth, globalData } = usePage<{ auth: Auth, globalData: { totalReports: number } }>().props;
     const user = auth?.user;
     const { isCurrentUrl } = useCurrentUrl();
-
-  const [totalReports, setTotalReports] = useState<number>(0);
-
-  const form_summary = useForm();
-
-  useEffect(() => {
-      form_summary.get(route("admin.summaryStats"), {
-      preserveState: true,
-      preserveScroll: true,
-      only: ['totalReports'], 
-      onSuccess: (page: any) => {
-        setTotalReports(page.props.totalReports || 0);
-      }
-    });
-  }, []); 
-
+    
     const isAdmin = user?.role === 'admin';
     
     const navResum: any[]=[
@@ -63,7 +48,7 @@ export function AdminSidebar() {
                   },
               ]
             : []),
-        { title: 'Abusos reportats', href: '/admin/reports', icon: CircleAlert, badge: totalReports },
+        { title: 'Abusos reportats', href: '/admin/reports', icon: CircleAlert, badge: globalData?.totalReports },
 
     ]
     const navUsuaris: any[]=[

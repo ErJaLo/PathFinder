@@ -6,7 +6,6 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaisosController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\AdminStatsController;
 use App\Http\Controllers\ReportsController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -29,6 +28,7 @@ Route::get("/llocs", [PaisosController::class, "llistarPaisos"])->name("llocs");
 
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
     Route::inertia('/', 'admin/index')->name('admin.index');
+    // Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('users/getUsers/{x?}/{y?}', [UserController::class, 'getUsers'])
         ->whereNumber('x')
@@ -41,8 +41,6 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::post("category", [CategoryController::class, "store"])->name('admin.categories.store');
     Route::get("category/{category}/edit", [CategoryController::class, "edit"])->name("admin.category.edit");
     Route::put("category/{category}", [CategoryController::class, "update"])->name("admin.category.update");
-
-    Route::get("summary-stats", [AdminStatsController::class, 'summaryStats'])->name("admin.summaryStats");
 
     Route::get("reports", [ReportsController::class, "index"])->name("reports");
 });

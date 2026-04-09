@@ -6,13 +6,13 @@ import type { AppLayoutProps } from '@/types';
 
 export default function AdminLayout({
     children,
-    breadcrumbs = [],
+    breadcrumbs = []
 }: AppLayoutProps) {
     return (
         <AppShell variant="sidebar">
             <AdminSidebar />
             <AppContent variant="sidebar" className="overflow-x-hidden">
-                <AppSidebarHeader breadcrumbs={breadcrumbs} />
+                <AppSidebarHeader breadcrumbs={breadcrumbs}  />
                 {children}
             </AppContent>
         </AppShell>
