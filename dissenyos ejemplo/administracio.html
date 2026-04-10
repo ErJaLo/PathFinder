@@ -76,9 +76,7 @@
             font-family: inherit;
         }
 
-        /* ══════════════════════════════
-           SIDEBAR
-        ══════════════════════════════ */
+        /* ══ SIDEBAR ══ */
         .sidebar {
             width: var(--sidebar-w);
             min-height: 100vh;
@@ -193,10 +191,6 @@
             border-radius: 999px;
         }
 
-        .sidebar-item .badge.amber {
-            background: var(--warning);
-        }
-
         .sidebar-footer {
             padding: 12px 8px;
             border-top: 1px solid rgba(255, 255, 255, .08);
@@ -241,7 +235,7 @@
             color: rgba(255, 255, 255, .4);
         }
 
-        /* Hamburger per mòbil */
+        /* Mobile hamburger */
         .sidebar-toggle {
             display: none;
             position: fixed;
@@ -290,9 +284,7 @@
             z-index: 190;
         }
 
-        /* ══════════════════════════════
-           MAIN CONTENT
-        ══════════════════════════════ */
+        /* ══ MAIN ══ */
         .main {
             margin-left: var(--sidebar-w);
             flex: 1;
@@ -360,9 +352,7 @@
             gap: 28px;
         }
 
-        /* ══════════════════════════════
-           STATS ROW
-        ══════════════════════════════ */
+        /* ══ STATS ══ */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -419,9 +409,7 @@
             color: var(--danger);
         }
 
-        /* ══════════════════════════════
-           PANEL GENERIC
-        ══════════════════════════════ */
+        /* ══ PANEL ══ */
         .panel {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -459,9 +447,6 @@
             padding: 20px;
         }
 
-        /* ══════════════════════════════
-           GRID 2 COL
-        ══════════════════════════════ */
         .two-col {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -469,9 +454,7 @@
             align-items: start;
         }
 
-        /* ══════════════════════════════
-           CATEGORIES
-        ══════════════════════════════ */
+        /* ══ CATEGORIES ══ */
         .cat-form {
             display: flex;
             gap: 8px;
@@ -612,7 +595,6 @@
             background: var(--danger-l);
         }
 
-        /* Edit inline */
         .cat-item.editing .cat-item-name {
             display: none;
         }
@@ -651,9 +633,7 @@
             display: none;
         }
 
-        /* ══════════════════════════════
-           USERS TABLE
-        ══════════════════════════════ */
+        /* ══ USERS TABLE ══ */
         .user-toolbar {
             display: flex;
             gap: 10px;
@@ -888,13 +868,664 @@
             cursor: not-allowed;
         }
 
-        /* Confirmació de baixa */
-        .confirm-overlay {
+        /* ══════════════════════════════════════════
+           SECCIÓ ABUSOS REPORTATS — DISSENY COMPLET
+        ══════════════════════════════════════════ */
+
+        /* Toolbar de reports */
+        .reports-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .reports-toolbar .search-box {
+            min-width: 200px;
+            flex: 1;
+        }
+
+        .reports-count-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--danger-l);
+            color: var(--danger);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 999px;
+            border: 1px solid #fca5a5;
+        }
+
+        .reports-count-badge svg {
+            width: 11px;
+            height: 11px;
+        }
+
+        /* Tabs de filtre */
+        .report-tabs {
+            display: flex;
+            gap: 2px;
+            padding: 3px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+        }
+
+        .report-tab {
+            padding: 5px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text3);
+            border: none;
+            background: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all .15s;
+            white-space: nowrap;
+        }
+
+        .report-tab.active {
+            background: var(--surface);
+            color: var(--text);
+            box-shadow: 0 1px 3px rgba(13, 31, 53, .1);
+        }
+
+        .report-tab:hover:not(.active) {
+            color: var(--text2);
+        }
+
+        /* Llista de reports */
+        .reports-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* Card de report */
+        .report-card {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 20px;
+            transition: background .15s;
+            align-items: start;
+            animation: fadeUp .25s ease both;
+        }
+
+        .report-card:last-child {
+            border-bottom: none;
+        }
+
+        .report-card:hover {
+            background: var(--surface2);
+        }
+
+        .report-card.resolved {
+            opacity: .55;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Icona de gravetat */
+        .report-severity {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+            margin-right: 14px;
+            margin-top: 1px;
+        }
+
+        .report-severity.high {
+            background: var(--danger-l);
+        }
+
+        .report-severity.medium {
+            background: var(--warning-l);
+        }
+
+        .report-severity.low {
+            background: var(--success-l);
+        }
+
+        /* Cos del report */
+        .report-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .report-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
+        }
+
+        .report-type {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .4px;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .report-type.spam {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .report-type.hate {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .report-type.fake {
+            background: #EDE9FE;
+            color: #5B21B6;
+        }
+
+        .report-type.abuse {
+            background: #FFF1F2;
+            color: #BE123C;
+        }
+
+        .report-type.other {
+            background: var(--surface2);
+            color: var(--text3);
+            border: 1px solid var(--border);
+        }
+
+        .report-severity-label {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 999px;
+        }
+
+        .report-severity-label.high {
+            background: var(--danger-l);
+            color: var(--danger);
+        }
+
+        .report-severity-label.medium {
+            background: var(--warning-l);
+            color: var(--warning);
+        }
+
+        .report-severity-label.low {
+            background: var(--success-l);
+            color: var(--success);
+        }
+
+        .report-time {
+            font-size: 11px;
+            color: var(--text3);
+            margin-left: auto;
+        }
+
+        .report-post-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .report-excerpt {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .report-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .report-reporter {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        .report-reporter-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .report-reported-by {
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        .report-reported-by strong {
+            color: var(--text2);
+            font-weight: 600;
+        }
+
+        /* Accions del report */
+        .report-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: flex-end;
+            margin-left: 16px;
+            flex-shrink: 0;
+        }
+
+        .report-status-badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 9px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .report-status-badge .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .report-status-badge.pending {
+            background: var(--warning-l);
+            color: var(--warning);
+        }
+
+        .report-status-badge.pending .dot {
+            background: var(--warning);
+        }
+
+        .report-status-badge.resolved {
+            background: var(--success-l);
+            color: var(--success);
+        }
+
+        .report-status-badge.resolved .dot {
+            background: var(--success);
+        }
+
+        .report-status-badge.dismissed {
+            background: var(--bg);
+            color: var(--text3);
+            border: 1px solid var(--border);
+        }
+
+        .report-status-badge.dismissed .dot {
+            background: var(--text3);
+        }
+
+        .report-action-btns {
+            display: flex;
+            gap: 5px;
+        }
+
+        .r-btn {
+            height: 28px;
+            padding: 0 10px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            background: none;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all .15s;
+            white-space: nowrap;
+        }
+
+        .r-btn svg {
+            width: 11px;
+            height: 11px;
+        }
+
+        .r-btn:hover {
+            border-color: var(--border2);
+            background: var(--surface2);
+        }
+
+        .r-btn.resolve:hover {
+            border-color: var(--success);
+            color: var(--success);
+            background: var(--success-l);
+        }
+
+        .r-btn.dismiss:hover {
+            border-color: var(--text3);
+            color: var(--text3);
+            background: var(--bg);
+        }
+
+        .r-btn.view-post:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-l);
+        }
+
+        .r-btn:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Estat buit */
+        .reports-empty {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text3);
+        }
+
+        .reports-empty-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .reports-empty-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text2);
+            margin-bottom: 6px;
+        }
+
+        .reports-empty-sub {
+            font-size: 13px;
+        }
+
+        /* Summary bar */
+        .reports-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .r-summary-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .r-summary-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .r-summary-label {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .r-summary-val {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-left: auto;
+        }
+
+        /* Modal detall */
+        .detail-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(8, 15, 26, .5);
             z-index: 500;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .detail-overlay.open {
+            display: flex;
+        }
+
+        .detail-modal {
+            background: var(--surface);
+            border-radius: var(--r);
+            max-width: 520px;
+            width: 94%;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
+            animation: modalIn .2s ease;
+            overflow: hidden;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(.94) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .detail-modal-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .detail-modal-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .detail-modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .detail-modal-sub {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .detail-modal-close {
+            margin-left: auto;
+            width: 28px;
+            height: 28px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .detail-modal-close:hover {
+            background: var(--bg);
+            color: var(--text2);
+        }
+
+        .detail-modal-close svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .detail-modal-body {
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 8px;
+            align-items: start;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--text3);
+            padding-top: 2px;
+        }
+
+        .detail-val {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+
+        .detail-val strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .detail-excerpt-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 12px 14px;
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .detail-modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .btn-modal-dismiss {
+            height: 36px;
+            padding: 0 16px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            background: none;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text2);
+            transition: all .15s;
+        }
+
+        .btn-modal-dismiss:hover {
+            background: var(--bg);
+        }
+
+        .btn-modal-resolve {
+            height: 36px;
+            padding: 0 16px;
+            border-radius: var(--r-sm);
+            border: none;
+            background: var(--success);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background .15s;
+        }
+
+        .btn-modal-resolve:hover {
+            background: #15803d;
+        }
+
+        .btn-modal-resolve svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .btn-modal-delete {
+            height: 36px;
+            padding: 0 16px;
+            border-radius: var(--r-sm);
+            border: none;
+            background: var(--danger);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background .15s;
+        }
+
+        .btn-modal-delete:hover {
+            background: var(--danger-h);
+        }
+
+        .btn-modal-delete svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        /* Confirmació baixa */
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 15, 26, .5);
+            z-index: 600;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(3px);
@@ -912,18 +1543,6 @@
             width: 90%;
             box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
             animation: modalIn .2s ease;
-        }
-
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(.94) translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
         }
 
         .confirm-icon {
@@ -1010,7 +1629,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            z-index: 600;
+            z-index: 700;
             opacity: 0;
             transform: translateY(8px);
             transition: opacity .2s, transform .2s;
@@ -1030,9 +1649,11 @@
             background: var(--danger);
         }
 
-        /* ══════════════════════════════
-           RESPONSIVE
-        ══════════════════════════════ */
+        .toast.warning {
+            background: var(--warning);
+        }
+
+        /* ══ RESPONSIVE ══ */
         @media (max-width: 1024px) {
             .stats-row {
                 grid-template-columns: 1fr 1fr;
@@ -1040,6 +1661,10 @@
 
             .two-col {
                 grid-template-columns: 1fr;
+            }
+
+            .reports-summary {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
@@ -1081,6 +1706,18 @@
             .stat-num {
                 font-size: 20px;
             }
+
+            .report-card {
+                grid-template-columns: auto 1fr;
+            }
+
+            .report-actions {
+                display: none;
+            }
+
+            .report-card:hover .report-actions {
+                display: flex;
+            }
         }
 
         @media (max-width: 500px) {
@@ -1088,11 +1725,13 @@
                 grid-template-columns: 1fr;
             }
 
-            .users-table th:nth-child(3),
-            .users-table td:nth-child(3),
-            .users-table th:nth-child(4),
-            .users-table td:nth-child(4) {
-                display: none;
+            .reports-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-row {
+                grid-template-columns: 1fr;
+                gap: 3px;
             }
         }
     </style>
@@ -1100,15 +1739,12 @@
 
 <body>
 
-    <!-- ═══ SIDEBAR TOGGLE (mòbil) ═══ -->
     <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Menú">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </button>
     <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 
-    <!-- ═══ SIDEBAR ═══ -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-logo">
             <div class="sidebar-logo-mark">V</div>
@@ -1117,7 +1753,6 @@
                 <div class="sidebar-logo-badge">Administració</div>
             </div>
         </div>
-
         <nav class="sidebar-nav">
             <div class="sidebar-section">General</div>
             <button class="sidebar-item" onclick="goTo('dashboard')">
@@ -1129,23 +1764,21 @@
                 </svg>
                 Resum
             </button>
-
             <div class="sidebar-section">Contingut</div>
-            <button class="sidebar-item active" onclick="showSection('categories', this)">
+            <button class="sidebar-item" onclick="showSection('categories', this)">
                 <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
                     <path d="M2 4h12M2 8h8M2 12h5" stroke-linecap="round" />
                 </svg>
                 Gestió de categories
             </button>
-            <button class="sidebar-item" onclick="showSection('reports', this)">
+            <button class="sidebar-item active" onclick="showSection('reports', this)">
                 <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
                     <path d="M8 2v6M8 11v1" stroke-linecap="round" />
                     <circle cx="8" cy="8" r="6.5" />
                 </svg>
                 Abusos reportats
-                <span class="badge">3</span>
+                <span class="badge" id="sidebar-reports-badge">3</span>
             </button>
-
             <div class="sidebar-section">Usuaris</div>
             <button class="sidebar-item" onclick="showSection('users', this)">
                 <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
@@ -1157,7 +1790,6 @@
                 Baixa d'usuaris
             </button>
         </nav>
-
         <div class="sidebar-footer">
             <div class="sidebar-admin">
                 <div class="sidebar-admin-ava">AD</div>
@@ -1169,10 +1801,10 @@
         </div>
     </aside>
 
-    <!-- ═══ MAIN ═══ -->
+    <!-- MAIN -->
     <div class="main">
         <div class="topbar">
-            <span class="topbar-title" id="topbar-title">Gestió de categories</span>
+            <span class="topbar-title" id="topbar-title">Abusos reportats</span>
             <div class="topbar-right">
                 <a href="index.html" class="topbar-link">
                     <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5">
@@ -1204,9 +1836,9 @@
                 <div class="stat-card">
                     <div class="stat-icon" style="background:#FEE2E2">🚩</div>
                     <div>
-                        <div class="stat-num">3</div>
+                        <div class="stat-num" id="stat-pending">3</div>
                         <div class="stat-lbl">Abusos pendents</div>
-                        <div class="stat-delta dn">Requereix atenció</div>
+                        <div class="stat-delta dn" id="stat-pending-label">Requereix atenció</div>
                     </div>
                 </div>
                 <div class="stat-card">
@@ -1218,11 +1850,9 @@
                 </div>
             </div>
 
-            <!-- ═══ SECCIÓ: CATEGORIES ═══ -->
-            <div id="section-categories">
+            <!-- SECCIÓ CATEGORIES -->
+            <div id="section-categories" style="display:none">
                 <div class="two-col">
-
-                    <!-- Afegir categoria -->
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">
@@ -1249,8 +1879,6 @@
                                 totes les experiències.</p>
                         </div>
                     </div>
-
-                    <!-- Llista de categories -->
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">
@@ -1265,11 +1893,10 @@
                             <div class="cat-list" id="cat-list"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            <!-- ═══ SECCIÓ: USUARIS ═══ -->
+            <!-- SECCIÓ USUARIS -->
             <div id="section-users" style="display:none">
                 <div class="panel">
                     <div class="panel-header">
@@ -1298,7 +1925,7 @@
                         </div>
                     </div>
                     <div class="users-table-wrap">
-                        <table class="users-table" id="users-table">
+                        <table class="users-table">
                             <thead>
                                 <tr>
                                     <th>Usuari</th>
@@ -1315,9 +1942,13 @@
                 </div>
             </div>
 
-            <!-- ═══ SECCIÓ: ABUSOS ═══ -->
-            <div id="section-reports" style="display:none">
+            <!-- ═══════════════════════════════
+                 SECCIÓ ABUSOS REPORTATS
+            ═══════════════════════════════ -->
+            <div id="section-reports">
                 <div class="panel">
+
+                    <!-- Capçalera amb filtre i cerca -->
                     <div class="panel-header">
                         <span class="panel-title">
                             <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5">
@@ -1326,20 +1957,129 @@
                             </svg>
                             Abusos reportats
                         </span>
-                        <span style="font-size:12px;color:var(--text3)">3 pendents de revisió</span>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="reports-count-badge" id="pending-badge">
+                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 1v5M6 9v.5" stroke-linecap="round" />
+                                    <circle cx="6" cy="6" r="5" />
+                                </svg>
+                                <span id="pending-count">3</span> pendents
+                            </span>
+                        </div>
                     </div>
-                    <div class="panel-body"
-                        style="color:var(--text3);font-size:13px;text-align:center;padding:40px 20px">
-                        <div style="font-size:36px;margin-bottom:12px">🚩</div>
-                        Secció d'abusos reportats (pendent d'implementació en fases posteriors).
+
+                    <!-- Toolbar: tabs + cerca -->
+                    <div
+                        style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--surface);">
+                        <div class="report-tabs">
+                            <button class="report-tab active" onclick="filterReports('all', this)">Tots</button>
+                            <button class="report-tab" onclick="filterReports('pending', this)">Pendents</button>
+                            <button class="report-tab" onclick="filterReports('resolved', this)">Resolts</button>
+                            <button class="report-tab" onclick="filterReports('dismissed', this)">Descartats</button>
+                        </div>
+                        <div class="search-box" style="min-width:180px;flex:1;max-width:300px;">
+                            <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
+                                <circle cx="6.5" cy="6.5" r="4" />
+                                <path d="M10 10l3 3" stroke-linecap="round" />
+                            </svg>
+                            <input type="text" id="report-search" placeholder="Cerca per títol o usuari…"
+                                oninput="searchReports()">
+                        </div>
+                        <select class="filter-select" id="report-type-filter" onchange="searchReports()">
+                            <option value="">Tots els tipus</option>
+                            <option value="spam">Spam</option>
+                            <option value="hate">Odi / Discriminació</option>
+                            <option value="fake">Informació falsa</option>
+                            <option value="abuse">Abús / Assetjament</option>
+                            <option value="other">Altres</option>
+                        </select>
                     </div>
+
+                    <!-- Resum barra -->
+                    <div class="reports-summary">
+                        <div class="r-summary-item">
+                            <div class="r-summary-dot" style="background:var(--warning)"></div>
+                            <span class="r-summary-label">Pendents</span>
+                            <span class="r-summary-val" id="sum-pending">3</span>
+                        </div>
+                        <div class="r-summary-item">
+                            <div class="r-summary-dot" style="background:var(--success)"></div>
+                            <span class="r-summary-label">Resolts</span>
+                            <span class="r-summary-val" id="sum-resolved">2</span>
+                        </div>
+                        <div class="r-summary-item">
+                            <div class="r-summary-dot" style="background:var(--text3)"></div>
+                            <span class="r-summary-label">Descartats</span>
+                            <span class="r-summary-val" id="sum-dismissed">1</span>
+                        </div>
+                    </div>
+
+                    <!-- Llista de reports -->
+                    <div class="reports-list" id="reports-list"></div>
+
+                    <!-- Estat buit -->
+                    <div class="reports-empty" id="reports-empty" style="display:none">
+                        <div class="reports-empty-icon">✅</div>
+                        <div class="reports-empty-title">Cap report trobat</div>
+                        <div class="reports-empty-sub">No hi ha abusos que coincideixin amb els filtres actuals.</div>
+                    </div>
+
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- ═══ MODAL CONFIRMACIÓ BAIXA ═══ -->
+    <!-- MODAL DETALL REPORT -->
+    <div class="detail-overlay" id="detail-overlay">
+        <div class="detail-modal">
+            <div class="detail-modal-header">
+                <div class="detail-modal-icon" id="detail-icon"></div>
+                <div>
+                    <div class="detail-modal-title" id="detail-title">Títol del report</div>
+                    <div class="detail-modal-sub" id="detail-sub">Subtítol</div>
+                </div>
+                <button class="detail-modal-close" onclick="closeDetail()">
+                    <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2">
+                        <path d="M2 2l8 8M10 2l-8 8" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="detail-modal-body">
+                <div class="detail-row">
+                    <span class="detail-label">Tipus</span>
+                    <span class="detail-val" id="detail-type-val">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Reportat per</span>
+                    <span class="detail-val" id="detail-reporter">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Autor del post</span>
+                    <span class="detail-val" id="detail-author">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Data</span>
+                    <span class="detail-val" id="detail-date">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Gravetat</span>
+                    <span class="detail-val" id="detail-severity">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Motiu declarat</span>
+                    <span class="detail-val" id="detail-reason">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Extracte del post</span>
+                    <div class="detail-excerpt-box" id="detail-excerpt">—</div>
+                </div>
+            </div>
+            <div class="detail-modal-footer" id="detail-footer"></div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMACIÓ BAIXA -->
     <div class="confirm-overlay" id="confirm-overlay">
         <div class="confirm-modal">
             <div class="confirm-icon">🗑</div>
@@ -1356,13 +2096,12 @@
         </div>
     </div>
 
-    <!-- ═══ TOAST ═══ -->
     <div class="toast" id="toast"></div>
 
     <script>
-        /* ══════════════════════════════
-           DATA
-        ══════════════════════════════ */
+        /* ═══════════════════════════════════════
+           DATA — CATEGORIES
+        ═══════════════════════════════════════ */
         let categories = [
             { id: 1, name: 'Aventura', color: '#E87D2C', count: 2341 },
             { id: 2, name: 'Muntanyisme', color: '#1A5FA8', count: 1890 },
@@ -1376,6 +2115,9 @@
         ];
         let nextCatId = 10;
 
+        /* ═══════════════════════════════════════
+           DATA — USUARIS
+        ═══════════════════════════════════════ */
         let users = [
             { id: 1, name: 'nomada_felix', email: 'felix@example.com', role: 'user', posts: 48, joined: '12 gen. 2022', status: 'active', ava: 'NF', bg: '#DCE9F7', fg: '#1A5FA8' },
             { id: 2, name: 'mochilera_clara', email: 'clara@example.com', role: 'user', posts: 31, joined: '3 feb. 2022', status: 'active', ava: 'MC', bg: '#DCFCE7', fg: '#16A34A' },
@@ -1386,33 +2128,281 @@
             { id: 7, name: 'kalahari_drive', email: 'kalahari@example.com', role: 'user', posts: 9, joined: '14 jul. 2023', status: 'deleted', ava: 'KD', bg: '#FEE2E2', fg: '#DC2626' },
             { id: 8, name: 'admin', email: 'admin@viatges.cat', role: 'admin', posts: 0, joined: '1 gen. 2019', status: 'active', ava: 'AD', bg: '#1A5FA8', fg: '#fff' },
         ];
-
         let pendingDeleteId = null;
 
-        /* ══════════════════════════════
-           RENDER CATEGORIES
-        ══════════════════════════════ */
+        /* ═══════════════════════════════════════
+           DATA — REPORTS
+        ═══════════════════════════════════════ */
+        let reports = [
+            {
+                id: 1,
+                type: 'hate',
+                severity: 'high',
+                status: 'pending',
+                postTitle: 'Experiència a Marràqueix — guia completa',
+                excerpt: 'Aquest post conté comentaris ofensius sobre la població local que podrien resultar discriminatoris i fomentar actituds negatives envers la cultura marroquina.',
+                reporter: { name: 'nomada_felix', ava: 'NF', bg: '#DCE9F7', fg: '#1A5FA8' },
+                author: { name: 'kalahari_drive', ava: 'KD', bg: '#FEE2E2', fg: '#DC2626' },
+                reason: 'El contingut utilitza llenguatge despectiu envers els habitants locals i generalitza comportaments de manera ofensiva.',
+                date: 'Avui, 09:42',
+            },
+            {
+                id: 2,
+                type: 'spam',
+                severity: 'medium',
+                status: 'pending',
+                postTitle: 'Les millors ofertes de vols per Tailàndia 2024',
+                excerpt: 'Utilitza el post per promoure un servei extern de manera reiterada amb enllaços d\'afiliació no declarats i contingut promocional encobert.',
+                reporter: { name: 'mochilera_clara', ava: 'MC', bg: '#DCFCE7', fg: '#16A34A' },
+                author: { name: 'sahara_blues', ava: 'SB', bg: '#E0E7FF', fg: '#4338CA' },
+                reason: 'Conté múltiples enllaços d\'afiliació no declarats i repeteix contingut promocional del mateix servei.',
+                date: 'Avui, 08:15',
+            },
+            {
+                id: 3,
+                type: 'fake',
+                severity: 'medium',
+                status: 'pending',
+                postTitle: 'Ruta pel Tibet sense permisos — és possible!',
+                excerpt: 'El post afirma que és possible visitar zones restringides del Tibet sense permisos oficials, informació que és falsa i que pot posar en risc els viatgers.',
+                reporter: { name: 'ruta_transiberiana', ava: 'RT', bg: '#FDE9D4', fg: '#C45E10' },
+                author: { name: 'tortilla_viajera', ava: 'TV', bg: '#FEF3C7', fg: '#D97706' },
+                reason: 'La informació sobre els permisos és completament errònia i pot induir els lectors a prendre decisions perilloses.',
+                date: 'Ahir, 22:30',
+            },
+            {
+                id: 4,
+                type: 'abuse',
+                severity: 'high',
+                status: 'resolved',
+                postTitle: 'Comentari ofensiu a la comunitat',
+                excerpt: 'L\'usuari va publicar un comentari amb contingut assetjador dirigit a altres membres de la comunitat en resposta a una crítica sobre un itinerari.',
+                reporter: { name: 'geysir_lover', ava: 'GL', bg: '#F0F4F8', fg: '#4E7099' },
+                author: { name: 'kalahari_drive', ava: 'KD', bg: '#FEE2E2', fg: '#DC2626' },
+                reason: 'Atacs personals i amenaces velades cap a un altre usuari que va deixar una valoració negativa.',
+                date: 'Fa 3 dies',
+            },
+            {
+                id: 5,
+                type: 'spam',
+                severity: 'low',
+                status: 'resolved',
+                postTitle: 'TOP 10 aplicacions de viatges',
+                excerpt: 'Post que llista aplicacions de viatge però amb enllaços d\'afiliació presents a la majoria de les recomanacions sense declarar la relació comercial.',
+                reporter: { name: 'sahara_blues', ava: 'SB', bg: '#E0E7FF', fg: '#4338CA' },
+                author: { name: 'nomada_felix', ava: 'NF', bg: '#DCE9F7', fg: '#1A5FA8' },
+                reason: 'Contingut promocional no etiquetat correctament.',
+                date: 'Fa 5 dies',
+            },
+            {
+                id: 6,
+                type: 'other',
+                severity: 'low',
+                status: 'dismissed',
+                postTitle: 'Experiència a les Maldives',
+                excerpt: 'Post sobre un viatge de luxe que, segons el denunciant, «fa sentir malament» als usuaris que no poden permetre\'s viatjar de la mateixa manera.',
+                reporter: { name: 'tortilla_viajera', ava: 'TV', bg: '#FEF3C7', fg: '#D97706' },
+                author: { name: 'mochilera_clara', ava: 'MC', bg: '#DCFCE7', fg: '#16A34A' },
+                reason: 'El denunciant considera que el to és elitista, però el contingut no viola cap norma de la comunitat.',
+                date: 'Fa 1 setmana',
+            },
+        ];
+
+        let currentFilter = 'all';
+        let activeDetailId = null;
+
+        const typeLabels = { spam: 'Spam', hate: 'Odi / Discriminació', fake: 'Informació falsa', abuse: 'Abús / Assetjament', other: 'Altres' };
+        const severityLabels = { high: 'Alta', medium: 'Mitjana', low: 'Baixa' };
+        const severityIcons = { high: '🚨', medium: '⚠️', low: '🔵' };
+        const statusLabels = { pending: 'Pendent', resolved: 'Resolt', dismissed: 'Descartat' };
+
+        /* ══ RENDER REPORTS ══ */
+        function renderReports() {
+            const q = document.getElementById('report-search').value.toLowerCase();
+            const type = document.getElementById('report-type-filter').value;
+
+            let filtered = reports.filter(r => {
+                if (currentFilter !== 'all' && r.status !== currentFilter) return false;
+                if (type && r.type !== type) return false;
+                if (q && !r.postTitle.toLowerCase().includes(q) && !r.reporter.name.includes(q) && !r.author.name.includes(q)) return false;
+                return true;
+            });
+
+            const list = document.getElementById('reports-list');
+            const empty = document.getElementById('reports-empty');
+
+            if (filtered.length === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+
+            list.innerHTML = filtered.map((r, i) => `
+            <div class="report-card ${r.status === 'resolved' || r.status === 'dismissed' ? 'resolved' : ''}"
+                 style="animation-delay:${i * 0.04}s">
+                <div class="report-severity ${r.severity}">${severityIcons[r.severity]}</div>
+                <div class="report-body">
+                    <div class="report-meta">
+                        <span class="report-type ${r.type}">${typeLabels[r.type]}</span>
+                        <span class="report-severity-label ${r.severity}">${severityLabels[r.severity]}</span>
+                        <span class="report-time">${r.date}</span>
+                    </div>
+                    <div class="report-post-title">${r.postTitle}</div>
+                    <div class="report-excerpt">${r.excerpt}</div>
+                    <div class="report-footer">
+                        <div class="report-reporter">
+                            <div class="report-reporter-dot" style="background:${r.reporter.bg};color:${r.reporter.fg}">${r.reporter.ava}</div>
+                            Reportat per <strong style="color:var(--text2);font-weight:600;margin-left:3px">u/${r.reporter.name}</strong>
+                        </div>
+                        <span style="color:var(--border2)">·</span>
+                        <div class="report-reported-by">Autor: <strong>u/${r.author.name}</strong></div>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <span class="report-status-badge ${r.status}">
+                        <span class="dot"></span>${statusLabels[r.status]}
+                    </span>
+                    <div class="report-action-btns">
+                        <button class="r-btn view-post" onclick="openDetail(${r.id})" title="Veure detalls">
+                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="6" cy="6" r="4"/>
+                                <path d="M9.5 9.5l1.5 1.5" stroke-linecap="round"/>
+                            </svg>
+                            Detalls
+                        </button>
+                        ${r.status === 'pending' ? `
+                        <button class="r-btn resolve" onclick="resolveReport(${r.id})" title="Marcar com resolt">
+                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2">
+                                <path d="M2 6l3 3 5-5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                        <button class="r-btn dismiss" onclick="dismissReport(${r.id})" title="Descartar">
+                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2">
+                                <path d="M2 2l8 8M10 2l-8 8" stroke-linecap="round"/>
+                            </svg>
+                        </button>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const pending = reports.filter(r => r.status === 'pending').length;
+            const resolved = reports.filter(r => r.status === 'resolved').length;
+            const dismissed = reports.filter(r => r.status === 'dismissed').length;
+
+            document.getElementById('sum-pending').textContent = pending;
+            document.getElementById('sum-resolved').textContent = resolved;
+            document.getElementById('sum-dismissed').textContent = dismissed;
+            document.getElementById('pending-count').textContent = pending;
+            document.getElementById('stat-pending').textContent = pending;
+            document.getElementById('sidebar-reports-badge').textContent = pending;
+
+            const pendingBadge = document.getElementById('pending-badge');
+            const label = document.getElementById('stat-pending-label');
+            if (pending === 0) {
+                pendingBadge.style.display = 'none';
+                label.textContent = 'Tot resolt ✓';
+                label.className = 'stat-delta up';
+            } else {
+                pendingBadge.style.display = 'inline-flex';
+                label.textContent = 'Requereix atenció';
+                label.className = 'stat-delta dn';
+            }
+        }
+
+        function filterReports(status, btn) {
+            currentFilter = status;
+            document.querySelectorAll('.report-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderReports();
+        }
+
+        function searchReports() { renderReports(); }
+
+        function resolveReport(id) {
+            const r = reports.find(r => r.id === id);
+            r.status = 'resolved';
+            renderReports();
+            showToast(`Report "${r.postTitle.substring(0, 30)}…" marcat com resolt`, 'success');
+        }
+
+        function dismissReport(id) {
+            const r = reports.find(r => r.id === id);
+            r.status = 'dismissed';
+            renderReports();
+            showToast(`Report descartat`, '');
+        }
+
+        /* ══ MODAL DETALL ══ */
+        function openDetail(id) {
+            const r = reports.find(r => r.id === id);
+            activeDetailId = id;
+
+            document.getElementById('detail-icon').textContent = severityIcons[r.severity];
+            document.getElementById('detail-icon').style.background = r.severity === 'high' ? 'var(--danger-l)' : r.severity === 'medium' ? 'var(--warning-l)' : 'var(--success-l)';
+            document.getElementById('detail-title').textContent = r.postTitle;
+            document.getElementById('detail-sub').textContent = `Report #${r.id} · ${r.date}`;
+            document.getElementById('detail-type-val').innerHTML = `<span class="report-type ${r.type}" style="display:inline-block">${typeLabels[r.type]}</span>`;
+            document.getElementById('detail-reporter').innerHTML = `<strong>u/${r.reporter.name}</strong>`;
+            document.getElementById('detail-author').innerHTML = `<strong>u/${r.author.name}</strong>`;
+            document.getElementById('detail-date').textContent = r.date;
+            document.getElementById('detail-severity').innerHTML = `<span class="report-severity-label ${r.severity}">${severityLabels[r.severity]}</span>`;
+            document.getElementById('detail-reason').textContent = r.reason;
+            document.getElementById('detail-excerpt').textContent = r.excerpt;
+
+            const footer = document.getElementById('detail-footer');
+            if (r.status === 'pending') {
+                footer.innerHTML = `
+                <button class="btn-modal-dismiss" onclick="dismissReport(${id});closeDetail()">Descartar report</button>
+                <button class="btn-modal-resolve" onclick="resolveReport(${id});closeDetail()">
+                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2"><path d="M2 7l4 4 6-6" stroke-linecap="round"/></svg>
+                    Marcar com resolt
+                </button>
+                <button class="btn-modal-delete" onclick="closeDetail();alert('Funcionalitat d\'eliminació de post pendent.')">
+                    <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5h10M5 3.5V2.5h4v1M6 6v4M8 6v4" stroke-linecap="round"/></svg>
+                    Eliminar post
+                </button>`;
+            } else {
+                footer.innerHTML = `
+                <span style="font-size:12px;color:var(--text3);margin-right:auto">${statusLabels[r.status]}</span>
+                <button class="btn-modal-dismiss" onclick="closeDetail()">Tancar</button>`;
+            }
+
+            document.getElementById('detail-overlay').classList.add('open');
+        }
+
+        function closeDetail() {
+            document.getElementById('detail-overlay').classList.remove('open');
+            activeDetailId = null;
+        }
+
+        /* ══ CATEGORIES ══ */
         function renderCategories() {
             const list = document.getElementById('cat-list');
             list.innerHTML = categories.map(c => `
-                <div class="cat-item" id="cat-${c.id}">
-                    <div class="cat-item-dot" style="background:${c.color}"></div>
-                    <span class="cat-item-name">${c.name}</span>
-                    <input class="cat-edit-input" value="${c.name}" onkeydown="if(event.key==='Enter') saveCategory(${c.id})">
-                    <span class="cat-item-count">${c.count.toLocaleString()} exp.</span>
-                    <div class="cat-item-actions">
-                        <button class="cat-btn edit" onclick="editCategory(${c.id})" title="Editar">
-                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M8 2l2 2-6 6H2V8L8 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </button>
-                        <button class="cat-btn save" onclick="saveCategory(${c.id})" title="Guardar">
-                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2"><path d="M2 6l3 3 5-5" stroke-linecap="round"/></svg>
-                        </button>
-                        <button class="cat-btn del" onclick="deleteCategory(${c.id})" title="Eliminar">
-                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M2 3h8M4 3V2h4v1M5 5v4M7 5v4" stroke-linecap="round"/></svg>
-                        </button>
-                    </div>
+            <div class="cat-item" id="cat-${c.id}">
+                <div class="cat-item-dot" style="background:${c.color}"></div>
+                <span class="cat-item-name">${c.name}</span>
+                <input class="cat-edit-input" value="${c.name}" onkeydown="if(event.key==='Enter') saveCategory(${c.id})">
+                <span class="cat-item-count">${c.count.toLocaleString()} exp.</span>
+                <div class="cat-item-actions">
+                    <button class="cat-btn edit" onclick="editCategory(${c.id})" title="Editar">
+                        <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M8 2l2 2-6 6H2V8L8 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button class="cat-btn save" onclick="saveCategory(${c.id})" title="Guardar">
+                        <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2"><path d="M2 6l3 3 5-5" stroke-linecap="round"/></svg>
+                    </button>
+                    <button class="cat-btn del" onclick="deleteCategory(${c.id})" title="Eliminar">
+                        <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M2 3h8M4 3V2h4v1M5 5v4M7 5v4" stroke-linecap="round"/></svg>
+                    </button>
                 </div>
-            `).join('');
+            </div>
+        `).join('');
             document.getElementById('cat-count-label').textContent = `${categories.length} categories`;
             document.getElementById('stat-cats').textContent = categories.length;
         }
@@ -1421,9 +2411,7 @@
             const input = document.getElementById('cat-new-input');
             const name = input.value.trim();
             if (!name) { showToast('Introdueix un nom per a la categoria', 'danger'); return; }
-            if (categories.find(c => c.name.toLowerCase() === name.toLowerCase())) {
-                showToast('Ja existeix una categoria amb aquest nom', 'danger'); return;
-            }
+            if (categories.find(c => c.name.toLowerCase() === name.toLowerCase())) { showToast('Ja existeix una categoria amb aquest nom', 'danger'); return; }
             const colors = ['#E87D2C', '#1A5FA8', '#16A34A', '#D97706', '#DC2626', '#7C3AED', '#059669', '#0891B2', '#4F46E5', '#0F766E'];
             categories.push({ id: nextCatId++, name, color: colors[Math.floor(Math.random() * colors.length)], count: 0 });
             input.value = '';
@@ -1439,79 +2427,71 @@
 
         function saveCategory(id) {
             const el = document.getElementById(`cat-${id}`);
-            const input = el.querySelector('.cat-edit-input');
-            const newName = input.value.trim();
+            const newName = el.querySelector('.cat-edit-input').value.trim();
             if (!newName) return;
-            const cat = categories.find(c => c.id === id);
-            cat.name = newName;
+            categories.find(c => c.id === id).name = newName;
             el.classList.remove('editing');
             renderCategories();
-            showToast(`Categoria actualitzada`, 'success');
+            showToast('Categoria actualitzada', 'success');
         }
 
         function deleteCategory(id) {
             const cat = categories.find(c => c.id === id);
-            if (!confirm(`Eliminar la categoria "${cat.name}"? Les experiències no s'eliminaran.`)) return;
+            if (!confirm(`Eliminar la categoria "${cat.name}"?`)) return;
             categories = categories.filter(c => c.id !== id);
             renderCategories();
             showToast(`Categoria "${cat.name}" eliminada`, 'danger');
         }
 
-        /* ══════════════════════════════
-           RENDER USERS
-        ══════════════════════════════ */
+        /* ══ USUARIS ══ */
         function renderUsers(data) {
             const tbody = document.getElementById('users-tbody');
             tbody.innerHTML = data.map(u => {
                 const statusLabel = { active: 'Actiu', inactive: 'Inactiu', deleted: 'Baixa' }[u.status];
                 const isDeleted = u.status === 'deleted';
                 return `
-                <tr id="user-row-${u.id}" class="${isDeleted ? 'deleted' : ''}">
-                    <td>
-                        <div class="user-cell">
-                            <div class="user-ava" style="background:${u.bg};color:${u.fg}">${u.ava}</div>
-                            <div>
-                                <div class="user-name">u/${u.name}</div>
-                                <div class="user-email">${u.email}</div>
-                            </div>
+            <tr id="user-row-${u.id}" class="${isDeleted ? 'deleted' : ''}">
+                <td>
+                    <div class="user-cell">
+                        <div class="user-ava" style="background:${u.bg};color:${u.fg}">${u.ava}</div>
+                        <div>
+                            <div class="user-name">u/${u.name}</div>
+                            <div class="user-email">${u.email}</div>
                         </div>
-                    </td>
-                    <td><span class="badge-role ${u.role}">${u.role === 'admin' ? 'Admin' : 'Usuari'}</span></td>
-                    <td>${u.posts}</td>
-                    <td>${u.joined}</td>
-                    <td>
-                        <span class="badge-status ${u.status}">
-                            <span class="dot"></span>${statusLabel}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="table-actions">
-                            <button class="tbl-btn" title="Veure experiències" ${isDeleted ? 'disabled' : ''}>
-                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><path d="M9 9l2 2" stroke-linecap="round"/></svg>
-                            </button>
-                            <button class="tbl-btn danger" title="Donar de baixa"
-                                ${isDeleted || u.role === 'admin' ? 'disabled' : `onclick="openConfirm(${u.id})"`}>
-                                <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M2 3h8M4 3V2h4v1M5 5v4M7 5v4" stroke-linecap="round"/></svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>`;
+                    </div>
+                </td>
+                <td><span class="badge-role ${u.role}">${u.role === 'admin' ? 'Admin' : 'Usuari'}</span></td>
+                <td>${u.posts}</td>
+                <td>${u.joined}</td>
+                <td>
+                    <span class="badge-status ${u.status}">
+                        <span class="dot"></span>${statusLabel}
+                    </span>
+                </td>
+                <td>
+                    <div class="table-actions">
+                        <button class="tbl-btn" title="Veure experiències" ${isDeleted ? 'disabled' : ''}>
+                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><path d="M9 9l2 2" stroke-linecap="round"/></svg>
+                        </button>
+                        <button class="tbl-btn danger" title="Donar de baixa"
+                            ${isDeleted || u.role === 'admin' ? 'disabled' : `onclick="openConfirm(${u.id})"`}>
+                            <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><path d="M2 3h8M4 3V2h4v1M5 5v4M7 5v4" stroke-linecap="round"/></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
             }).join('');
         }
 
         function filterUsers() {
             const q = document.getElementById('user-search').value.toLowerCase();
             const st = document.getElementById('user-filter').value;
-            const filtered = users.filter(u =>
+            renderUsers(users.filter(u =>
                 (!q || u.name.includes(q) || u.email.includes(q)) &&
                 (!st || u.status === st)
-            );
-            renderUsers(filtered);
+            ));
         }
 
-        /* ══════════════════════════════
-           BAIXA D'USUARI
-        ══════════════════════════════ */
         function openConfirm(id) {
             pendingDeleteId = id;
             const u = users.find(u => u.id === id);
@@ -1532,12 +2512,10 @@
             showToast(`Usuari u/${u.name} donat de baixa`, 'danger');
         }
 
-        /* ══════════════════════════════
-           NAVEGACIÓ SECCIONS
-        ══════════════════════════════ */
+        /* ══ NAVEGACIÓ ══ */
         const sectionTitles = {
             categories: 'Gestió de categories',
-            users: 'Baixa d\'usuaris',
+            users: "Baixa d'usuaris",
             reports: 'Abusos reportats',
         };
 
@@ -1554,16 +2532,19 @@
 
         function goTo(page) { window.location.href = page === 'dashboard' ? 'index.html' : page + '.html'; }
 
-        /* ══════════════════════════════
-           SIDEBAR MÒBIL
-        ══════════════════════════════ */
+        /* ══ SIDEBAR MÒBIL ══ */
         function toggleSidebar() { document.body.classList.toggle('sidebar-open'); }
         function closeSidebar() { document.body.classList.remove('sidebar-open'); }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSidebar(); closeConfirm(); } });
 
-        /* ══════════════════════════════
-           TOAST
-        ══════════════════════════════ */
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeSidebar();
+                closeConfirm();
+                closeDetail();
+            }
+        });
+
+        /* ══ TOAST ══ */
         let toastTimer;
         function showToast(msg, type = '') {
             const t = document.getElementById('toast');
@@ -1573,11 +2554,10 @@
             toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        /* ══════════════════════════════
-           INIT
-        ══════════════════════════════ */
+        /* ══ INIT ══ */
         renderCategories();
         renderUsers(users);
+        renderReports();
     </script>
 </body>
 

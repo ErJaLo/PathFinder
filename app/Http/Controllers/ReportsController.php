@@ -12,21 +12,48 @@ class ReportsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $reports = DB::table("reports")
+        $perPage = $request->integer('perPage', 10);
+        $page = $request->integer('page', 1);
+        $offset = ($page - 1) * $perPage;
+        $status = (string) $request->input('status', '');
+        $search = trim((string) $request->input('search', ''));
+
+        $query = DB::table("reports")
             ->select(
-                "id",
-                "user_id",
-                "post_id",
-                "status",
-                "reason",
-                "created_at"
+                "reports.id",
+                "reports.user_id",
+                "reports.post_id",
+                "reports.status",
+                "reports.reason",
+                "reports.created_at"
             )
+            ->when(
+                $search !== '',
+                fn($q) => $q->where(function ($searchQuery) use ($search) {
+                    $searchQuery->where('reports.reason', 'like', "%{$search}%");
+                })
+            )
+            ->when(
+                $status !== '',
+                fn($q) => $q->where('reports.status', $status)
+            );
+
+        $reports = $query->orderBy('reports.created_at', 'desc')
+            ->limit($perPage)
+            ->offset($offset)
             ->get();
 
-        return Inertia::render("admin/reports", compact("reports"));
+        return Inertia::render("admin/reports", [
+            'reports' => $reports,
+            'perPage' => $perPage,
+            'page' => $page,
+            'status' => $status,
+            'search' => $search,
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
