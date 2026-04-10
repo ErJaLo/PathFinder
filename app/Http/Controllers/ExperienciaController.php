@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Country;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -115,7 +116,8 @@ class ExperienciaController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = '/storage/' . $request->file('image')->store('experiences', 'public');
+            $optimizer = new ImageOptimizer();
+            $imagePath = '/storage/' . $optimizer->store($request->file('image'));
         }
 
         $post = Post::create([
@@ -240,7 +242,8 @@ class ExperienciaController extends Controller
             if ($post->image) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
             }
-            $validated['image'] = '/storage/' . $request->file('image')->store('experiences', 'public');
+            $optimizer = new ImageOptimizer();
+            $validated['image'] = '/storage/' . $optimizer->store($request->file('image'));
         } else {
             unset($validated['image']);
         }

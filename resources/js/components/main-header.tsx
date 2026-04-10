@@ -85,7 +85,7 @@ export function MainHeader() {
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem asChild>
                                         <Link href="/settings/experiences" className="cursor-pointer">
-                                            Experiencies
+                                            Gestió d'experiencies
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
