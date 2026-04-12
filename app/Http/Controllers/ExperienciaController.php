@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\Post;
+use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -82,7 +83,7 @@ class ExperienciaController extends Controller
         ]);
     }
 
-    
+
 
     public function create()
     {
@@ -170,12 +171,14 @@ class ExperienciaController extends Controller
             ],
         ]);
     }
-    public function meves(Request $request){
+
+    public function meves(Request $request)
+    {
         $query = Post::where('user_id', $request->user()->id)
             ->with(['categories:id,name', 'mainCountry:code,name'])
             ->withCount([
-                'ratings as ratings_up_count' => fn ($q) => $q->where('value', 1),
-                'ratings as ratings_down_count' => fn ($q) => $q->where('value', -1),
+                'ratings as ratings_up_count' => fn($q) => $q->where('value', 1),
+                'ratings as ratings_down_count' => fn($q) => $q->where('value', -1),
             ]);
 
         if ($request->filled('status')) {
@@ -204,8 +207,8 @@ class ExperienciaController extends Controller
         }
 
         $post->load(['categories:id,name', 'mainCountry:code,name']);
-        $categories = Category::orderBy('name')->get(['id','name']);
-        $countries = Country::orderBy('name')->get(['code','name']);
+        $categories = Category::orderBy('name')->get(['id', 'name']);
+        $countries = Country::orderBy('name')->get(['code', 'name']);
 
         return Inertia::render('experiencies/editar', [
             'experience' => $post,
@@ -269,5 +272,21 @@ class ExperienciaController extends Controller
         $post->delete();
 
         return redirect()->route('experiencies.meves')->with('success', 'Experiencia eliminada.');
+    }
+
+    public function rejectedStatus(Report $report)
+    {
+        $post = Post::findOrFail($report->post_id);
+        $post->update(['status' => "rejected"]);
+
+        return back();
+    }
+
+    public function acceptedStatus(Report $report)
+    {
+        $post = Post::findOrFail($report->post_id);
+        $post->update(['status' => "published"]);
+
+        return back();
     }
 }

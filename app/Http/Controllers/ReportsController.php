@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-
+use PHPUnit\Logging\OpenTestReporting\Status;
 
 class ReportsController extends Controller
 {
@@ -35,10 +36,18 @@ class ReportsController extends Controller
                     $searchQuery->where('reports.reason', 'like', "%{$search}%");
                 })
             )
-            ->when(
-                $status !== '',
-                fn($q) => $q->where('reports.status', $status)
-            );
+            ->when($status !== '', function ($q) use ($status) {
+                // Si la variable the status que arriba és 'reviewed', mostrarà tot menos els pendents
+                if ($status === 'reviewed') {
+                    return $q->where('reports.status', '!=', 'pending');
+                }
+
+                // En els altres casos es filtrarà normalment
+                return $q->where('reports.status', $status);
+            });
+
+        // Obtenim el total de registres abans del limit/offset
+        $total = $query->count();
 
         $reports = $query->orderBy('reports.created_at', 'desc')
             ->limit($perPage)
@@ -49,11 +58,23 @@ class ReportsController extends Controller
             'reports' => $reports,
             'perPage' => $perPage,
             'page' => $page,
+            'total' => $total,
             'status' => $status,
             'search' => $search,
         ]);
     }
 
+    public function acceptStatus(Report $report)
+    {
+        $report->update(['status' => "accepted"]);
+        return back();
+    }
+
+    public function rejectedStatus(Report $report)
+    {
+        $report->update(['status' => "dismissed"]);
+        return back();
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -76,7 +97,18 @@ class ReportsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $report = Report::findOrFail($id);
+
+        $report->load([
+            'user:id,name,email',
+            'post' => function ($query) {
+                $query->with(['user' => function ($userQuery) {
+                    $userQuery->withCount(['posts', 'reportsReceived']);
+                }, 'mainCountry']);
+            }
+        ]);
+
+        return Inertia::render("admin/report-detail", compact("report"));
     }
 
     /**
@@ -100,6 +132,9 @@ class ReportsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $report = Report::findOrFail($id);
+        $report->delete();
+
+        return Inertia::render("admin/reports");
     }
 }

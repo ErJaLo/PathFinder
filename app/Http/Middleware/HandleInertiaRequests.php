@@ -42,7 +42,9 @@ class HandleInertiaRequests extends Middleware
 
         // Si l'usuari és administrador o moderador, calculem el total de reports
         if ($user && in_array($user->role, ['admin', 'moderator'])) {
-            $globalData['totalReports'] = \Illuminate\Support\Facades\DB::table('reports')->count();
+            $globalData['totalReports'] = \Illuminate\Support\Facades\DB::table('reports')->where('status', 'pending')->count();
+            $globalData["totalReportsResols"] =  \Illuminate\Support\Facades\DB::table('reports')->where('status', 'reviewed')->count();
+            $globalData["totalReportsDescartats"] =  \Illuminate\Support\Facades\DB::table('reports')->where('status', 'dismissed')->count();
             $globalData["totalCategories"] = \Illuminate\Support\Facades\DB::table('categories')->count();
             $globalData["totalUsuaris"]  = \Illuminate\Support\Facades\DB::table('users')->count();
             $globalData["totalExperiencies"]  = \Illuminate\Support\Facades\DB::table('posts')->count();

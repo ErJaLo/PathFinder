@@ -12,10 +12,17 @@ class ReportSeeder extends Seeder
     public function run(): void
     {
         $users = User::where('role', 'user')->get();
-        $posts = Post::where('status', 'published')->inRandomOrder()->take(3)->get();
+        $posts = Post::where('status', 'published')->inRandomOrder()->take(20)->get();
 
         foreach ($posts as $post) {
-            $reporter = $users->where('id', '!=', $post->user_id)->random();
+            // Busquem un usuari que no sigui l'autor del post
+            $reporters = $users->where('id', '!=', $post->user_id);
+
+            if ($reporters->isEmpty()) {
+                continue;
+            }
+
+            $reporter = $reporters->random();
 
             Report::create([
                 'user_id' => $reporter->id,
@@ -24,8 +31,10 @@ class ReportSeeder extends Seeder
                     'Contingut ofensiu o inadequat',
                     'Informació falsa o enganyosa',
                     'Spam o publicitat',
+                    'Odi corporatiu / discriminació',
+                    'Falta de respecte o assetjament',
                 ]),
-                'status' => 'pending',
+                'status' => fake()->randomElement(['pending', 'dismissed', "accepted"]),
             ]);
         }
     }

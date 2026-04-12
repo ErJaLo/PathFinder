@@ -7,26 +7,6 @@ function Summary() {
 
   const { auth, globalData } = usePage<{ auth: Auth, globalData: { totalReports: number, totalCategories:number, totalUsuaris:number, totalExperiencies:number } }>().props;
   
-  // const [totalCategories, setTotalCategories] = useState<number>(0);
-  // const [totalUsuaris, setTotaUsuaris] = useState<number>(0);
-  // const [totalExperiencies, setTotalExperiencies] = useState<number>(0);
-  // const [totalReports, setTotalReports] = useState<number>(0);
-
-  // const form_summary = useForm();
-
-  // useEffect(() => {
-  //     form_summary.get(route("admin.summaryStats"), {
-  //     preserveState: true,
-  //     preserveScroll: true,
-  //     only: ['totalCategories', 'totalUsuaris', 'totalExperiencies', 'totalReports'], 
-  //     onSuccess: (page: any) => {
-  //       setTotalCategories(page.props.totalCategories || 0);
-  //       setTotaUsuaris(page.props.totalUsuaris || 0);
-  //       setTotalExperiencies(page.props.totalExperiencies || 0);
-  //       setTotalReports(page.props.totalReports || 0);
-  //     }
-  //   });
-  // }, []); 
 
   // Funció per donar format numèric curt (ex: 42.8K)
   const formatNumber = (num: number) => {
