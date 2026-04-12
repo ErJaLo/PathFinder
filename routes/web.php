@@ -18,9 +18,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/experiencies/{post}/editar', [ExperienciaController::class, 'edit'])->name('experiencies.edit');
     Route::put('/experiencies/{post}', [ExperienciaController::class, 'update'])->name('experiencies.update');
     Route::delete('/experiencies/{post}', [ExperienciaController::class, 'destroy'])->name('experiencies.destroy');
+    Route::put('/experiencies/{post}/rating', [ExperienciaController::class, 'rate'])->name('experiencies.rating');
     Route::get('/experiencies/crear', [ExperienciaController::class, 'create'])->name('experiencies.create');
     Route::post('/experiencies', [ExperienciaController::class, 'store'])->name('experiencies.store');
-
+    Route::post('/reports', [ReportsController::class, 'store'])->name('reports.store');
 });
 
 Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
