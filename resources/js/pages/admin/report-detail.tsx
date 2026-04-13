@@ -124,13 +124,13 @@ export default function ReportDetails() {
                     </div>
                     <div className="flex flex-col gap-2">
                         <div className="flex items-center gap-3">
-                            <span className="px-2.5 py-1 text-xs font-bold uppercase tracking-wide bg-red-100 text-red-800 dark:bg-red-900/40 rounded-md">
+                            <span className="px-2.5 py-1 text-xs font-bold uppercase tracking-wide bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400 rounded-md">
                                 {r.reason}
                             </span>
-                            <span className="px-2.5 py-1 text-xs font-bold uppercase text-red-600 border border-red-200 rounded-md">
+                            <span className="px-2.5 py-1 text-xs font-bold uppercase text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-md">
                                 Gravetat alta
                             </span>
-                            <span className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 text-amber-700 font-bold text-xs rounded-md border border-amber-200">
+                            <span className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 font-bold text-xs rounded-md border border-amber-200 dark:border-amber-800">
                                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
                                 {r.status === 'pending' ? 'Pendent' : r.status}
                             </span>
@@ -138,7 +138,7 @@ export default function ReportDetails() {
                         <h1 className="text-2xl font-extrabold text-pf-text dark:text-white">
                             {r.post?.title}
                         </h1>
-                        <p className="text-sm text-pf-text-3 font-medium">
+                        <p className="text-sm text-pf-text-3 dark:text-pf-text-3dark font-medium">
                             Reportat el {formatDateTime(r.created_at)}
                         </p>
                     </div>
@@ -158,29 +158,29 @@ export default function ReportDetails() {
                             </div>
                             <div className="p-5 flex flex-col">
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] border-b border-pf-border/50 py-4 last:border-0 first:pt-0">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Reportat per</span>
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Reportat per</span>
                                     <div className="flex items-center gap-3">
                                         <div className="w-9 h-9 rounded-full bg-pf-avatar-mc text-pf-avatar-mctxt flex items-center justify-center font-extrabold text-xs">
                                             {r.user?.name.substring(0, 2).toUpperCase()}
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-pf-text text-sm">u/{r.user?.name}</span>
-                                            <span className="text-pf-text-3 text-xs">{r.user?.email}</span>
+                                            <span className="font-bold text-pf-text dark:text-pf-text-dark text-sm">u/{r.user?.name}</span>
+                                            <span className="text-pf-text-3 dark:text-pf-text-3dark text-xs">{r.user?.email}</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] border-b border-pf-border/50 py-4 last:border-0">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Motiu</span>
-                                    <div className="bg-pf-bg border border-pf-border p-4 rounded-lg text-sm text-pf-text-2 italic">
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Motiu</span>
+                                    <div className="bg-pf-bg dark:bg-pf-bg-dark border border-pf-border dark:border-pf-border-dark p-4 rounded-lg text-sm text-pf-text-2 dark:text-pf-text-2dark italic">
                                         {r.reason}
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] border-b border-pf-border/50 py-4 last:border-0">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Estat</span>
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Estat</span>
                                     <div className="flex items-center">
-                                        <span className="flex items-center gap-2 px-3 py-1 bg-amber-50 text-amber-700 font-bold text-sm rounded-full border border-amber-200">
+                                        <span className="flex items-center gap-2 px-3 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 font-bold text-sm rounded-full border border-amber-200 dark:border-amber-800">
                                             <div className="w-2 h-2 rounded-full bg-amber-500"></div>
                                             {r.status === 'pending' ? 'Pendent' : r.status}
                                         </span>
@@ -197,48 +197,48 @@ export default function ReportDetails() {
                             </div>
                             <div className="p-5 flex flex-col">
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] border-b border-pf-border/50 py-4 first:pt-0">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Títol</span>
-                                    <span className="font-bold text-pf-text text-sm">{r.post?.title}</span>
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Títol</span>
+                                    <span className="font-bold text-pf-text dark:text-pf-text-dark text-sm">{r.post?.title}</span>
                                 </div>
 
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] border-b border-pf-border/50 py-4">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Contingut</span>
-                                    <div className="bg-pf-bg border border-pf-border p-4 rounded-lg text-sm text-pf-text-2 italic">
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Contingut</span>
+                                    <div className="bg-pf-bg dark:bg-pf-bg-dark border border-pf-border dark:border-pf-border-dark p-4 rounded-lg text-sm text-pf-text-2 dark:text-pf-text-2dark italic">
                                         {r.post?.content}
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] border-b border-pf-border/50 py-4">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Autor</span>
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Autor</span>
                                     <div className="flex items-center gap-3">
-                                        <div className="w-9 h-9 rounded-full bg-red-100 text-red-800 flex items-center justify-center font-extrabold text-xs">
+                                        <div className="w-9 h-9 rounded-full bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400 flex items-center justify-center font-extrabold text-xs">
                                             {r.post?.user?.name.substring(0, 2).toUpperCase()}
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-pf-text text-sm">u/{r.post?.user?.name}</span>
-                                            <span className="text-pf-text-3 text-xs">{r.post?.user?.email}</span>
+                                            <span className="font-bold text-pf-text dark:text-pf-text-dark text-sm">u/{r.post?.user?.name}</span>
+                                            <span className="text-pf-text-3 dark:text-pf-text-3dark text-xs">{r.post?.user?.email}</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] border-b border-pf-border/50 py-4">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Ubicació</span>
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Ubicació</span>
                                     <div className="flex flex-col gap-2">
-                                        <div className="flex items-center gap-2 text-sm font-bold text-pf-text">
+                                        <div className="flex items-center gap-2 text-sm font-bold text-pf-text dark:text-pf-text-dark">
                                             <span className="text-red-500 select-none"></span> {r.post?.main_country?.name || 'Sense ubicació'}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] border-b border-pf-border/50 py-4">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Data exp.</span>
-                                    <span className="text-sm text-pf-text font-medium">{formatDate(r.post?.experience_date)}</span>
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Data exp.</span>
+                                    <span className="text-sm text-pf-text dark:text-pf-text-dark font-medium">{formatDate(r.post?.experience_date)}</span>
                                 </div>
 
                                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] py-4 pb-0">
-                                    <span className="text-pf-text-2 font-semibold text-sm">Estat</span>
+                                    <span className="text-pf-text-2 dark:text-pf-text-2dark font-semibold text-sm">Estat</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 font-bold text-sm rounded-full border border-blue-200">
+                                        <span className="flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-bold text-sm rounded-full border border-blue-200 dark:border-blue-800">
                                             <div className="w-2 h-2 rounded-full bg-blue-500"></div>
                                             {r.post?.status}
                                         </span>
@@ -263,18 +263,18 @@ export default function ReportDetails() {
                                     <Check className="w-4 h-4" strokeWidth={3} />
                                     Acceptar report
                                 </button>
-                                <button onClick={handleDismiss} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-pf-border hover:bg-pf-bg text-pf-text font-bold rounded-lg transition-colors shadow-sm">
+                                <button onClick={handleDismiss} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-pf-surface-dark border border-pf-border dark:border-pf-border-dark hover:bg-pf-bg dark:hover:bg-pf-bg-dark text-pf-text dark:text-white font-bold rounded-lg transition-colors shadow-sm">
                                     <X className="w-4 h-4" strokeWidth={3} />
                                     Descartar report
                                 </button>
                                 
-                                <div className="h-px w-full bg-pf-border/60 my-2"></div>
+                                <div className="h-px w-full bg-pf-border/60 dark:bg-pf-border-dark/60 my-2"></div>
                                 
-                                <button onClick={handleSuspend} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-700 font-bold rounded-lg transition-colors">
+                                <button onClick={handleSuspend} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/50 text-amber-700 dark:text-amber-400 font-bold rounded-lg transition-colors">
                                     <UserX className="w-4 h-4" />
                                     Suspendre autor
                                 </button>
-                                <button onClick={handleDeletePost} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 border border-red-200 hover:bg-red-100 text-red-700 font-bold rounded-lg transition-colors">
+                                <button onClick={handleDeletePost} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400 font-bold rounded-lg transition-colors">
                                     <Trash2 className="w-4 h-4" />
                                     Eliminar post
                                 </button>
@@ -287,14 +287,14 @@ export default function ReportDetails() {
                                 <User className="w-4 h-4 text-pf-text-2" />
                                 <h2 className="font-bold text-sm text-pf-text dark:text-white">Activitat de l'autor</h2>
                             </div>
-                            <div className="flex divide-x divide-pf-border">
+                            <div className="flex divide-x divide-pf-border dark:divide-pf-border-dark">
                                 <div className="flex-1 p-4 flex flex-col items-center text-center">
-                                    <span className="text-3xl font-black text-pf-text">{r.post?.user?.posts_count || 0}</span>
-                                    <span className="text-xs text-pf-text-3 font-semibold mt-1">Posts publicats</span>
+                                    <span className="text-3xl font-black text-pf-text dark:text-pf-text-dark">{r.post?.user?.posts_count || 0}</span>
+                                    <span className="text-xs text-pf-text-3 dark:text-pf-text-3dark font-semibold mt-1">Posts publicats</span>
                                 </div>
                                 <div className="flex-1 p-4 flex flex-col items-center text-center">
-                                    <span className="text-3xl font-black text-red-600">{r.post?.user?.reports_received_count || 0}</span>
-                                    <span className="text-xs text-pf-text-3 font-semibold mt-1">Reports rebuts</span>
+                                    <span className="text-3xl font-black text-red-600 dark:text-red-400">{r.post?.user?.reports_received_count || 0}</span>
+                                    <span className="text-xs text-pf-text-3 dark:text-pf-text-3dark font-semibold mt-1">Reports rebuts</span>
                                 </div>
                             </div>
                         </div>
@@ -307,39 +307,39 @@ export default function ReportDetails() {
                             </div>
                             <div className="p-6 relative">
                                 {/* Linia de fons */}
-                                <div className="absolute left-[39px] top-8 bottom-8 w-px bg-pf-border -z-0"></div>
+                                <div className="absolute left-[39px] top-8 bottom-8 w-px bg-pf-border dark:bg-pf-border-dark -z-0"></div>
 
                                 {/* Items */}
                                 <div className="flex gap-4 relative z-10 mb-6">
-                                    <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 flex-shrink-0">
+                                    <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
                                         <Edit3 className="w-4 h-4" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-pf-text text-sm">Post publicat</span>
-                                        <span className="text-pf-text-3 text-xs my-0.5">u/{r.post?.user?.name}</span>
-                                        <span className="text-pf-text-3 text-xs">{formatDateTime(r.post?.created_at) || "Desconeguda"}</span>
+                                        <span className="font-bold text-pf-text dark:text-pf-text-dark text-sm">Post publicat</span>
+                                        <span className="text-pf-text-3 dark:text-pf-text-3dark text-xs my-0.5">u/{r.post?.user?.name}</span>
+                                        <span className="text-pf-text-3 dark:text-pf-text-3dark text-xs">{formatDateTime(r.post?.created_at) || "Desconeguda"}</span>
                                     </div>
                                 </div>
 
                                 <div className="flex gap-4 relative z-10 mb-6">
-                                    <div className="w-8 h-8 rounded-full bg-red-50 border border-red-200 flex items-center justify-center text-red-600 flex-shrink-0">
+                                    <div className="w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 flex items-center justify-center text-red-600 dark:text-red-400 flex-shrink-0">
                                         <Flag className="w-4 h-4" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-pf-text text-sm">Report rebut</span>
-                                        <span className="text-pf-text-3 text-xs my-0.5">u/{r.user?.name} - {r.reason.toLowerCase()}</span>
-                                        <span className="text-pf-text-3 text-xs">{formatDateTime(r.created_at)}</span>
+                                        <span className="font-bold text-pf-text dark:text-pf-text-dark text-sm">Report rebut</span>
+                                        <span className="text-pf-text-3 dark:text-pf-text-3dark text-xs my-0.5">u/{r.user?.name} - {r.reason.toLowerCase()}</span>
+                                        <span className="text-pf-text-3 dark:text-pf-text-3dark text-xs">{formatDateTime(r.created_at)}</span>
                                     </div>
                                 </div>
 
                                 <div className="flex gap-4 relative z-10">
-                                    <div className="w-8 h-8 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 flex-shrink-0">
+                                    <div className="w-8 h-8 rounded-full bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400 flex-shrink-0">
                                         <Eye className="w-4 h-4" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-pf-text text-sm">Última actualització</span>
-                                        <span className="text-pf-text-3 text-xs my-0.5">Automàtic</span>
-                                        <span className="text-pf-text-3 text-xs">{formatDateTime(r.updated_at || r.created_at)}</span>
+                                        <span className="font-bold text-pf-text dark:text-pf-text-dark text-sm">Última actualització</span>
+                                        <span className="text-pf-text-3 dark:text-pf-text-3dark text-xs my-0.5">Automàtic</span>
+                                        <span className="text-pf-text-3 dark:text-pf-text-3dark text-xs">{formatDateTime(r.updated_at || r.created_at)}</span>
                                     </div>
                                 </div>
 

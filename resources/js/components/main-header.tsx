@@ -72,10 +72,10 @@ export function MainHeader() {
                     {user ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
-                                    <Avatar className="h-8 w-8">
+                                <button className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
+                                    <Avatar className="h-10 w-10">
                                         <AvatarImage src={user.img ?? user.avatar} alt={user.name} />
-                                        <AvatarFallback className="bg-pf-primary-l text-xs font-semibold text-pf-primary dark:bg-pf-primary-ldark dark:text-pf-primary-dark">
+                                        <AvatarFallback className="bg-pf-primary-l text-sm font-semibold text-pf-primary dark:bg-pf-primary-ldark dark:text-pf-primary-dark">
                                             {getInitials(user.name)}
                                         </AvatarFallback>
                                     </Avatar>
@@ -123,7 +123,7 @@ export function MainHeader() {
                         </Link>
                     )}
                     <button
-                        className="ml-4 p-3 rounded-full bg-pf-primary-l hover:bg-pf-primary/10 border border-pf-border transition dark:bg-pf-primary-ldark dark:hover:bg-pf-primary-dark/20 dark:border-pf-border-dark"
+                        className="ml-4 flex h-10 w-10 items-center justify-center rounded-full bg-pf-primary-l hover:bg-pf-primary/10 border border-pf-border transition dark:bg-pf-primary-ldark dark:hover:bg-pf-primary-dark/20 dark:border-pf-border-dark"
                         onClick={toggleTheme}
                         title="Cambiar tema"
                     >
