@@ -19,161 +19,145 @@ Cada secció correspon a una branca de git independent. Les branques amb depend�
 
 ---
 
-## 1. `feature/project-setup` ⚠️ PARCIALMENT COMPLETAT
+## 1. `feature/project-setup` ✅ COMPLETAT
 
 **Prioritat:** Molt Alta — Base del projecte
 **Dependències:** Cap
 
-### Descripció
-Configuració inicial del projecte: Laravel + Inertia + React 19. Estructura de carpetes, configuració de BBDD, seeds, Tailwind, i autenticació.
-
-### Estat actual — Ja fet
+### Tasques
 - [x] **Backend:** Inicialitzar projecte Laravel 12 amb Inertia 2.
 - [x] **Backend:** Configurar connexió a la base de dades (SQLite configurat).
 - [x] **Backend:** Configurar autenticació amb Fortify (login, register, 2FA, email verification).
+- [x] **Backend:** Crear migracions de negoci: `posts`, `categories`, `ratings`, `reports`, `notifications`.
+- [x] **Backend:** Afegir camp `role` a la taula `users` (`enum: user, moderator, admin`, default: `user`).
+- [x] **Backend:** Crear models Eloquent: `Post`, `Category`, `Rating`, `Report`, `Notification`, `Country`.
+- [x] **Backend:** Crear seeders amb dades de prova (usuaris dels 3 rols, categories, experiències, ratings, reports).
+- [x] **Backend:** Middleware de rol (`CheckRole`) per protegir rutes d'administració.
 - [x] **Frontend:** Instal·lar React 19.2 + Inertia React adapter + TypeScript.
-- [x] **Frontend:** Configurar Tailwind 4 + shadcn components.
+- [x] **Frontend:** Configurar Tailwind 4 + shadcn components (40+ components).
 - [x] **Frontend:** Configurar alias `@/` per a imports.
 - [x] **Frontend:** Pàgines d'auth creades (login, register, forgot-password, verify-email, 2FA).
 - [x] **Frontend:** Pàgines de settings creades (profile, security, appearance).
-
-### Tasques pendents
-- [x] **Backend:** Crear migracions de negoci: `experiencies`, `categories`, `votes`, `reports`.
-- [x] **Backend:** Afegir camp `role` a la taula `users` (`enum: user, moderator, admin`, default: `user`).
-- [x] **Backend:** Crear models Eloquent: `Experiencia`, `Category`, `Vote`, `Report`.
-- [x] **Backend:** Crear seeders amb dades de prova (usuaris dels 3 rols, categories, experiències).
-- [x] **Backend:** Middleware de rol (`CheckRole`) per protegir rutes d'administració.
-- [ ] **Frontend:** Crear `MainLayout.tsx` (header, nav, footer amb copyright) — layout persistent per a la vista d'usuari.
+- [x] **Frontend:** Crear `MainLayout.tsx` (header amb nav responsiu, footer amb copyright).
 - [x] **Frontend:** Crear `AdminLayout.tsx` — layout per a la vista d'administració (sidebar/tabs).
-- [ ] **Docs:** Diagrama relacional de la base de dades (Obsidian md). 
-- [ ] **Docs:** Esbós de l'estructura del lloc (/dissenyos ejemplo).
+- [ ] **Docs:** Diagrama relacional de la base de dades (Obsidian md).
 - [ ] **Docs:** README.md amb integrants, objectiu i resum.
 
 ---
 
-## 2. `feature/home-page` 🆕 PENDENT
+## 2. `feature/home-page` ✅ COMPLETAT
 
 **Prioritat:** Molt Alta — Primera pàgina visible
 **Dependències:** `feature/project-setup`
 
-### Descripció
-Pàgina d'inici pública (vista d'usuari) amb logotip, text de benvinguda, animació hover en imatge, llistat d'últimes experiències (títols) i àrea de login/registre.
-
 ### Tasques
-- [ ] **Backend:** `HomeController` — obtenir últimes experiències publicades.
-- [ ] **Backend:** Ruta `GET /` → `HomeController@index`.
-- [ ] **Frontend:** Pàgina `Home.tsx` amb logotip, títol, imatge amb animació hover, text de benvinguda.
-- [ ] **Frontend:** Llistat de títols d'últimes experiències (usuari no registrat).
-- [ ] **Frontend:** Àrea d'inici de sessió i registre (links o formularis inline).
-- [ ] **Frontend:** Disseny responsive.
+- [x] **Backend:** `HomeController@index` — obtenir últimes experiències publicades + featured.
+- [x] **Backend:** Ruta `GET /` → `HomeController@index`.
+- [x] **Frontend:** Pàgina `Home.tsx` amb logotip, títol, hero amb experiència destacada, text de benvinguda.
+- [x] **Frontend:** Llistat de les 3 últimes experiències amb `ExperienceCard` (size `lg`).
+- [x] **Frontend:** Àrea d'inici de sessió i registre (CTAs, s'oculta "Registrar-se" si ja has iniciat sessió).
+- [x] **Frontend:** Disseny responsive amb animacions fade-up.
+- [x] **Frontend:** Experiència destacada amb link a la seva pàgina de detall.
 
 ---
 
-## 3. `feature/experiences-list` 🆕 PENDENT
+## 3. `feature/experiences-list` ✅ COMPLETAT
 
 **Prioritat:** Alta — Core de l'aplicació
-**Dependències:** `feature/project-setup` (auth ja està fet)
-
-### Descripció
-Llistat d'experiències complet per a usuaris registrats (vista d'usuari). Substitueix "Últimes entrades" després del login. Inclou fitxa resum, selector de categoria, cercador, ordenació per data o puntuació, i visualització completa.
+**Dependències:** `feature/project-setup`
 
 ### Tasques
-- [ ] **Backend:** `ExperienciaController@index` — llistat amb filtres (categoria, cerca, ordre).
-- [ ] **Backend:** `ExperienciaController@show` — detall complet d'una experiència.
-- [ ] **Backend:** Query scopes per filtrar per categoria, cercar per títol/text, ordenar per data/puntuació.
-- [ ] **Frontend:** Pàgina de llistat d'experiències amb fitxa resum (card).
-- [ ] **Frontend:** Selector de categoria (dropdown o pills).
-- [ ] **Frontend:** Buscador d'experiències (input amb debounce).
-- [ ] **Frontend:** Ordenació per data o puntuació (selector).
-- [ ] **Frontend:** Pàgina de detall d'una experiència (títol, data, text, imatge, mapa, categories, votacions).
-- [ ] **Frontend:** Navegació SPA sense recàrrega (Inertia `<Link>`).
+- [x] **Backend:** `ExperienciaController@index` — llistat amb filtres (categoria, país, cerca, ordre).
+- [x] **Backend:** `ExperienciaController@show` — detall complet amb stats de l'autor.
+- [x] **Backend:** Query scopes: `published()`, `byCategory()`, `search()`.
+- [x] **Frontend:** Pàgina `/explorar` amb cards (grid/llista), sidebar (countries trending, top users).
+- [x] **Frontend:** Barra de països amb marquee animat.
+- [x] **Frontend:** Panel de filtres: categories + països.
+- [x] **Frontend:** Buscador amb debounce.
+- [x] **Frontend:** Ordenació: Popular, Nou, Data, Puntuació.
+- [x] **Frontend:** Vista grid (masonry) i llista (horitzontal).
+- [x] **Frontend:** Paginació.
+- [x] **Frontend:** Pàgina de detall (`show.tsx`): hero amb imatge, contingut, mapa Leaflet, sidebar autor + valoració + detalls.
+- [x] **Frontend:** Navegació SPA sense recàrrega (Inertia `<Link>` a cards).
 
 ---
 
-## 4. `feature/create-experience` 🆕 PENDENT
+## 4. `feature/create-experience` ✅ COMPLETAT
 
 **Prioritat:** Alta — Generació de contingut
 **Dependències:** `feature/project-setup`
 
-### Descripció
-Creació d'experiències per part d'usuaris registrats. Formulari amb títol, text, imatge destacada, coordenades (mapa), categories i estat (esborrany/publicada).
-
 ### Tasques
-- [ ] **Backend:** `ExperienciaController@store` — crear experiència amb validació.
-- [ ] **Backend:** Gestió d'imatges (upload, emmagatzematge, optimització).
-- [ ] **Backend:** Validació de camps obligatoris (títol, text, categoria, imatge).
-- [ ] **Backend:** Suport per a estats: esborrany, publicada.
-- [ ] **Frontend:** Formulari de creació amb camps: títol, text (editor ric opcional), imatge, categories, coordenades.
-- [ ] **Frontend:** Integració de mapa (Google Maps o Leaflet/OpenStreetMap) per seleccionar coordenades.
-- [ ] **Frontend:** Validació client dels camps.
-- [ ] **Frontend:** Preview de la imatge abans de pujar.
-- [ ] **Frontend:** Opció de guardar com a esborrany o publicar directament.
+- [x] **Backend:** `ExperienciaController@store` — crear experiència amb validació condicional (draft vs published).
+- [x] **Backend:** Gestió d'imatges: upload, emmagatzematge, optimització (WebP, resize max 1600px) via `ImageOptimizer`.
+- [x] **Backend:** Validació de camps obligatoris per a publicació (títol, contingut, categories).
+- [x] **Backend:** Suport per a estats: esborrany (validació relaxada), publicada (validació estricta).
+- [x] **Frontend:** Component compartit `ExperienceForm` reutilitzat per crear i editar.
+- [x] **Frontend:** Camps: títol, contingut, imatge amb preview, categories (pills multi-selecció), país, data, mapa interactiu (Leaflet).
+- [x] **Frontend:** `MapPicker` — selecció de coordenades clicant al mapa (OpenStreetMap + Leaflet vanilla).
+- [x] **Frontend:** Validació client: banner d'error quan falten camps obligatoris per publicar.
+- [x] **Frontend:** Preview de la imatge abans de pujar.
+- [x] **Frontend:** Opció de guardar com a esborrany o publicar directament.
+- [x] **Frontend:** Lazy loading del mapa per evitar problemes SSR.
+- [x] **Frontend:** Botó "Crear" al header (visible només si logat).
 
 ---
 
-## 5. `feature/voting` 🆕 PENDENT
+## 5. `feature/voting` ✅ COMPLETAT
 
 **Prioritat:** Alta — Interacció entre usuaris
 **Dependències:** `feature/experiences-list`
 
-### Descripció
-Sistema de votació +1 / -1 per a experiències. Un usuari registrat pot votar una experiència una vegada.
-
 ### Tasques
-- [ ] **Backend:** Model `Vote` amb relació `user_id` + `experiencia_id` + `value` (+1/-1).
-- [ ] **Backend:** Endpoint `POST /experiencies/{id}/vote` — crear o actualitzar vot.
-- [ ] **Backend:** Constraint UNIQUE per evitar duplicats (un vot per usuari per experiència).
-- [ ] **Backend:** Comptador de valoracions positives i negatives a l'experiència.
-- [ ] **Frontend:** Botons de +1 / -1 a la card i al detall de l'experiència.
-- [ ] **Frontend:** Estat visual del vot de l'usuari actual (destacat si ja ha votat).
-- [ ] **Frontend:** Actualització optimista del comptador.
+- [x] **Backend:** Model `Rating` amb relació `user_id` + `post_id` + `value` (+1/-1).
+- [x] **Backend:** Endpoint `PUT /experiencies/{id}/rating` — crear, actualitzar o eliminar vot.
+- [x] **Backend:** Constraint: un vot per usuari per experiència (updateOrCreate).
+- [x] **Backend:** Comptador de valoracions positives i negatives a l'experiència (withCount).
+- [x] **Frontend:** Botons de +1 / -1 a la pàgina de detall de l'experiència.
+- [x] **Frontend:** Estat visual del vot de l'usuari actual (destacat si ja ha votat).
+- [x] **Frontend:** Actualització optimista del comptador.
 
 ---
 
-## 6. `feature/user-profile` 🆕 PENDENT
+## 6. `feature/user-profile` ✅ COMPLETAT
 
 **Prioritat:** Mitjana-Alta
 **Dependències:** `feature/create-experience`
 
-### Descripció
-Secció d'usuari registrat (vista d'usuari, mateixa pàgina): modificació de dades personals, edició i eliminació de les pròpies experiències.
-
 ### Tasques
-- [ ] **Backend:** `ExperienciaController@update` — editar experiència pròpia.
-- [ ] **Backend:** `ExperienciaController@destroy` — eliminar experiència pròpia.
-- [ ] **Backend:** Autorització: només el propietari pot editar/eliminar les seves experiències.
-- [ ] **Frontend:** Llistat d'experiències pròpies amb accions d'editar/eliminar.
-- [ ] **Frontend:** Confirmació abans d'eliminar.
+- [x] **Backend:** `ExperienciaController@update` — editar experiència pròpia (validació condicional draft/published).
+- [x] **Backend:** `ExperienciaController@destroy` — eliminar experiència pròpia (+ eliminar imatge del storage).
+- [x] **Backend:** `ExperienciaController@meves` — llistat filtrable per estat i cerca.
+- [x] **Backend:** Autorització: `abort(403)` si no és propietari.
+- [x] **Frontend:** Pàgina `/settings/experiences` integrada al layout de perfil (`UserHeader`).
+- [x] **Frontend:** Llistat d'experiències pròpies amb filtres: Totes / Publicades / Esborranys.
+- [x] **Frontend:** Cards amb badges d'estat (verd/ambar), botons: Veure, Editar, Eliminar.
+- [x] **Frontend:** Modal de confirmació abans d'eliminar (shadcn Dialog).
+- [x] **Frontend:** Link "Gestió d'experiencies" al dropdown del header.
 
 > **Nota:** La modificació de dades personals (nom, email, contrasenya) ja existeix a `/settings/profile` i `/settings/security` via Fortify.
 
 ---
 
-## 7. `feature/report-abuse` 🆕 PENDENT
+## 7. `feature/report-abuse` ✅ COMPLETAT
 
 **Prioritat:** Mitjana
 **Dependències:** `feature/experiences-list`
 
-### Descripció
-Sistema de reportar abusos (vista d'usuari). Els usuaris poden reportar experiències que considerin inadequades. Les experiències reportades es marquen per a revisió a la vista d'administració.
-
 ### Tasques
-- [ ] **Backend:** Model `Report` amb `user_id`, `experiencia_id`, `motiu`, `estat` (pendent, revisat, descartat).
-- [ ] **Backend:** Endpoint `POST /experiencies/{id}/report` — crear report.
-- [ ] **Backend:** Evitar reports duplicats del mateix usuari a la mateixa experiència.
-- [ ] **Frontend:** Botó/link "Reportar abús" a la vista completa de l'experiència (només per a usuaris registrats, no visible a la portada pública).
-- [ ] **Frontend:** Modal amb camp de motiu del report.
-- [ ] **Frontend:** Confirmació visual un cop enviat.
+- [x] **Backend:** Model `Report` amb `user_id`, `post_id`, `reason`, `status` (pending, accepted, dismissed).
+- [x] **Backend:** Endpoint `POST /reports` — crear report amb motiu.
+- [x] **Backend:** Evitar reports duplicats del mateix usuari a la mateixa experiència.
+- [x] **Frontend:** Botó "Reportar abús" a la vista completa de l'experiència (només per a usuaris registrats).
+- [x] **Frontend:** Modal (`ModalReport`) amb camp de motiu del report.
+- [x] **Frontend:** Confirmació visual un cop enviat.
 
 ---
 
-## 8. `feature/admin-panel` 🆕 PENDENT
+## 8. `feature/admin-panel` ✅ COMPLETAT
 
 **Prioritat:** Mitjana
 **Dependències:** `feature/project-setup` (rols), `feature/report-abuse`
-
-### Descripció
-Vista d'administració amb accés diferenciat per rol. Pot funcionar amb recàrrega de pàgina (no cal SPA).
 
 ### Permisos per rol
 
@@ -184,69 +168,65 @@ Vista d'administració amb accés diferenciat per rol. Pot funcionar amb recàrr
 | Gestió d'usuaris | ❌ | ✅ |
 
 ### Tasques
-- [ ] **Backend:** Middleware `CheckRole` — accepta una llista de rols permesos.
-- [ ] **Backend:** Rutes d'admin protegides amb `middleware('role:moderator,admin')`.
-- [ ] **Backend:** Rutes de categories i usuaris protegides amb `middleware('role:admin')`.
-- [ ] **Backend:** `AdminReportController` — llistat de reports, accions mantenir/rebutjar experiència.
-- [ ] **Backend:** `AdminCategoryController` — CRUD de categories.
-- [ ] **Backend:** `AdminUserController` — llistat d'usuaris, baixa d'usuari (soft delete o desactivació).
-- [ ] **Frontend:** `AdminLayout.tsx` amb sidebar/tabs condicionals segons el rol de l'usuari.
-- [ ] **Frontend:** Pàgina `/admin` amb guard de rol (`moderator` o `admin`).
-- [ ] **Frontend:** Tab "Reports": llistat d'experiències reportades amb accions mantenir/rebutjar (visible per `moderator` i `admin`).
-- [ ] **Frontend:** Tab "Categories": llistat, crear, editar, eliminar (només visible per `admin`).
-- [ ] **Frontend:** Tab "Usuaris": llistat amb acció de baixa (només visible per `admin`).
-- [ ] **Frontend:** Navegació: link a `/admin` visible al header/menú només si l'usuari és `moderator` o `admin`.
+- [x] **Backend:** Middleware `CheckRole` — accepta una llista de rols permesos.
+- [x] **Backend:** Rutes d'admin protegides amb `middleware('role:moderator,admin')`.
+- [x] **Backend:** `ReportsController` — llistat, detall, acceptar, descartar, eliminar report; canviar estat del post (rejected/published).
+- [x] **Backend:** `CategoryController` — CRUD de categories.
+- [x] **Backend:** `UserController` — llistat d'usuaris, crear, editar, toggle active.
+- [x] **Backend:** Stats globals compartides via middleware (totalReports, totalCategories, totalUsuaris, totalExperiencies).
+- [x] **Frontend:** `AdminLayout.tsx` amb sidebar condicional segons rol.
+- [x] **Frontend:** Pàgina `/admin` amb dashboard summary.
+- [x] **Frontend:** Pàgina Reports: llistat amb filtres, detall, accions mantenir/rebutjar.
+- [x] **Frontend:** Pàgina Categories: llistat, crear, editar, eliminar.
+- [x] **Frontend:** Pàgina Usuaris: llistat amb cerca, crear, editar, toggle active.
+- [x] **Frontend:** Link a `/admin` visible al header si l'usuari és `moderator` o `admin`.
 
 ---
 
-## 9. `feature/rich-experiences` 🆕 PENDENT
+## 9. `feature/rich-experiences` ⚠️ PARCIALMENT COMPLETAT
 
 **Prioritat:** Mitjana — Millora de contingut
 **Dependències:** `feature/create-experience`
 
-### Descripció
-Millorar la creació d'experiències amb editor ric (markdown/HTML), múltiples imatges, i integració avançada de mapa.
-
 ### Tasques
 - [ ] **Backend:** Suport per a text en markdown o HTML (sanititzat).
 - [ ] **Backend:** Múltiples imatges per experiència (galeria).
-- [ ] **Backend:** Optimització d'imatges (format, qualitat, mida segons pantalla).
+- [x] **Backend:** Optimització d'imatges: `ImageOptimizer` servei — resize (max 1600px), conversió a WebP (qualitat 80%), GD nativa.
 - [ ] **Frontend:** Editor ric de text (TipTap, React-Quill, o similar).
 - [ ] **Frontend:** Upload múltiple d'imatges amb preview.
-- [ ] **Frontend:** Lazy loading d'imatges.
+- [x] **Frontend:** Lazy loading d'imatges (`loading="lazy"` a cards i llistes).
 - [ ] **Frontend:** Imatges servides des de CDN (Cloudinary).
-- [ ] **Frontend:** Mapa interactiu amb Google Maps o OpenStreetMap + Leaflet.
+- [x] **Frontend:** Mapa interactiu amb OpenStreetMap + Leaflet vanilla.
+  - `MapPicker` — selecció de coordenades al formulari (clic al mapa).
+  - `MapDisplay` — visualització read-only a la pàgina de detall.
+  - Cleanup correcte amb Inertia SPA navigation.
+  - `isolation: isolate` per evitar z-index conflicts amb modals.
+- [ ] **Frontend:** Lightbox per veure imatges a pantalla completa.
 
 ---
 
-## 10. `feature/home-improvements` 🆕 PENDENT
+## 10. `feature/home-improvements` ✅ COMPLETAT
 
 **Prioritat:** Baixa-Mitjana — Millora de la pàgina d'inici
 **Dependències:** `feature/experiences-list`
 
-### Descripció
-Millores opcionals de la pàgina d'inici: mostrar cards d'experiència en lloc de només títols, afegir filtres i cercador a la portada.
-
 ### Tasques
-- [ ] **Frontend:** Substituir llistat de títols per cards d'experiència (ExperienciaCard).
-- [ ] **Frontend:** Cards mostren info de l'experiència però sense link de reportar i sense poder votar.
-- [ ] **Frontend:** Afegir filtres de categoria i cercador a la pàgina d'inici.
+- [x] **Frontend:** Cards d'experiència (`ExperienceCard` amb size `lg`) a la pàgina d'inici.
+- [x] **Frontend:** Cards mostren info de l'experiència sense link de reportar i sense poder votar.
+- [x] **Frontend:** Experiència destacada (featured) al hero amb link.
 
 ---
 
-## 11. `feature/responsive-design` 🆕 PENDENT
+## 11. `feature/responsive-design` ⚠️ PARCIALMENT COMPLETAT
 
 **Prioritat:** Mitjana — Requisit tècnic
 **Dependències:** Cap (es pot fer en paral·lel)
 
-### Descripció
-Assegurar disseny adaptatiu (responsive) a totes les pantalles. Compatibilitat amb Firefox i Chrome. Estètica coherent.
-
 ### Tasques
-- [ ] **Frontend:** Revisar i ajustar breakpoints per a mòbil, tablet i escriptori.
+- [x] **Frontend:** Menú de navegació responsiu (hamburguesa en mòbil) — `MainHeader` i `UserHeader`.
+- [x] **Frontend:** Peu de pàgina amb copyright (`MainFooter`).
+- [ ] **Frontend:** Revisar i ajustar breakpoints per a mòbil, tablet i escriptori (test exhaustiu).
 - [ ] **Frontend:** Testejar en Firefox i Chrome (últimes versions estables).
-- [ ] **Frontend:** Peu de pàgina amb copyright i informació legal.
-- [ ] **Frontend:** Menú de navegació responsiu (hamburguesa en mòbil).
 - [ ] **Frontend:** Qualitat Tailwind: organització, variables.
 
 ---
@@ -255,9 +235,6 @@ Assegurar disseny adaptatiu (responsive) a totes les pantalles. Compatibilitat a
 
 **Prioritat:** Mitjana — Publicació
 **Dependències:** Totes les anteriors (o les que estiguin llestes)
-
-### Descripció
-Configuració d'entorns de desenvolupament, preproducció i producció. Documentació d'instal·lació.
 
 ### Tasques
 - [ ] **DevOps:** Entorn de desenvolupament documentat (`.env.example`, `docker-compose` opcional).
@@ -274,28 +251,16 @@ Configuració d'entorns de desenvolupament, preproducció i producció. Document
 
 ```
 develop
- ├── feature/project-setup              (merge 1 — completar base: models, migracions, rols, layouts)
- ├── feature/home-page                  (merge 2 — primera pàgina visible)
- ├── feature/experiences-list           (merge 3 — core de l'app)
- ├── feature/create-experience          (merge 4 — generació de contingut)
- ├── feature/voting                     (merge 5 — interacció)
- ├── feature/user-profile               (merge 6 — gestió personal)
- ├── feature/report-abuse               (merge 7 — moderació bàsica)
- ├── feature/admin-panel                (merge 8 — vista d'administració amb rols)
- ├── feature/rich-experiences           (merge 9 — millora de contingut)
- ├── feature/home-improvements          (merge 10 — millora pàgina inici)
- ├── feature/responsive-design          (merge 11 — en paral·lel)
- └── feature/deployment                 (merge 12 — publicació final)
+ ├── feature/project-setup              ✅ (merge 1)
+ ├── feature/home-page                  ✅ (merge 2)
+ ├── feature/experiences-list           ✅ (merge 3)
+ ├── feature/create-experience          ✅ (merge 4)
+ ├── feature/voting                     ✅ (merge 5)
+ ├── feature/user-profile               ✅ (merge 6)
+ ├── feature/report-abuse               ✅ (merge 7)
+ ├── feature/admin-panel                ✅ (merge 8)
+ ├── feature/rich-experiences           ⚠️ (merge 9 — parcial)
+ ├── feature/home-improvements          ✅ (merge 10)
+ ├── feature/responsive-design          ⚠️ (merge 11 — parcial)
+ └── feature/deployment                 🆕 (merge 12 — pendent)
 ```
-
----
-
-## Planificació temporal
-
-| Setmana | Dates | Hores | Objectiu |
-|---------|-------|-------|----------|
-| 1 | 16/03 – 20/03 | 8h | Completar setup (models, rols, migracions) + Home page + Llistat experiències |
-| 2 | 23/03 – 27/03 | 8h | Creació experiències + Votació + Perfil + Reports |
-| 3 | 07/04 – 10/04 | 5h | Admin panel (moderator/admin) + Millores + Responsive + Deploy |
-
-**Presentació:** Data a confirmar — 10 min (3 demo + 5 presentació + 2 preguntes).
