@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage, useForm } from '@inertiajs/react';
 import { Search, PenLine, Trash2, Eye, Plus } from 'lucide-react';
 import { useState, useCallback, useRef } from 'react';
 import { UserHeader } from '@/components/user-Header';
@@ -283,6 +283,7 @@ export default function MevesExperiencies({ experiences, filters }: Props) {
 /* ── Delete confirmation dialog ── */
 function DeleteDialog({ experienceId, experienceTitle }: { experienceId: number; experienceTitle: string }) {
     const [open, setOpen] = useState(false);
+    const form = useForm();
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -308,7 +309,7 @@ function DeleteDialog({ experienceId, experienceTitle }: { experienceId: number;
                     <Button
                         variant="destructive"
                         onClick={() => {
-                            router.delete(`/experiencies/${experienceId}`, {
+                            form.delete(`/experiencies/${experienceId}`, {
                                 onSuccess: () => setOpen(false),
                             });
                         }}

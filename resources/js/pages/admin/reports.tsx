@@ -103,9 +103,9 @@ export default function ReportsPage(){
     });
     
     function acceptReport(reportf:Reports){
-        router.put(route("admin.reports.accepted", { report: reportf.id }), {}, {
+        formReport.put(route("admin.reports.accepted", { report: reportf.id }), {
             onSuccess: () => {
-                router.put(route("admin.reports.cancel-post", { report: reportf.id }));
+                formReport.put(route("admin.reports.cancel-post", { report: reportf.id }));
             }
         });
     }

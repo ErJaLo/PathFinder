@@ -1,4 +1,4 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import {
     ArrowLeft,
     ThumbsUp,
@@ -70,6 +70,8 @@ export default function ShowExperiencia({ experience, author }: Props) {
         userVote: (experience.user_rating_value ?? 0) as -1 | 0 | 1,
     });
 
+    const voteForm = useForm({ value: 0 as -1 | 0 | 1 });
+
     const score = voteState.up - voteState.down;
 
     const applyVote = (up: number, down: number, from: -1 | 0 | 1, to: -1 | 0 | 1) => {
@@ -112,9 +114,9 @@ export default function ShowExperiencia({ experience, author }: Props) {
         setVoteState({ ...optimistic, userVote: nextVote });
         setIsVoting(true);
 
-        router.put(
+        voteForm.transform(() => ({ value: nextVote }));
+        voteForm.put(
             route('experiencies.rating', experience.id),
-            { value: nextVote },
             {
                 preserveScroll: true,
                 onError: () => {

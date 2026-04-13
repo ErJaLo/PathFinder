@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import { LogOut, Settings, User as UserIcon } from 'lucide-react';
 import { route } from 'ziggy-js';
 import {
@@ -17,6 +17,8 @@ type UserDropdownProps = {
 };
 
 export function UserDropdown({ user, initials }: UserDropdownProps) {
+    const logoutForm = useForm();
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -48,7 +50,7 @@ export function UserDropdown({ user, initials }: UserDropdownProps) {
                 <DropdownMenuSeparator className="bg-pf-border dark:bg-pf-border-dark m-0" />
                 <DropdownMenuItem 
                     className="hover:bg-pf-primary-l dark:hover:bg-pf-border-dark focus:bg-pf-primary-l dark:focus:bg-pf-border-dark focus:text-pf-primary dark:focus:text-white cursor-pointer rounded-none border-none py-1"
-                    onSelect={() => router.post(route('logout'))}
+                    onSelect={() => logoutForm.post(route('logout'))}
                 >
                     <div className="flex items-center gap-3 w-full px-4 py-2">
                         <LogOut className="w-4 h-4 text-pf-text-3 dark:text-white/80" />

@@ -1,4 +1,4 @@
-import { Link, usePage, router } from '@inertiajs/react';
+import { Link, usePage, useForm } from '@inertiajs/react';
 import { Map, Compass, User, Menu, X, PenLine } from 'lucide-react';
 import { useState } from 'react';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
@@ -26,6 +26,7 @@ export function MainHeader() {
     const { auth } = usePage<{ auth: Auth }>().props;
     const user = auth?.user;
     const getInitials = useInitials();
+    const logoutForm = useForm();
     const [mobileOpen, setMobileOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
 
@@ -111,7 +112,7 @@ export function MainHeader() {
 
                                 <DropdownMenuItem 
                                     className="w-full cursor-pointer"
-                                    onSelect={() => router.post(route('logout'))}
+                                    onSelect={() => logoutForm.post(route('logout'))}
                                 >
                                     Tancar sessió
                                 </DropdownMenuItem>
@@ -188,7 +189,7 @@ export function MainHeader() {
                                     <button
                                         className="flex-1 rounded-full border border-pf-border px-4 py-2 text-center text-sm font-medium text-pf-text-2 transition-colors hover:bg-pf-primary-l dark:border-pf-border-dark dark:text-pf-text-2dark"
                                         onClick={() => {
-                                            router.post(route('logout'));
+                                            logoutForm.post(route('logout'));
                                             setMobileOpen(false);
                                         }}
                                     >

@@ -1,6 +1,6 @@
 
 
-import { Link, usePage, router } from "@inertiajs/react";
+import { Link, usePage, useForm } from "@inertiajs/react";
 import { 
     AlertTriangle, ChevronLeft, Info, FileText, Clock, Component, 
     Check, X, UserX, Trash2, User, Flag, Eye, Edit3, MapPin 
@@ -88,24 +88,26 @@ export default function ReportDetails() {
         }
     };
 
+    const form = useForm();
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Administració', href: '/admin' },
         { title: 'Abusos reportats', href: '/admin/reports' },
         { title: `Report #${r.id}`, href: `/admin/reports/${r.id}` }
     ];
 
-    const handleResolve = () => router.put(route("admin.reports.accepted", { report: r.id }), {}, {
+    const handleResolve = () => form.put(route("admin.reports.accepted", { report: r.id }), {
             onSuccess: () => {
-                router.put(route("admin.reports.cancel-post", { report: r.id }));
+                form.put(route("admin.reports.cancel-post", { report: r.id }));
             }
         });
-    const handleDismiss = () => router.put(route("admin.reports.aprove-post", { report: r.id }), {}, {
+    const handleDismiss = () => form.put(route("admin.reports.aprove-post", { report: r.id }), {
         onSuccess: () => {
-            router.put(route("admin.reports.active-post", { report: r.id }));
+            form.put(route("admin.reports.active-post", { report: r.id }));
         }
     });
-    const handleSuspend = () => router.patch(route("admin.users.toggleActive", { user: r.post.user.id }));
-    const handleDeletePost = () => router.post(route("admin.report.delete", { report: r.id }));
+    const handleSuspend = () => form.patch(route("admin.users.toggleActive", { user: r.post.user.id }));
+    const handleDeletePost = () => form.post(route("admin.report.delete", { report: r.id }));
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>

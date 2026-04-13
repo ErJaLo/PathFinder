@@ -1,4 +1,4 @@
-import { router } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import { ImagePlus, X, Save, Send, MapPin, AlertTriangle } from 'lucide-react';
 import { useState, lazy, Suspense } from 'react';
 import InputError from '@/components/input-error';
@@ -40,7 +40,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
     const isEditing = !!experience;
     const today = new Date().toISOString().split('T')[0];
 
-    const [formData, setFormData] = useState<FormData>({
+    const { data: formData, setData: setFormData, post, processing, errors, transform } = useForm<FormData>({
         title: experience?.title ?? '',
         content: experience?.content ?? '',
         experience_date: experience?.experience_date?.split('T')[0] ?? '',
@@ -53,20 +53,17 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
     });
 
     const [imagePreview, setImagePreview] = useState<string | null>(experience?.image ?? null);
-    const [processing, setProcessing] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const setField = <K extends keyof FormData>(key: K, value: FormData[K]) => {
-        setFormData((prev) => ({ ...prev, [key]: value }));
+    const setField = (key: keyof FormData, value: unknown) => {
+        setFormData(key as never, value as never);
     };
 
     const toggleCategory = (id: number) => {
-        setFormData((prev) => ({
-            ...prev,
-            categories: prev.categories.includes(id)
-                ? prev.categories.filter((c) => c !== id)
-                : [...prev.categories, id],
-        }));
+        setFormData('categories',
+            formData.categories.includes(id)
+                ? formData.categories.filter((c) => c !== id)
+                : [...formData.categories, id],
+        );
     };
 
     const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,23 +78,12 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
     };
 
     const submitAs = (status: 'draft' | 'published') => {
-        setProcessing(true);
-        setErrors({});
-
-        const payload = { ...formData, status } as unknown as Record<string, string>;
-
         if (isEditing) {
-            router.post(`/experiencies/${experience.id}`, { ...payload, _method: 'PUT' }, {
-                forceFormData: true,
-                onError: (errs) => { setErrors(errs); setProcessing(false); },
-                onFinish: () => setProcessing(false),
-            });
+            transform((d) => ({ ...d, status, _method: 'PUT' as const }));
+            post(`/experiencies/${experience.id}`, { forceFormData: true });
         } else {
-            router.post('/experiencies', payload, {
-                forceFormData: true,
-                onError: (errs) => { setErrors(errs); setProcessing(false); },
-                onFinish: () => setProcessing(false),
-            });
+            transform((d) => ({ ...d, status }));
+            post('/experiencies', { forceFormData: true });
         }
     };
 
