@@ -21,29 +21,34 @@ class ReportsController extends Controller
         $status = (string) $request->input('status', '');
         $search = trim((string) $request->input('search', ''));
 
-        $query = DB::table("reports")
+        $query = \App\Models\Report::with(['user:id,name', 'post' => function ($q) {
+            $q->select('id', 'title', 'user_id', 'status')->with('user:id,name');
+        }])
             ->select(
-                "reports.id",
-                "reports.user_id",
-                "reports.post_id",
-                "reports.status",
-                "reports.reason",
-                "reports.created_at"
+                "id",
+                "user_id",
+                "post_id",
+                "status",
+                "reason",
+                "created_at"
             )
             ->when(
                 $search !== '',
                 fn($q) => $q->where(function ($searchQuery) use ($search) {
-                    $searchQuery->where('reports.reason', 'like', "%{$search}%");
+                    $searchQuery->where('reason', 'like', "%{$search}%")
+                        ->orWhereHas('post', function ($postQuery) use ($search) {
+                            $postQuery->where('title', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('name', 'like', "%{$search}%");
+                        });
                 })
             )
             ->when($status !== '', function ($q) use ($status) {
-                // Si la variable the status que arriba és 'reviewed', mostrarà tot menos els pendents
                 if ($status === 'reviewed') {
-                    return $q->where('reports.status', '!=', 'pending');
+                    return $q->where('status', '!=', 'pending');
                 }
-
-                // En els altres casos es filtrarà normalment
-                return $q->where('reports.status', $status);
+                return $q->where('status', $status);
             });
 
         // Obtenim el total de registres abans del limit/offset

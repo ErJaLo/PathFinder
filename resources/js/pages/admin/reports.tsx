@@ -7,12 +7,28 @@ import { DataPagination } from '@/components/ui/data-pagination';
 import AdminLayout from "@/layouts/admin-layout";
 import type { BreadcrumbItem } from '@/types';
 
+interface UserData {
+    id: number;
+    name: string;
+}
+
+interface PostData {
+    id: number;
+    title: string;
+    user_id: number;
+    status: string;
+    user?: UserData;
+}
+
 interface Reports{
     id:number;
     user_id:number;
     post_id:number;
     status:string;
     reason:string;
+    created_at?: string;
+    user?: UserData;
+    post?: PostData;
 }
 
 export default function ReportsPage(){
@@ -21,6 +37,18 @@ export default function ReportsPage(){
         { title: 'reports', href: '/admin/reports' }
     ];
     
+
+    interface PostData {
+        id: number;
+        title: string;
+        content: string;
+        latitude?: number;
+        longitude?: number;
+        experience_date?: string;
+        status: string;
+        created_at?: string;
+    }
+
     type PageProps = { 
         auth: any; 
         globalData: { totalReports: number, totalReportsResols:number, totalReportsDescartats:number };
@@ -30,6 +58,7 @@ export default function ReportsPage(){
         page: number;
         search?: string;
         status?: string;
+        post: PostData;
     };
 
     const { 
@@ -40,7 +69,8 @@ export default function ReportsPage(){
         perPage = 10,
         page = 1,
         search: prevSearch = '',
-        status: prevStatus = ''
+        status: prevStatus = '',
+        post,
     } = usePage<PageProps>().props;
 
     const currentStatus = prevStatus;
@@ -186,30 +216,28 @@ export default function ReportsPage(){
                             {/* Content */}
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <span className="px-2 py-0.5 text-xs font-bold uppercase tracking-wide bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 rounded">
-                                        {rep.reason || "ODI / DISCRIMINACIÓ"}
-                                    </span>
+                                  
                                     <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 rounded bg-red-50/50 dark:bg-transparent">
                                         Alta
                                     </span>
                                 </div>
                                 
                                 <h3 className="text-base font-bold text-pf-text dark:text-white mb-1 truncate">
-                                    Experiència reportada a Marràqueix — guia completa
+                                    {rep.post?.title || "Post sense títol"}
                                 </h3>
                                 <p className="text-sm text-pf-text-2 dark:text-pf-text-2dark line-clamp-2 mb-3">
-                                    Aquest post conté comentaris ofensius sobre la població local que podrien resultar discriminatoris i fomentar actituds negatives envers la cultura marroquina.
+                                    {rep.reason}
                                 </p>
                                 
                                 <div className="flex items-center gap-3 text-xs text-pf-text-3 dark:text-pf-text-3dark">
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-5 h-5 rounded-full bg-pf-primary-l dark:bg-pf-primary-ldark text-pf-primary dark:text-pf-primary-hdark font-bold flex items-center justify-center text-[9px] uppercase">
-                                            {("User").substring(0,2)}
+                                            {(rep.user?.name || "U").substring(0,2)}
                                         </div>
-                                        <span>Reportat per <span className="font-semibold text-pf-text dark:text-gray-300">u/usuari_{rep.user_id}</span></span>
+                                        <span>Reportat per <span className="font-semibold text-pf-text dark:text-gray-300">u/{rep.user?.name || rep.user_id}</span></span>
                                     </div>
                                     <span>•</span>
-                                    <span>Autor: <span className="font-semibold text-pf-text dark:text-gray-300">u/autor_{rep.post_id}</span></span>
+                                    <span>Autor: <span className="font-semibold text-pf-text dark:text-gray-300">u/{rep.post?.user?.name || rep.post?.user_id}</span></span>
                                 </div>
                             </div>
 
