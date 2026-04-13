@@ -17,8 +17,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/experiencies/{post}/editar', [ExperienciaController::class, 'edit'])->name('experiencies.edit');
     Route::put('/experiencies/{post}', [ExperienciaController::class, 'update'])->name('experiencies.update');
     Route::delete('/experiencies/{post}', [ExperienciaController::class, 'destroy'])->name('experiencies.destroy');
+    Route::put('/experiencies/{post}/rating', [ExperienciaController::class, 'rate'])->name('experiencies.rating');
     Route::get('/experiencies/crear', [ExperienciaController::class, 'create'])->name('experiencies.create');
     Route::post('/experiencies', [ExperienciaController::class, 'store'])->name('experiencies.store');
+    Route::post('/reports', [ReportsController::class, 'store'])->name('reports.store');
 });
 
 Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
@@ -33,7 +35,8 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
         ->whereNumber('x')
         ->whereNumber('y')
         ->name('admin.users.getUsers');
-    Route::patch('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
     Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
     Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");

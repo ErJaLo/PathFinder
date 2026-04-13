@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\Post;
+use App\Models\Rating;
 use App\Models\Report;
 use App\Models\User;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -105,7 +107,8 @@ class ExperienciaController extends Controller
             'content' => $isDraft ? 'nullable|string' : 'required|string',
             'experience_date' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
-            'location' => 'nullable|string|max:255',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'country_code' => 'nullable|string|exists:countries,code',
             'categories' => $isDraft ? 'nullable|array' : 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
@@ -116,7 +119,8 @@ class ExperienciaController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = '/storage/' . $request->file('image')->store('experiences', 'public');
+            $optimizer = new ImageOptimizer();
+            $imagePath = '/storage/' . $optimizer->store($request->file('image'));
         }
 
         $post = Post::create([
@@ -125,6 +129,8 @@ class ExperienciaController extends Controller
             'content' => $validated['content'] ?? '',
             'experience_date' => $validated['experience_date'] ?? null,
             'image' => $imagePath,
+            'latitude' => $validated['latitude'] ?? null,
+            'longitude' => $validated['longitude'] ?? null,
             'country_code' => $validated['country_code'] ?? null,
             'status' => $validated['status'],
         ]);
@@ -140,13 +146,23 @@ class ExperienciaController extends Controller
         return redirect()->route('experiencies.edit', $post)->with('success', 'Esborrany guardat!');
     }
 
-    public function show(Post $post)
+    public function show(Request $request, Post $post)
     {
         $post->load(['categories:id,name', 'mainCountry:code,name']);
         $post->loadCount([
             'ratings as ratings_up_count' => fn($q) => $q->where('value', 1),
             'ratings as ratings_down_count' => fn($q) => $q->where('value', -1),
         ]);
+
+        $userRatingValue = null;
+
+        if ($request->user()) {
+            $userRatingValue = Rating::where('user_id', $request->user()->id)
+                ->where('post_id', $post->id)
+                ->value('value');
+        }
+
+        $post->setAttribute('user_rating_value', $userRatingValue);
 
         // Author with stats
         $author = User::where('id', $post->user_id)
@@ -172,8 +188,34 @@ class ExperienciaController extends Controller
         ]);
     }
 
-    public function meves(Request $request)
+    public function rate(Request $request, Post $post)
     {
+        $validated = $request->validate([
+            'value' => ['required', 'integer', 'in:-1,0,1'],
+        ]);
+
+        $value = (int) $validated['value'];
+
+        if ($value === 0) {
+            Rating::where('user_id', $request->user()->id)
+                ->where('post_id', $post->id)
+                ->delete();
+        } else {
+            Rating::updateOrCreate(
+                [
+                    'user_id' => $request->user()->id,
+                    'post_id' => $post->id,
+                ],
+                [
+                    'value' => $value,
+                ]
+            );
+        }
+
+        return back()->with('success', 'Vot actualitzat');
+    }
+
+    public function meves(Request $request){
         $query = Post::where('user_id', $request->user()->id)
             ->with(['categories:id,name', 'mainCountry:code,name'])
             ->withCount([
@@ -230,7 +272,8 @@ class ExperienciaController extends Controller
             'content' => $isDraft ? 'nullable|string' : 'required|string',
             'experience_date' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
-            'location' => 'nullable|string|max:255',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'country_code' => 'nullable|string|exists:countries,code',
             'categories' => $isDraft ? 'nullable|array' : 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
@@ -243,7 +286,8 @@ class ExperienciaController extends Controller
             if ($post->image) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
             }
-            $validated['image'] = '/storage/' . $request->file('image')->store('experiences', 'public');
+            $optimizer = new ImageOptimizer();
+            $validated['image'] = '/storage/' . $optimizer->store($request->file('image'));
         } else {
             unset($validated['image']);
         }

@@ -72,7 +72,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin/users/create');
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -88,7 +88,7 @@ class UserController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('users.index')->with('success', 'Usuario creado correctamente.');
+        return redirect()->route('admin.users.index')->with('success', 'Usuario creado correctamente.');
     }
 
     /**
@@ -109,9 +109,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return Inertia::render('admin/users/show', [
-            'user' => $user,
-        ]);
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -119,9 +117,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return Inertia::render('admin/users/edit', [
-            'user' => $user,
-        ]);
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -144,7 +140,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente.');
+        return redirect()->route('admin.users.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
     /**
@@ -154,6 +150,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente.');
+        return redirect()->route('admin.users.index')->with('success', 'Usuario eliminado correctamente.');
     }
 }
