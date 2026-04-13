@@ -165,7 +165,7 @@ export default function MevesExperiencies({ experiences, filters }: Props) {
                                     {/* Thumbnail */}
                                     <div className="h-[72px] w-[100px] flex-shrink-0 overflow-hidden rounded-lg">
                                         {exp.image ? (
-                                            <img src={exp.image} alt={exp.title} className="h-full w-full object-cover" />
+                                            <img src={exp.image} alt={exp.title} loading="lazy" className="h-full w-full object-cover" />
                                         ) : (
                                             <div
                                                 className="flex h-full w-full items-center justify-center text-2xl"

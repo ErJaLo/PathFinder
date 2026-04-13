@@ -88,6 +88,11 @@ class User extends Authenticatable
         return $this->hasMany(Report::class);
     }
 
+    public function reportsReceived()
+    {
+        return $this->hasManyThrough(Report::class, Post::class);
+    }
+
     public function countriesVisited()
     {
         return $this->belongsToMany(Country::class, 'user_country', 'user_id', 'country_code', 'id', 'code');

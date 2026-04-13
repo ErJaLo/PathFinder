@@ -6,7 +6,6 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaisosController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\AdminStatsController;
 use App\Http\Controllers\ReportsController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -45,9 +44,13 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::get("category/{category}/edit", [CategoryController::class, "edit"])->name("admin.category.edit");
     Route::put("category/{category}", [CategoryController::class, "update"])->name("admin.category.update");
 
-    Route::get("summary-stats", [AdminStatsController::class, 'summaryStats'])->name("admin.summaryStats");
-
-    Route::get("reports", [ReportsController::class, "index"])->name("reports");
+    Route::get("reports", [ReportsController::class, "index"])->name("admin.reports.index");
+    Route::put("reports/{report}/resolve", [ReportsController::class, "acceptStatus"])->name("admin.reports.accepted");
+    Route::put("reports/{report}/cancel-post", [ExperienciaController::class, "rejectedStatus"])->name("admin.reports.cancel-post");
+    Route::put("reports/{report}/active-post", [ExperienciaController::class, "acceptedStatus"])->name("admin.reports.active-post");
+    Route::put("reports/{report}/aprove-post", [ReportsController::class, "rejectedStatus"])->name("admin.reports.aprove-post");
+    Route::get("reports/detail/{report}", [ReportsController::class, "show"])->name("admin.reports.detail");
+    Route::post("reports/delete/{report}", [ReportsController::class, "destroy"])->name("admin.report.delete");
 });
 
 require __DIR__ . '/settings.php';

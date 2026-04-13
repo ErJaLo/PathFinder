@@ -23,6 +23,8 @@ export type Experience = {
     experience_date: string;
     created_at: string;
     status: 'draft' | 'published' | 'rejected';
+    latitude?: number | null;
+    longitude?: number | null;
     user: ExperienceAuthor;
     categories: ExperienceCategory[];
     main_country: ExperienceCountry | null;

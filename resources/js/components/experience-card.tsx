@@ -71,6 +71,7 @@ export function ExperienceCard({ experience, size = 'default', layout = 'vertica
                     <img
                         src={experience.image}
                         alt={experience.title}
+                        loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-400 group-hover:scale-105"
                     />
                 ) : (

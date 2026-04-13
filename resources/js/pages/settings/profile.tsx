@@ -21,7 +21,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     });
 
     return (
-        <div className="min-h-screen bg-pf-bg-2 text-pf-text dark:bg-pf-bg-dark dark:text-pf-text-dark">
+        <div className="min-h-screen bg-pf-bg text-pf-text dark:bg-pf-bg-dark dark:text-pf-text-dark">
             <Head title="El meu perfil" />
             <UserHeader user={auth.user} />
         

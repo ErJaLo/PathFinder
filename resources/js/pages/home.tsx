@@ -1,8 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ArrowRight, ThumbsUp } from 'lucide-react';
 import MainLayout from '@/layouts/main-layout';
 import { ExperienceCard } from '@/components/experience-card';
-import type { Experience } from '@/types';
+import type { Experience, Auth } from '@/types';
 
 type Props = {
     featured: Experience | null;
@@ -13,6 +13,8 @@ type Props = {
 const heroGradient = 'linear-gradient(135deg, #1A5FA8 0%, #0C4880 40%, #E87D2C 100%)';
 
 export default function Home({ featured, experiences, canRegister }: Props) {
+    const { auth } = usePage<{ auth: Auth }>().props;
+    const isGuest = !auth?.user;
     return (
         <MainLayout>
             <Head title="PathFinder — Experiències de viatges" />
@@ -47,7 +49,7 @@ export default function Home({ featured, experiences, canRegister }: Props) {
                         >
                             Explorar experiències
                         </Link>
-                        {canRegister && (
+                        {canRegister && isGuest && (
                             <Link
                                 href="/register"
                                 className="rounded-full border-[1.5px] border-pf-border-2 px-6 py-[11px] text-sm font-medium text-pf-text-2 transition-all hover:border-pf-primary hover:bg-pf-primary-l hover:text-pf-primary dark:border-pf-border-2dark dark:text-pf-text-2dark dark:hover:border-pf-primary-dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark"

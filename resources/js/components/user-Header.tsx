@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import React, { useState } from 'react';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
+import { UserDropdown } from '@/components/user-dropdown';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import type { User } from '@/types/auth';
@@ -32,9 +33,9 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
             className="h-10 w-10 rounded-lg object-cover"
           />
         </Link>
-        <div>
+        <Link href="/" className="flex-shrink-0">
           <div className="header-logo-text font-serif font-bold text-lg leading-tight">PathFinder</div>
-        </div>
+        </Link>
       </div>
 
       {/* Desktop nav */}
@@ -85,13 +86,8 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
             ? <HiOutlineSun className="w-6 h-6 text-pf-primary-dark" />
             : <HiOutlineMoon className="w-6 h-6 text-pf-primary-dark" />}
         </button>
-        <div className="header-user flex items-center gap-2">
-          <div className="header-user-ava w-8 h-8 rounded-full bg-pf-accent-l flex items-center justify-center font-bold text-pf-accent text-sm">
-            {initials}
-          </div>
-          <div className="hidden md:block">
-            <div className="header-user-name text-sm font-medium text-white/90">{user.name}</div>
-          </div>
+        <div className="header-user flex items-center">
+            <UserDropdown user={user} initials={initials} />
         </div>
         
         {/* Mobile menu toggle */}

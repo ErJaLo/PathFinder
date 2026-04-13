@@ -1,6 +1,6 @@
 import { router } from '@inertiajs/react';
 import { ImagePlus, X, Save, Send, MapPin, AlertTriangle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import InputError from '@/components/input-error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import type { Experience, ExperienceCategory, ExperienceCountry } from '@/types';
+
+// Lazy load map to avoid SSR issues with Leaflet
+const MapPicker = lazy(() => import('@/components/map-picker').then((m) => ({ default: m.MapPicker })));
 
 type Props = {
     experience?: Experience;
@@ -21,7 +24,8 @@ type FormData = {
     experience_date: string;
     image: File | null;
     country_code: string;
-    location: string;
+    latitude: number | null;
+    longitude: number | null;
     categories: number[];
     status: 'draft' | 'published';
 };
@@ -42,7 +46,8 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
         experience_date: experience?.experience_date?.split('T')[0] ?? '',
         image: null,
         country_code: experience?.main_country?.code ?? '',
-        location: '',
+        latitude: experience?.latitude != null ? Number(experience.latitude) : null,
+        longitude: experience?.longitude != null ? Number(experience.longitude) : null,
         categories: experience?.categories.map((c) => c.id) ?? [],
         status: (experience?.status as 'draft' | 'published') ?? 'published',
     });
@@ -235,24 +240,33 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     </div>
                 </div>
 
-                {/* ── Location ── */}
+                {/* ── Map location ── */}
                 <div className="space-y-2">
-                    <Label htmlFor="location">
+                    <Label>
                         <MapPin className="mr-1 inline h-3.5 w-3.5" />
-                        Localitzacio
+                        Ubicacio al mapa
                     </Label>
-                    <Input
-                        id="location"
-                        type="text"
-                        value={formData.location}
-                        onChange={(e) => setField('location', e.target.value)}
-                        placeholder="Ex: Annapurna Base Camp, Nepal"
-                        className="h-10"
-                    />
-                    <p className="text-[11px] text-pf-text-3 dark:text-pf-text-3dark">
-                        Indica el lloc aproximat de l&apos;experiencia (ciutat, regio, punt d&apos;interes...)
-                    </p>
-                    <InputError message={errors.location} />
+                    <Suspense fallback={
+                        <div className="flex h-[280px] items-center justify-center rounded-xl border border-pf-border bg-pf-surface-2 dark:border-pf-border-dark dark:bg-pf-surface-2dark">
+                            <Spinner className="h-6 w-6" />
+                        </div>
+                    }>
+                        <MapPicker
+                            value={formData.latitude != null && formData.longitude != null
+                                ? { lat: formData.latitude, lng: formData.longitude }
+                                : null
+                            }
+                            onChange={(coords) => {
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    latitude: coords?.lat ?? null,
+                                    longitude: coords?.lng ?? null,
+                                }));
+                            }}
+                        />
+                    </Suspense>
+                    <InputError message={errors.latitude} />
+                    <InputError message={errors.longitude} />
                 </div>
 
                 {/* ── Actions ── */}
