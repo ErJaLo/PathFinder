@@ -23,7 +23,7 @@ export default function ConfirmPassword() {
                             <PasswordInput
                                 id="password"
                                 name="password"
-                                placeholder="Password"
+                                placeholder="Contrasenya"
                                 autoComplete="current-password"
                                 autoFocus
                             />

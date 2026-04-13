@@ -21,13 +21,17 @@ export default function Register() {
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
                 disableWhileProcessing
-                className="flex flex-col gap-6"
+                className="flex flex-col gap-5"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                        <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
+                            <div className="border-b border-pf-border px-5 py-3 text-[11px] font-semibold uppercase tracking-wider text-pf-text-2 dark:border-pf-border-dark dark:text-pf-text-2dark">
+                                Registre
+                            </div>
+                            <div className="grid gap-5 p-5">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="name" className="text-pf-text-2 dark:text-pf-text-2dark">Nom</Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -36,7 +40,8 @@ export default function Register() {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Full name"
+                                    placeholder="Nom complet"
+                                    className="h-10 rounded-lg border-pf-border bg-pf-surface-2 text-pf-text placeholder:text-pf-text-3 focus-visible:border-pf-primary focus-visible:ring-pf-primary/20 dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-dark dark:placeholder:text-pf-text-3dark dark:focus-visible:border-pf-primary-dark dark:focus-visible:ring-pf-primary-dark/20"
                                 />
                                 <InputError
                                     message={errors.name}
@@ -45,7 +50,7 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email" className="text-pf-text-2 dark:text-pf-text-2dark">Email</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -53,27 +58,29 @@ export default function Register() {
                                     tabIndex={2}
                                     autoComplete="email"
                                     name="email"
-                                    placeholder="email@example.com"
+                                    placeholder="correu@exemple.com"
+                                    className="h-10 rounded-lg border-pf-border bg-pf-surface-2 text-pf-text placeholder:text-pf-text-3 focus-visible:border-pf-primary focus-visible:ring-pf-primary/20 dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-dark dark:placeholder:text-pf-text-3dark dark:focus-visible:border-pf-primary-dark dark:focus-visible:ring-pf-primary-dark/20"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label htmlFor="password" className="text-pf-text-2 dark:text-pf-text-2dark">Contrasenya</Label>
                                 <PasswordInput
                                     id="password"
                                     required
                                     tabIndex={3}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Contrasenya"
+                                    className="h-10 rounded-lg border-pf-border bg-pf-surface-2 text-pf-text placeholder:text-pf-text-3 focus-visible:border-pf-primary focus-visible:ring-pf-primary/20 dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-dark dark:placeholder:text-pf-text-3dark dark:focus-visible:border-pf-primary-dark dark:focus-visible:ring-pf-primary-dark/20"
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Confirm password
+                                    Confirma la contrasenya
                                 </Label>
                                 <PasswordInput
                                     id="password_confirmation"
@@ -81,7 +88,8 @@ export default function Register() {
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirm password"
+                                    placeholder="Confirma la contrasenya"
+                                    className="h-10 rounded-lg border-pf-border bg-pf-surface-2 text-pf-text placeholder:text-pf-text-3 focus-visible:border-pf-primary focus-visible:ring-pf-primary/20 dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-dark dark:placeholder:text-pf-text-3dark dark:focus-visible:border-pf-primary-dark dark:focus-visible:ring-pf-primary-dark/20"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -90,19 +98,24 @@ export default function Register() {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full"
+                                className="mt-2 h-10 w-full rounded-lg border border-pf-primary bg-pf-primary text-white hover:bg-pf-primary-h dark:border-pf-primary-dark dark:bg-pf-primary-dark dark:hover:bg-pf-primary"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
                                 {processing && <Spinner />}
-                                Create account
+                                Crea el compte
                             </Button>
                         </div>
+                        </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
-                            Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={6}>
-                                Log in
+                        <div className="rounded-xl border border-pf-border bg-pf-surface px-4 py-3 text-center text-sm text-pf-text-3 shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark dark:text-pf-text-3dark">
+                            Ja tens compte?{' '}
+                            <TextLink
+                                href={login()}
+                                tabIndex={6}
+                                className="text-pf-primary decoration-pf-primary/30 hover:text-pf-primary-h dark:text-pf-primary-dark dark:decoration-pf-primary-dark/40 dark:hover:text-pf-primary"
+                            >
+                                Inicia sessió
                             </TextLink>
                         </div>
                     </>

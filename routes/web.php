@@ -36,7 +36,8 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
         ->whereNumber('x')
         ->whereNumber('y')
         ->name('admin.users.getUsers');
-    Route::patch('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
     Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
     Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");

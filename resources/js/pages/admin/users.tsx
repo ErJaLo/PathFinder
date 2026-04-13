@@ -1,9 +1,8 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { route } from 'ziggy-js';
 import Summary from '@/components/admin/summary';
 import { DataPagination } from '@/components/ui/data-pagination';
-import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -37,21 +36,17 @@ function getInitials(name: string): string {
 const STATUS_LABEL: Record<string, string> = {
     active: 'Actiu',
     inactive: 'Inactiu',
-    // deleted: 'Baixa',
 };
 
 const STATUS_STYLES: Record<string, string> = {
     active: 'bg-pf-accent-l text-pf-accent-h dark:bg-pf-accent-ldark dark:text-pf-accent-dark',
     inactive:
         'bg-pf-amber-l text-pf-amber-dark dark:bg-pf-amber-ldark dark:text-pf-amber-dark',
-    deleted:
-        'bg-pf-border-2 text-pf-border-dark line-through opacity-60 dark:bg-pf-border-2dark dark:text-pf-border-dark',
 };
 
 const DOT_STYLES: Record<string, string> = {
     active: 'bg-pf-accent dark:bg-pf-accent-dark',
     inactive: 'bg-pf-amber dark:bg-pf-amber-dark',
-    deleted: 'bg-pf-border-dark dark:bg-pf-border-2dark',
 };
 
 interface User {
@@ -60,7 +55,7 @@ interface User {
     email: string;
     created_at: string;
     role: 'admin' | 'user';
-    status: 'active' | 'inactive' | 'deleted';
+    status: 'active' | 'inactive';
     posts?: number;
 }
 
@@ -77,14 +72,14 @@ function ConfirmModal({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
             <div className="w-full max-w-sm rounded-xl border border-pf-border bg-pf-surface p-6 shadow-2xl dark:border-pf-border-dark dark:bg-pf-surface-dark">
                 <h2 className="mb-1 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                    Donar de baixa
+                    Canviar estat
                 </h2>
                 <p className="mb-6 text-sm text-pf-text-3 dark:text-pf-text-3dark">
-                    Segur que vols donar de baixa a{' '}
+                    Segur que vols {user.status === 'active' ? 'desactivar' : 'activar'}{' '}
                     <span className="font-medium text-pf-text dark:text-pf-text-dark">
                         {user.name}
                     </span>
-                    ? Aquesta acció no es pot desfer.
+                    ?
                 </p>
                 <div className="flex justify-end gap-2">
                     <button
@@ -97,7 +92,7 @@ function ConfirmModal({
                         onClick={() => onConfirm(user.id)}
                         className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
                     >
-                        Confirmar baixa
+                        Confirmar
                     </button>
                 </div>
             </div>
@@ -121,28 +116,14 @@ export default function AdminUsers() {
         search?: string;
         status?: string;
     };
-    console.log({ total, perPage, page });
     const [search, setSearch] = useState(prevSearch);
     const [statusFilter, setStatusFilter] = useState(prevStatus);
     const [confirmUser, setConfirmUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[]>(initialUsers);
-    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         setUsers(initialUsers);
     }, [initialUsers]);
-
-    // const filtered = useMemo(() => {
-    //     const q = search.toLowerCase();
-
-    //     return users.filter(
-    //         (u) =>
-    //             (!q ||
-    //                 u.name.toLowerCase().includes(q) ||
-    //                 u.email.toLowerCase().includes(q)) &&
-    //             (!statusFilter || u.status === statusFilter),
-    //     );
-    // }, [users, search, statusFilter]);
 
     const formPage = useForm({ page, perPage });
 
@@ -157,11 +138,11 @@ export default function AdminUsers() {
     const formSearch = useForm({ search: '', status: '' });
 
     function handleSearch() {
-        formSearch.transform(() => ({ 
+        formSearch.transform(() => ({
             page: 1,
             perPage,
             search,
-            status: statusFilter 
+            status: statusFilter,
         }));
         formSearch.get(route('admin.users.index'), {
             preserveScroll: true,
@@ -181,7 +162,12 @@ export default function AdminUsers() {
     function handleDeactivate(id: number) {
         setUsers((prev) =>
             prev.map((u) =>
-                u.id === id ? { ...u, status: 'deleted' as const } : u,
+                u.id === id
+                    ? {
+                          ...u,
+                          status: u.status === 'active' ? 'inactive' : 'active',
+                      }
+                    : u,
             ),
         );
         setConfirmUser(null);
@@ -304,7 +290,7 @@ export default function AdminUsers() {
                                 </tr>
                             ) : (
                                 users.map((user) => {
-                                    const isDeleted = user.status === 'deleted';
+                                    const isInactive = user.status === 'inactive';
                                     const { bg, fg } = getAvatarColors(
                                         user.name,
                                     );
@@ -313,7 +299,7 @@ export default function AdminUsers() {
                                     return (
                                         <tr
                                             key={user.id}
-                                            className={`transition-colors hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark ${isDeleted ? 'opacity-50' : ''}`}
+                                            className={`transition-colors hover:bg-pf-bg-2 dark:hover:bg-pf-bg-2dark ${isInactive ? 'opacity-70' : ''}`}
                                         >
                                             {/* User cell */}
                                             <td className="px-4 py-3">
@@ -381,7 +367,7 @@ export default function AdminUsers() {
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center gap-1">
                                                     <button
-                                                        disabled={isDeleted}
+                                                        disabled={false}
                                                         title="Veure experiències"
                                                         className="rounded-lg p-1.5 text-pf-text-3 transition-colors hover:bg-pf-bg-2 hover:text-pf-text disabled:cursor-not-allowed disabled:opacity-40 dark:text-pf-text-3dark dark:hover:bg-pf-bg-2dark dark:hover:text-pf-text-dark"
                                                     >
@@ -405,12 +391,12 @@ export default function AdminUsers() {
                                                     </button>
 
                                                     <button
-                                                        disabled={
-                                                            isDeleted ||
-                                                            user.role ===
-                                                                'admin'
+                                                        disabled={user.role === 'admin'}
+                                                        title={
+                                                            user.status === 'active'
+                                                                ? 'Desactivar'
+                                                                : 'Activar'
                                                         }
-                                                        title="Donar de baixa"
                                                         onClick={() =>
                                                             setConfirmUser(user)
                                                         }
@@ -424,7 +410,7 @@ export default function AdminUsers() {
                                                             strokeWidth="1.5"
                                                         >
                                                             <path
-                                                                d="M2 3h8M4 3V2h4v1M5 5v4M7 5v4"
+                                                                d="M2 6h8M6 2v8"
                                                                 strokeLinecap="round"
                                                             />
                                                         </svg>
