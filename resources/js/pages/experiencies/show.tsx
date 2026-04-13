@@ -11,8 +11,11 @@ import {
     CheckCircle,
     User,
 } from 'lucide-react';
+import { lazy, Suspense } from 'react';
 import MainLayout from '@/layouts/main-layout';
 import type { Experience, ExperienceAuthorDetail } from '@/types';
+
+const MapDisplay = lazy(() => import('@/components/map-display').then((m) => ({ default: m.MapDisplay })));
 
 type Props = {
     experience: Experience;
@@ -138,18 +141,22 @@ export default function ShowExperiencia({ experience, author }: Props) {
             <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[1fr_300px]">
                 {/* ── MAIN COLUMN ── */}
                 <div>
-                    {/* Map placeholder */}
-                    <div className="mb-6 overflow-hidden rounded-xl border border-pf-border dark:border-pf-border-dark">
-                        <div className="relative flex h-[200px] cursor-pointer items-center justify-center bg-gradient-to-br from-[#C0D8EE] to-[#8AB4D8] text-5xl transition-all hover:brightness-105 dark:from-[#1a3050] dark:to-[#0c2040]">
-                            🗺
-                            <div className="absolute inset-x-0 bottom-3 flex justify-center">
-                                <span className="rounded-full bg-white/90 px-4 py-1.5 text-xs font-medium text-pf-primary shadow-sm backdrop-blur-sm dark:bg-pf-surface-dark/90 dark:text-pf-primary-dark">
-                                    <MapPin className="mr-1 inline h-3 w-3" />
-                                    Mapa interactiu — properament
-                                </span>
-                            </div>
+                    {/* Map */}
+                    {experience.latitude != null && experience.longitude != null && (
+                        <div className="mb-6">
+                            <Suspense fallback={
+                                <div className="flex h-[220px] items-center justify-center rounded-xl border border-pf-border bg-pf-surface-2 dark:border-pf-border-dark dark:bg-pf-surface-2dark">
+                                    <span className="text-sm text-pf-text-3 dark:text-pf-text-3dark">Carregant mapa...</span>
+                                </div>
+                            }>
+                                <MapDisplay
+                                    lat={Number(experience.latitude)}
+                                    lng={Number(experience.longitude)}
+                                    label={experience.title}
+                                />
+                            </Suspense>
                         </div>
-                    </div>
+                    )}
 
                     {/* Content */}
                     <article className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
@@ -330,8 +337,11 @@ export default function ShowExperiencia({ experience, author }: Props) {
                                     <MapPin className="h-3.5 w-3.5" />
                                     Coordenades
                                 </span>
-                                <span className="text-[11px] italic text-pf-text-3 dark:text-pf-text-3dark">
-                                    Properament
+                                <span className="text-[11px] font-medium text-pf-text dark:text-pf-text-dark">
+                                    {experience.latitude != null && experience.longitude != null
+                                        ? `${Number(experience.latitude).toFixed(4)}°, ${Number(experience.longitude).toFixed(4)}°`
+                                        : <span className="italic text-pf-text-3 dark:text-pf-text-3dark">No disponible</span>
+                                    }
                                 </span>
                             </div>
                         </div>
