@@ -216,9 +216,7 @@ export default function ReportsPage(){
                             {/* Content */}
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <span className="px-2 py-0.5 text-xs font-bold uppercase tracking-wide bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 rounded">
-                                        {rep.reason || "ODI / DISCRIMINACIÓ"}
-                                    </span>
+                                  
                                     <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 rounded bg-red-50/50 dark:bg-transparent">
                                         Alta
                                     </span>

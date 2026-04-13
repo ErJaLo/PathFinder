@@ -124,9 +124,6 @@ export default function ReportDetails() {
                     </div>
                     <div className="flex flex-col gap-2">
                         <div className="flex items-center gap-3">
-                            <span className="px-2.5 py-1 text-xs font-bold uppercase tracking-wide bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400 rounded-md">
-                                {r.reason}
-                            </span>
                             <span className="px-2.5 py-1 text-xs font-bold uppercase text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-md">
                                 Gravetat alta
                             </span>
