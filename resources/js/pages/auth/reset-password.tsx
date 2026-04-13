@@ -53,7 +53,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
                                 autoFocus
-                                placeholder="Password"
+                                placeholder="Contrasenya"
                             />
                             <InputError message={errors.password} />
                         </div>
@@ -67,7 +67,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder="Confirm password"
+                                placeholder="Confirma la contrasenya"
                             />
                             <InputError
                                 message={errors.password_confirmation}

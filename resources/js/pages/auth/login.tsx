@@ -33,13 +33,17 @@ export default function Login({
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
+                className="flex flex-col gap-5"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                        <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
+                            <div className="border-b border-pf-border px-5 py-3 text-[11px] font-semibold uppercase tracking-wider text-pf-text-2 dark:border-pf-border-dark dark:text-pf-text-2dark">
+                                Accés
+                            </div>
+                            <div className="grid gap-5 p-5">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="email" className="text-pf-text-2 dark:text-pf-text-2dark">Email</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -48,21 +52,22 @@ export default function Login({
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="email@example.com"
+                                    placeholder="correu@exemple.com"
+                                    className="h-10 rounded-lg border-pf-border bg-pf-surface-2 text-pf-text placeholder:text-pf-text-3 focus-visible:border-pf-primary focus-visible:ring-pf-primary/20 dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-dark dark:placeholder:text-pf-text-3dark dark:focus-visible:border-pf-primary-dark dark:focus-visible:ring-pf-primary-dark/20"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label htmlFor="password" className="text-pf-text-2 dark:text-pf-text-2dark">Contrasenya</Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
-                                            className="ml-auto text-sm"
+                                            className="ml-auto text-sm text-pf-primary decoration-pf-primary/30 hover:text-pf-primary-h dark:text-pf-primary-dark dark:decoration-pf-primary-dark/40 dark:hover:text-pf-primary"
                                             tabIndex={5}
                                         >
-                                            Forgot password?
+                                            Has oblidat la contrasenya?
                                         </TextLink>
                                     )}
                                 </div>
@@ -72,7 +77,8 @@ export default function Login({
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder="Contrasenya"
+                                    className="h-10 rounded-lg border-pf-border bg-pf-surface-2 text-pf-text placeholder:text-pf-text-3 focus-visible:border-pf-primary focus-visible:ring-pf-primary/20 dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-dark dark:placeholder:text-pf-text-3dark dark:focus-visible:border-pf-primary-dark dark:focus-visible:ring-pf-primary-dark/20"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -82,27 +88,33 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
+                                    className="border-pf-border data-checked:border-pf-primary data-checked:bg-pf-primary dark:border-pf-border-dark dark:data-checked:border-pf-primary-dark dark:data-checked:bg-pf-primary-dark"
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember" className="text-pf-text-2 dark:text-pf-text-2dark">Recorda'm</Label>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="mt-2 h-10 w-full rounded-lg border border-pf-primary bg-pf-primary text-white hover:bg-pf-primary-h dark:border-pf-primary-dark dark:bg-pf-primary-dark dark:hover:bg-pf-primary"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
                             >
                                 {processing && <Spinner />}
-                                Log in
+                                Inicia sessió
                             </Button>
+                        </div>
                         </div>
 
                         {canRegister && (
-                            <div className="text-center text-sm text-muted-foreground">
-                                Don't have an account?{' '}
-                                <TextLink href={register()} tabIndex={5}>
-                                    Sign up
+                            <div className="rounded-xl border border-pf-border bg-pf-surface px-4 py-3 text-center text-sm text-pf-text-3 shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark dark:text-pf-text-3dark">
+                                No tens compte?{' '}
+                                <TextLink
+                                    href={register()}
+                                    tabIndex={5}
+                                    className="text-pf-primary decoration-pf-primary/30 hover:text-pf-primary-h dark:text-pf-primary-dark dark:decoration-pf-primary-dark/40 dark:hover:text-pf-primary"
+                                >
+                                    Registra't
                                 </TextLink>
                             </div>
                         )}
@@ -111,7 +123,7 @@ export default function Login({
             </Form>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div className="rounded-lg border border-green-300/50 bg-green-50 px-3 py-2 text-center text-sm font-medium text-green-700 dark:border-green-500/40 dark:bg-green-500/10 dark:text-green-300">
                     {status}
                 </div>
             )}

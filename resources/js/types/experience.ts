@@ -30,6 +30,7 @@ export type Experience = {
     main_country: ExperienceCountry | null;
     ratings_up_count: number;
     ratings_down_count: number;
+    user_rating_value?: -1 | 0 | 1 | null;
 };
 
 export type ExperienceAuthorDetail = {

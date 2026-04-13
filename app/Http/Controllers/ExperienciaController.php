@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\Post;
+use App\Models\Rating;
 use App\Models\Report;
 use App\Models\User;
 use App\Services\ImageOptimizer;
@@ -145,13 +146,23 @@ class ExperienciaController extends Controller
         return redirect()->route('experiencies.edit', $post)->with('success', 'Esborrany guardat!');
     }
 
-    public function show(Post $post)
+    public function show(Request $request, Post $post)
     {
         $post->load(['categories:id,name', 'mainCountry:code,name']);
         $post->loadCount([
             'ratings as ratings_up_count' => fn($q) => $q->where('value', 1),
             'ratings as ratings_down_count' => fn($q) => $q->where('value', -1),
         ]);
+
+        $userRatingValue = null;
+
+        if ($request->user()) {
+            $userRatingValue = Rating::where('user_id', $request->user()->id)
+                ->where('post_id', $post->id)
+                ->value('value');
+        }
+
+        $post->setAttribute('user_rating_value', $userRatingValue);
 
         // Author with stats
         $author = User::where('id', $post->user_id)
@@ -177,8 +188,34 @@ class ExperienciaController extends Controller
         ]);
     }
 
-    public function meves(Request $request)
+    public function rate(Request $request, Post $post)
     {
+        $validated = $request->validate([
+            'value' => ['required', 'integer', 'in:-1,0,1'],
+        ]);
+
+        $value = (int) $validated['value'];
+
+        if ($value === 0) {
+            Rating::where('user_id', $request->user()->id)
+                ->where('post_id', $post->id)
+                ->delete();
+        } else {
+            Rating::updateOrCreate(
+                [
+                    'user_id' => $request->user()->id,
+                    'post_id' => $post->id,
+                ],
+                [
+                    'value' => $value,
+                ]
+            );
+        }
+
+        return back()->with('success', 'Vot actualitzat');
+    }
+
+    public function meves(Request $request){
         $query = Post::where('user_id', $request->user()->id)
             ->with(['categories:id,name', 'mainCountry:code,name'])
             ->withCount([

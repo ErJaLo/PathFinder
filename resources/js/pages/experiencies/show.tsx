@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import {
     ArrowLeft,
     ThumbsUp,
@@ -11,6 +11,9 @@ import {
     CheckCircle,
     User,
 } from 'lucide-react';
+import { useState } from 'react';
+import { route } from 'ziggy-js';
+import ModalReport from '@/components/modals/modal-report';
 import { lazy, Suspense } from 'react';
 import MainLayout from '@/layouts/main-layout';
 import type { Experience, ExperienceAuthorDetail } from '@/types';
@@ -25,39 +28,118 @@ type Props = {
 function countryFlag(code: string): string {
     const base = 0x1f1e6 - 65;
     const upper = code.toUpperCase();
-    return String.fromCodePoint(upper.charCodeAt(0) + base, upper.charCodeAt(1) + base);
+    return String.fromCodePoint(
+        upper.charCodeAt(0) + base,
+        upper.charCodeAt(1) + base,
+    );
 }
 
 function formatNum(n: number): string {
     if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    
     return String(n);
 }
 
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+    return date.toLocaleDateString('ca-ES', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+    });
 }
 
 function getInitials(name: string): string {
     return name
-        .split(' ')
-        .map((w) => w[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
 }
 
-const heroGradient = 'linear-gradient(135deg, #1A5FA8 0%, #0C4880 40%, #0a3060 100%)';
+const heroGradient =
+    'linear-gradient(135deg, #1A5FA8 0%, #0C4880 40%, #0a3060 100%)';
 
 export default function ShowExperiencia({ experience, author }: Props) {
-    const score = experience.ratings_up_count - experience.ratings_down_count;
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [isVoting, setIsVoting] = useState(false);
+    const [voteState, setVoteState] = useState({
+        up: experience.ratings_up_count,
+        down: experience.ratings_down_count,
+        userVote: (experience.user_rating_value ?? 0) as -1 | 0 | 1,
+    });
+
+    const score = voteState.up - voteState.down;
+
+    const applyVote = (up: number, down: number, from: -1 | 0 | 1, to: -1 | 0 | 1) => {
+        let nextUp = up;
+        let nextDown = down;
+
+        if (from === 1) {
+            nextUp -= 1;
+        }
+
+        if (from === -1) {
+            nextDown -= 1;
+        }
+
+        if (to === 1) {
+            nextUp += 1;
+        }
+
+        if (to === -1) {
+            nextDown += 1;
+        }
+
+        return { up: nextUp, down: nextDown };
+    };
+
+    const submitVote = (target: -1 | 1) => {
+        if (isVoting) {
+            return;
+        }
+
+        const previousVote = voteState.userVote;
+        const nextVote: -1 | 0 | 1 = previousVote === target ? 0 : target;
+        const optimistic = applyVote(
+            voteState.up,
+            voteState.down,
+            previousVote,
+            nextVote,
+        );
+
+        setVoteState({ ...optimistic, userVote: nextVote });
+        setIsVoting(true);
+
+        router.put(
+            route('experiencies.rating', experience.id),
+            { value: nextVote },
+            {
+                preserveScroll: true,
+                onError: () => {
+                    setVoteState((current) => ({
+                        ...current,
+                        up: voteState.up,
+                        down: voteState.down,
+                        userVote: previousVote,
+                    }));
+                },
+                onFinish: () => {
+                    setIsVoting(false);
+                },
+            },
+        );
+    };
 
     return (
         <MainLayout>
             <Head title={`${experience.title} — PathFinder`} />
-
             {/* ══════ HERO ══════ */}
-            <section className="relative -mx-6 -mt-8 overflow-hidden" style={{ height: 420 }}>
+            <section
+                className="relative -mx-6 -mt-8 overflow-hidden"
+                style={{ height: 420 }}
+            >
                 {experience.image ? (
                     <img
                         src={experience.image}
@@ -90,7 +172,8 @@ export default function ShowExperiencia({ experience, author }: Props) {
                         ))}
                         {experience.main_country && (
                             <span className="rounded-full bg-pf-accent px-3 py-0.5 text-[11px] font-medium text-white">
-                                {countryFlag(experience.main_country.code)} {experience.main_country.name}
+                                {countryFlag(experience.main_country.code)}{' '}
+                                {experience.main_country.name}
                             </span>
                         )}
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-green-400/30 bg-green-500/20 px-2.5 py-0.5 text-[11px] font-medium text-green-300">
@@ -100,7 +183,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
                     </div>
 
                     {/* Title */}
-                    <h1 className="animate-fade-up mb-3 max-w-3xl text-[clamp(24px,4vw,42px)] font-bold leading-[1.2] tracking-tight text-white">
+                    <h1 className="animate-fade-up mb-3 max-w-3xl text-[clamp(24px,4vw,42px)] leading-[1.2] font-bold tracking-tight text-white">
                         {experience.title}
                     </h1>
 
@@ -119,15 +202,15 @@ export default function ShowExperiencia({ experience, author }: Props) {
                         {experience.main_country && (
                             <span className="flex items-center gap-1.5">
                                 <Globe className="h-3.5 w-3.5 opacity-80" />
-                                {countryFlag(experience.main_country.code)} {experience.main_country.name}
+                                {countryFlag(experience.main_country.code)}{' '}
+                                {experience.main_country.name}
                             </span>
                         )}
                     </div>
                 </div>
             </section>
-
             {/* ══════ BACK BUTTON ══════ */}
-            <div className="mb-4 mt-6">
+            <div className="mt-6 mb-4">
                 <Link
                     href="/explorar"
                     className="inline-flex items-center gap-1.5 rounded-full border border-pf-border px-3.5 py-1.5 text-[13px] font-medium text-pf-text-3 transition-all hover:border-pf-primary hover:bg-pf-primary-l hover:text-pf-primary dark:border-pf-border-dark dark:text-pf-text-3dark dark:hover:border-pf-primary-dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark"
@@ -136,7 +219,6 @@ export default function ShowExperiencia({ experience, author }: Props) {
                     Tornar
                 </Link>
             </div>
-
             {/* ══════ MAIN LAYOUT ══════ */}
             <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[1fr_300px]">
                 {/* ── MAIN COLUMN ── */}
@@ -161,15 +243,17 @@ export default function ShowExperiencia({ experience, author }: Props) {
                     {/* Content */}
                     <article className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
                         <div className="prose-pf px-6 py-7 text-[15px] leading-[1.8] text-pf-text-2 sm:px-8 dark:text-pf-text-2dark">
-                            {experience.content.split('\n').map((paragraph, i) => {
-                                const trimmed = paragraph.trim();
-                                if (!trimmed) return null;
-                                return (
-                                    <p key={i} className="mb-4 last:mb-0">
-                                        {trimmed}
-                                    </p>
-                                );
-                            })}
+                            {experience.content
+                                .split('\n')
+                                .map((paragraph, i) => {
+                                    const trimmed = paragraph.trim();
+                                    if (!trimmed) return null;
+                                    return (
+                                        <p key={i} className="mb-4 last:mb-0">
+                                            {trimmed}
+                                        </p>
+                                    );
+                                })}
                         </div>
                     </article>
                 </div>
@@ -178,7 +262,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
                 <aside className="sticky top-20 flex flex-col gap-4 max-lg:static">
                     {/* Author card */}
                     <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
-                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-pf-text-2 dark:border-pf-border-dark dark:text-pf-text-2dark">
+                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold tracking-wider text-pf-text-2 uppercase dark:border-pf-border-dark dark:text-pf-text-2dark">
                             Autor
                         </div>
                         <div className="p-4">
@@ -191,7 +275,10 @@ export default function ShowExperiencia({ experience, author }: Props) {
                                         {author.name}
                                     </div>
                                     <div className="text-[12px] text-pf-text-3 dark:text-pf-text-3dark">
-                                        Membre des de {new Date(author.created_at).getFullYear()}
+                                        Membre des de{' '}
+                                        {new Date(
+                                            author.created_at,
+                                        ).getFullYear()}
                                     </div>
                                 </div>
                             </div>
@@ -218,28 +305,46 @@ export default function ShowExperiencia({ experience, author }: Props) {
 
                     {/* Valoracio card */}
                     <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
-                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-pf-text-2 dark:border-pf-border-dark dark:text-pf-text-2dark">
+                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold tracking-wider text-pf-text-2 uppercase dark:border-pf-border-dark dark:text-pf-text-2dark">
                             Valoracio
                         </div>
                         <div className="p-4">
                             <div className="mb-3 flex items-center justify-center gap-3">
-                                <span className="flex items-center gap-1.5 rounded-full border border-pf-border px-3 py-1.5 text-sm font-medium text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark">
+                                <button
+                                    type="button"
+                                    onClick={() => submitVote(1)}
+                                    disabled={isVoting}
+                                    className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+                                        voteState.userVote === 1
+                                            ? 'border-pf-primary bg-pf-primary-l text-pf-primary dark:border-pf-primary-dark dark:bg-pf-primary-ldark dark:text-pf-primary-dark'
+                                            : 'border-pf-border text-pf-text-3 hover:border-pf-primary hover:text-pf-primary dark:border-pf-border-dark dark:text-pf-text-3dark dark:hover:border-pf-primary-dark dark:hover:text-pf-primary-dark'
+                                    }`}
+                                >
                                     <ThumbsUp className="h-3.5 w-3.5" />
-                                    {formatNum(experience.ratings_up_count)}
-                                </span>
+                                    {formatNum(voteState.up)}
+                                </button>
                                 <span className="text-xl font-bold text-pf-accent dark:text-pf-accent-dark">
-                                    {score >= 0 ? '+' : ''}{formatNum(score)}
+                                    {score >= 0 ? '+' : ''}
+                                    {formatNum(score)}
                                 </span>
-                                <span className="flex items-center gap-1.5 rounded-full border border-pf-border px-3 py-1.5 text-sm font-medium text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark">
+                                <button
+                                    type="button"
+                                    onClick={() => submitVote(-1)}
+                                    disabled={isVoting}
+                                    className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+                                        voteState.userVote === -1
+                                            ? 'border-pf-accent bg-pf-accent-l text-pf-accent-h dark:border-pf-accent-dark dark:bg-pf-accent-ldark dark:text-pf-accent-dark'
+                                            : 'border-pf-border text-pf-text-3 hover:border-pf-accent hover:text-pf-accent dark:border-pf-border-dark dark:text-pf-text-3dark dark:hover:border-pf-accent-dark dark:hover:text-pf-accent-dark'
+                                    }`}
+                                >
                                     <ThumbsDown className="h-3.5 w-3.5" />
-                                    {formatNum(experience.ratings_down_count)}
-                                </span>
+                                    {formatNum(voteState.down)}
+                                </button>
                             </div>
                             <div className="border-t border-pf-border pt-3 dark:border-pf-border-dark">
                                 <button
-                                    disabled
-                                    className="flex w-full items-center justify-center gap-1.5 rounded-full border border-pf-border py-1.5 text-xs font-medium text-pf-text-3 opacity-50 dark:border-pf-border-dark dark:text-pf-text-3dark"
-                                    title="Properament"
+                                    onClick={() => setIsReportModalOpen(true)}
+                                    className="flex w-full items-center justify-center gap-1.5 rounded-full border border-pf-border py-1.5 text-xs font-medium text-pf-text-3 transition-colors hover:border-pf-primary hover:text-pf-primary dark:border-pf-border-dark dark:text-pf-text-3dark dark:hover:border-pf-primary-dark dark:hover:text-pf-primary-dark"
                                 >
                                     <AlertCircle className="h-3.5 w-3.5" />
                                     Reportar abus
@@ -250,7 +355,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
 
                     {/* Details card */}
                     <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
-                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-pf-text-2 dark:border-pf-border-dark dark:text-pf-text-2dark">
+                        <div className="border-b border-pf-border px-4 py-3 text-[11px] font-semibold tracking-wider text-pf-text-2 uppercase dark:border-pf-border-dark dark:text-pf-text-2dark">
                             Detalls
                         </div>
                         <div className="flex flex-col gap-3 p-4 text-[13px]">
@@ -286,7 +391,10 @@ export default function ShowExperiencia({ experience, author }: Props) {
                                         Pais
                                     </span>
                                     <span className="font-medium text-pf-text dark:text-pf-text-dark">
-                                        {countryFlag(experience.main_country.code)} {experience.main_country.name}
+                                        {countryFlag(
+                                            experience.main_country.code,
+                                        )}{' '}
+                                        {experience.main_country.name}
                                     </span>
                                 </div>
                             )}
@@ -298,7 +406,8 @@ export default function ShowExperiencia({ experience, author }: Props) {
                                     Puntuacio
                                 </span>
                                 <span className="font-bold text-pf-accent dark:text-pf-accent-dark">
-                                    {score >= 0 ? '+' : ''}{formatNum(score)}
+                                    {score >= 0 ? '+' : ''}
+                                    {formatNum(score)}
                                 </span>
                             </div>
 
@@ -348,6 +457,11 @@ export default function ShowExperiencia({ experience, author }: Props) {
                     </div>
                 </aside>
             </div>
+            <ModalReport
+                open={isReportModalOpen}
+                onOpenChange={setIsReportModalOpen}
+                postId={experience.id}
+            />{' '}
         </MainLayout>
     );
 }
