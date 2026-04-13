@@ -35,12 +35,28 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        $globalData = [
+            'totalReports' => 0
+        ];
+
+        // Si l'usuari és administrador o moderador, calculem el total de reports
+        if ($user && in_array($user->role, ['admin', 'moderator'])) {
+            $globalData['totalReports'] = \Illuminate\Support\Facades\DB::table('reports')->where('status', 'pending')->count();
+            $globalData["totalReportsResols"] =  \Illuminate\Support\Facades\DB::table('reports')->whereIn('status', ['accepted', 'dismissed'])->count();
+            $globalData["totalReportsDescartats"] =  \Illuminate\Support\Facades\DB::table('reports')->where('status', 'dismissed')->count();
+            $globalData["totalCategories"] = \Illuminate\Support\Facades\DB::table('categories')->count();
+            $globalData["totalUsuaris"]  = \Illuminate\Support\Facades\DB::table('users')->count();
+            $globalData["totalExperiencies"]  = \Illuminate\Support\Facades\DB::table('posts')->count();
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
             ],
+            'globalData' => $globalData,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [
                 'success' => $request->session()->get('success'),
