@@ -46,8 +46,8 @@ export function MapDisplay({ lat, lng, label, height = 220 }: Props) {
     }, [lat, lng, label]);
 
     return (
-        <div className="overflow-hidden rounded-xl border border-pf-border dark:border-pf-border-dark">
-            <div ref={containerRef} style={{ height, width: '100%' }} />
+        <div className="isolate overflow-hidden rounded-xl border border-pf-border dark:border-pf-border-dark">
+            <div ref={containerRef} style={{ height, width: '100%' }} className="z-0" />
         </div>
     );
 }

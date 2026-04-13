@@ -80,8 +80,8 @@ export function MapPicker({ value, onChange, height = 280 }: Props) {
     };
 
     return (
-        <div className="overflow-hidden rounded-xl border border-pf-border dark:border-pf-border-dark">
-            <div ref={containerRef} style={{ height, width: '100%' }} />
+        <div className="isolate overflow-hidden rounded-xl border border-pf-border dark:border-pf-border-dark">
+            <div ref={containerRef} style={{ height, width: '100%' }} className="z-0" />
             <div className="flex items-center justify-between bg-pf-surface-2 px-3 py-1.5 text-[11px] text-pf-text-3 dark:bg-pf-surface-2dark dark:text-pf-text-3dark">
                 {value ? (
                     <span>{value.lat.toFixed(5)}°, {value.lng.toFixed(5)}°</span>
