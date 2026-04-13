@@ -12,7 +12,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/explorar', [ExperienciaController::class, 'index'])->name('explorar.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
     Route::get('/settings/experiences', [ExperienciaController::class, 'meves'])->name('experiencies.meves');
     Route::get('/experiencies/{post}/editar', [ExperienciaController::class, 'edit'])->name('experiencies.edit');
     Route::put('/experiencies/{post}', [ExperienciaController::class, 'update'])->name('experiencies.update');
