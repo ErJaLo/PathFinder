@@ -62,7 +62,7 @@ class ExperienciaController extends Controller
             ->whereHas('posts')
             ->orderByDesc('posts_count')
             ->limit(5)
-            ->get(['code', 'name']);
+            ->get(['code', 'name', 'img']);
 
         $topUsers = User::withCount('posts')
             ->whereHas('posts')
