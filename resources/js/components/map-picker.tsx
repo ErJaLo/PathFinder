@@ -48,7 +48,10 @@ export function MapPicker({ value, onChange, height = 280 }: Props) {
         }
 
         map.on('click', (e: L.LeafletMouseEvent) => {
-            const coords = { lat: e.latlng.lat, lng: e.latlng.lng };
+            // Normalize longitude to -180..180 (Leaflet allows clicking beyond when world wraps)
+            let lng = e.latlng.lng;
+            lng = ((lng + 180) % 360 + 360) % 360 - 180;
+            const coords = { lat: e.latlng.lat, lng };
 
             if (markerRef.current) {
                 markerRef.current.setLatLng(e.latlng);
