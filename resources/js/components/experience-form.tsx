@@ -97,7 +97,9 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
             {Object.keys(errors).length > 0 && (
                 <div className="mb-6 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
                     <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-                    Per publicar, cal omplir els camps obligatoris (titol, contingut i categories).
+                    {errors.title || errors.content || errors.categories
+                        ? 'Per publicar, cal omplir els camps obligatoris (titol, contingut i categories).'
+                        : "Hi ha errors al formulari. Revisa els camps marcats."}
                 </div>
             )}
 

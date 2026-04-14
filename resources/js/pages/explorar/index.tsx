@@ -30,6 +30,7 @@ type PaginatedData<T> = {
 type TrendingCountry = {
     code: string;
     name: string;
+    img?: string | null;
     posts_count: number;
 };
 
@@ -83,12 +84,6 @@ function countryFlag(code: string): string {
     const upper = code.toUpperCase();
     return String.fromCodePoint(upper.charCodeAt(0) + base, upper.charCodeAt(1) + base);
 }
-
-const countryIcons: Record<string, string> = {
-    JP: '🏯', MA: '🕌', PE: '🦙', ID: '🌋', IS: '🧊',
-    TH: '🛶', NP: '🏔', MX: '🌮', VN: '🏍', GR: '🏛',
-    ZA: '🦁', NA: '🦒', ET: '🏜', DE: '🏰',
-};
 
 const avatarColors = [
     { bg: 'bg-pf-primary-l dark:bg-pf-primary-ldark', text: 'text-pf-primary dark:text-pf-primary-dark' },
@@ -468,8 +463,12 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                                         <span className="text-[11px] text-pf-text-3 dark:text-pf-text-3dark" style={{ width: 16, textAlign: 'center' }}>
                                             {i + 1}
                                         </span>
-                                        <div className="flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-lg bg-pf-surface-2 text-xl dark:bg-pf-surface-2dark">
-                                            {countryIcons[country.code] ?? countryFlag(country.code)}
+                                        <div className="flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center overflow-hidden rounded-lg bg-pf-surface-2 dark:bg-pf-surface-2dark">
+                                            {country.img ? (
+                                                <img src={country.img} alt={country.name} className="h-full w-full object-cover" />
+                                            ) : (
+                                                <span className="text-xl">{countryFlag(country.code)}</span>
+                                            )}
                                         </div>
                                         <div className="flex-1 overflow-hidden">
                                             <div className="truncate text-[13px] font-medium text-pf-text dark:text-pf-text-dark">
