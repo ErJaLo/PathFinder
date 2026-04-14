@@ -31,5 +31,8 @@ php artisan key:gen
 ## Generacion BD (sqlite por defecto)
 php artisan migrate
 
+## Symlink para mostrar imagenes guardadas
+php artisan storage:link
+
 ## Ejecutar servidor
 composer run dev
