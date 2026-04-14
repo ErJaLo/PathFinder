@@ -19,7 +19,7 @@ export default function Home({ featured, experiences, canRegister }: Props) {
         <MainLayout>
             <Head title="PathFinder — Experiències de viatges" />
 
-            {/* ══════ HERO ══════ */}
+            {/* Hero */}
             <section className="relative mx-auto grid max-w-6xl items-center gap-12 py-12 lg:grid-cols-2 lg:gap-16 lg:py-8">
                 {/* Decorative circle */}
                 <div className="pointer-events-none absolute -right-20 -top-28 -z-10 hidden h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-pf-primary-l to-transparent opacity-60 lg:block dark:from-pf-primary-ldark" />
@@ -114,7 +114,7 @@ export default function Home({ featured, experiences, canRegister }: Props) {
                 </div>
             </section>
 
-            {/* ══════ ÚLTIMES EXPERIÈNCIES ══════ */}
+            {/* Latest experiences */}
             {experiences.length > 0 && (
                 <section className="mt-12 max-w-6xl lg:mt-16">
                     {/* Section header */}

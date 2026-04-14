@@ -148,7 +148,7 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
         <MainLayout>
             <Head title="Explorar experiencies — PathFinder" />
 
-            {/* ══════ COUNTRY TAGS STRIP (marquee) ══════ */}
+            {/* Country tags strip */}
             <div className="group/marquee -m-7 mb-6 flex items-center border-b border-pf-border dark:border-pf-border-dark">
                 {/* Fixed "Tots" button */}
                 <div className="flex-shrink-0 border-r border-pf-border py-2.5 pr-3 dark:border-pf-border-dark">
@@ -181,9 +181,9 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                 </div>
             </div>
 
-            {/* ══════ MAIN LAYOUT: FEED + SIDEBAR ══════ */}
+            {/* Main layout */}
             <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_300px]">
-                {/* ── FEED ── */}
+                {/* Feed */}
                 <div>
                     {/* Toolbar */}
                     <div className="mb-5 space-y-2.5">
@@ -446,7 +446,7 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                     )}
                 </div>
 
-                {/* ── SIDEBAR ── */}
+                {/* Sidebar */}
                 <aside className="sticky top-20 hidden flex-col gap-4 lg:flex">
                     {/* Trending countries */}
                     {trendingCountries.length > 0 && (

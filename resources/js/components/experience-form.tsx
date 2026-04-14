@@ -102,7 +102,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* ── Title ── */}
+                {/* Title */}
                 <div className="space-y-2">
                     <Label htmlFor="title">
                         Titol <span className="text-pf-accent">*</span>
@@ -118,7 +118,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.title} />
                 </div>
 
-                {/* ── Content ── */}
+                {/* Content */}
                 <div className="space-y-2">
                     <Label htmlFor="content">
                         Contingut <span className="text-pf-accent">*</span>
@@ -133,7 +133,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.content} />
                 </div>
 
-                {/* ── Image ── */}
+                {/* Image */}
                 <div className="space-y-2">
                     <Label>Imatge destacada</Label>
                     {imagePreview ? (
@@ -165,7 +165,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.image} />
                 </div>
 
-                {/* ── Categories ── */}
+                {/* Categories */}
                 <div className="space-y-2">
                     <Label>
                         Categories <span className="text-pf-accent">*</span>
@@ -192,7 +192,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.categories} />
                 </div>
 
-                {/* ── Country + Date ── */}
+                {/* Country + Date */}
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                         <Label htmlFor="country_code">Pais</Label>
@@ -226,7 +226,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     </div>
                 </div>
 
-                {/* ── Map location ── */}
+                {/* Map location */}
                 <div className="space-y-2">
                     <Label>
                         <MapPin className="mr-1 inline h-3.5 w-3.5" />
@@ -255,7 +255,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.longitude} />
                 </div>
 
-                {/* ── Actions ── */}
+                {/* Actions */}
                 <div className="flex items-center gap-3 border-t border-pf-border pt-6 dark:border-pf-border-dark">
                     <Button
                         type="submit"

@@ -137,7 +137,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
     return (
         <MainLayout>
             <Head title={`${experience.title} — PathFinder`} />
-            {/* ══════ HERO ══════ */}
+            {/* Hero */}
             <section
                 className="relative -mx-6 -mt-8 overflow-hidden"
                 style={{ height: 420 }}
@@ -211,7 +211,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
                     </div>
                 </div>
             </section>
-            {/* ══════ BACK BUTTON ══════ */}
+            {/* Back button */}
             <div className="mt-6 mb-4">
                 <Link
                     href="/explorar"
@@ -221,9 +221,9 @@ export default function ShowExperiencia({ experience, author }: Props) {
                     Tornar
                 </Link>
             </div>
-            {/* ══════ MAIN LAYOUT ══════ */}
+            {/* Main layout */}
             <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[1fr_300px]">
-                {/* ── MAIN COLUMN ── */}
+                {/* Main column */}
                 <div>
                     {/* Map */}
                     {experience.latitude != null && experience.longitude != null && (
@@ -260,7 +260,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
                     </article>
                 </div>
 
-                {/* ── SIDEBAR ── */}
+                {/* Sidebar */}
                 <aside className="sticky top-20 flex flex-col gap-4 max-lg:static">
                     {/* Author card */}
                     <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
