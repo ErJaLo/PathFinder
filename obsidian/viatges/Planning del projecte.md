@@ -224,7 +224,9 @@ Cada secció correspon a una branca de git independent. Les branques amb depend�
 
 ### Tasques
 - [x] **Frontend:** Menú de navegació responsiu (hamburguesa en mòbil) — `MainHeader` i `UserHeader`.
-- [x] **Frontend:** Peu de pàgina amb copyright (`MainFooter`).
+- [x] **Frontend:** Peu de pàgina amb copyright i links legals (`MainFooter`): Inici, Explorar, Contacte, Politica de privacitat, Termes i condicions, Politica de cookies.
+- [x] **Frontend:** Pagina Politica de privacitat (`/politica-privacitat`) amb 10 seccions legals.
+- [x] **Frontend:** Pagina Politica de cookies (`/politica-cookies`) amb detall de cookies, taula i tercers.
 - [ ] **Frontend:** Revisar i ajustar breakpoints per a mòbil, tablet i escriptori (test exhaustiu).
 - [ ] **Frontend:** Testejar en Firefox i Chrome (últimes versions estables).
 - [ ] **Frontend:** Qualitat Tailwind: organització, variables.
