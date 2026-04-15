@@ -23,6 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
+Route::inertia('/politica-cookies', 'legal/politica-cookies')->name('legal.politica-cookies');
+
+
 
 
 Route::get("/llocs", [PaisosController::class, "llistarPaisos"])->name("llocs");

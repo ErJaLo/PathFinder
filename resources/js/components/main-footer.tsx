@@ -11,7 +11,7 @@ export function MainFooter() {
         { label: 'Contacte', href: '#contacte' },
         { label: 'Avís legal', href: '#avis-legal' },
         { label: 'Termes i condicions', href: '#termes-condicions' },
-        { label: 'Política de cookies', href: '#politica-cookies' },
+        { label: 'Política de cookies', href: '/politica-cookies' },
     ];
 
     return (
