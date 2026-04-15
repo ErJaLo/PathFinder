@@ -1,150 +1,158 @@
 import { Head } from '@inertiajs/react';
-import MainLayout from '@/layouts/main-layout';
+import { MainHeader } from '@/components/main-header';
 
 export default function PoliticaPrivacitat() {
     return (
-        <MainLayout>
+        <>
             <Head title="Politica de privacitat — PathFinder" />
+            <MainHeader />
 
-            <div className="mx-auto w-full max-w-3xl">
-                <h1 className="mb-6 text-[clamp(22px,3vw,30px)] font-bold tracking-tight text-pf-text dark:text-pf-text-dark">
+            <main className="container mx-auto max-w-4xl space-y-8 px-4 py-12">
+                <h1 className="mb-8 text-3xl font-bold text-pf-text dark:text-pf-text-dark">
                     Politica de privacitat
                 </h1>
 
-                <div className="space-y-6 text-[15px] leading-relaxed text-pf-text-2 dark:text-pf-text-2dark">
+                <Section title="1. Responsable del tractament">
                     <p>
-                        Aquesta politica de privacitat descriu com PathFinder recull, utilitza i protegeix
-                        la informacio personal dels seus usuaris. En utilitzar la nostra plataforma, acceptes
-                        les practiques descrites en aquest document.
+                        El responsable del tractament de les dades personals es <strong className="text-pf-text dark:text-pf-text-dark">PathFinder</strong>,
+                        plataforma comunitaria per compartir experiencies de viatge. Per a qualsevol
+                        consulta relacionada amb la privacitat, pots contactar-nos a traves del
+                        formulari de contacte de la web.
                     </p>
+                    <p>
+                        Aquesta politica s&apos;aplica unicament al lloc web <strong className="text-pf-text dark:text-pf-text-dark">pathfinder.cat</strong> i
+                        compleix el Reglament General de Proteccio de Dades (RGPD) de la UE i la Llei de Serveis
+                        de la Societat de la Informacio (LSSI).
+                    </p>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            1. Responsable del tractament
-                        </h2>
-                        <p>
-                            El responsable del tractament de les dades personals es PathFinder,
-                            plataforma comunitaria per compartir experiencies de viatge. Per a qualsevol
-                            consulta relacionada amb la privacitat, pots contactar-nos a traves del
-                            formulari de contacte de la web.
-                        </p>
-                    </section>
+                <Section title="2. Dades que recollim">
+                    <p>Recollim les seguents dades personals:</p>
+                    <ul className="list-inside list-disc space-y-1.5 pl-2">
+                        <li><strong className="text-pf-text dark:text-pf-text-dark">Dades de registre:</strong> nom, correu electronic i contrasenya (xifrada amb bcrypt). Opcionalment, pais de residencia.</li>
+                        <li><strong className="text-pf-text dark:text-pf-text-dark">Contingut publicat:</strong> titol, text, imatges, categories, ubicacio (coordenades al mapa) i data de les experiencies.</li>
+                        <li><strong className="text-pf-text dark:text-pf-text-dark">Dades d&apos;interaccio:</strong> votacions (+1/-1) a experiencies i reports d&apos;abus amb motiu.</li>
+                        <li><strong className="text-pf-text dark:text-pf-text-dark">Dades tecniques:</strong> adreca IP, tipus de navegador i cookies de sessio.</li>
+                    </ul>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            2. Dades que recollim
-                        </h2>
-                        <p className="mb-2">Recollim les seguents dades personals:</p>
-                        <ul className="list-inside list-disc space-y-1 pl-2">
-                            <li><strong>Dades de registre:</strong> nom, correu electronic i contrasenya (xifrada).</li>
-                            <li><strong>Contingut publicat:</strong> titol, text, imatges, categories, ubicacio i coordenades de les experiencies.</li>
-                            <li><strong>Dades d&apos;interaccio:</strong> votacions (+1/-1) i reports d&apos;abus.</li>
-                            <li><strong>Dades tecniques:</strong> adreça IP, tipus de navegador i cookies de sessio.</li>
-                        </ul>
-                    </section>
+                <Section title="3. Finalitat del tractament">
+                    <p>Utilitzem les dades per a:</p>
+                    <ul className="list-inside list-disc space-y-1.5 pl-2">
+                        <li>Gestionar el registre i l&apos;autenticacio d&apos;usuaris (inclos 2FA).</li>
+                        <li>Permetre la creacio, edicio i visualitzacio d&apos;experiencies de viatge.</li>
+                        <li>Mostrar contingut personalitzat (experiencies destacades, filtres per pais o categoria).</li>
+                        <li>Gestionar el sistema de votacions i reports d&apos;abus.</li>
+                        <li>Administracio de la plataforma (gestio d&apos;usuaris, categories i moderacio).</li>
+                        <li>Millorar la plataforma i garantir-ne la seguretat.</li>
+                    </ul>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            3. Finalitat del tractament
-                        </h2>
-                        <p className="mb-2">Utilitzem les dades per a:</p>
-                        <ul className="list-inside list-disc space-y-1 pl-2">
-                            <li>Gestionar el registre i l&apos;autenticacio d&apos;usuaris.</li>
-                            <li>Permetre la creacio, edicio i visualitzacio d&apos;experiencies de viatge.</li>
-                            <li>Mostrar contingut personalitzat (experiencies destacades, filtres per pais o categoria).</li>
-                            <li>Gestionar el sistema de votacions i reports d&apos;abus.</li>
-                            <li>Millorar la plataforma i garantir-ne la seguretat.</li>
-                        </ul>
-                    </section>
+                <Section title="4. Base legal">
+                    <p>
+                        El tractament de les dades es basa en el <strong className="text-pf-text dark:text-pf-text-dark">consentiment</strong> de
+                        l&apos;usuari al registrar-se, l&apos;execucio del contracte de servei (termes d&apos;us) i
+                        l&apos;interes legitim per mantenir la seguretat de la plataforma i prevenir abusos.
+                    </p>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            4. Base legal
-                        </h2>
-                        <p>
-                            El tractament de les dades es basa en el consentiment de l&apos;usuari al registrar-se,
-                            l&apos;execucio del contracte de servei (termes d&apos;us) i l&apos;interes legitim per mantenir
-                            la seguretat de la plataforma.
-                        </p>
-                    </section>
+                <Section title="5. Conservacio de les dades">
+                    <p>
+                        Les dades personals es conserven mentre el compte d&apos;usuari estigui actiu.
+                        En cas d&apos;eliminacio del compte (disponible a <strong className="text-pf-text dark:text-pf-text-dark">Configuracio &gt; Perfil</strong>),
+                        les dades es suprimeixen de forma definitiva, incloent experiencies, votacions i reports associats.
+                        Es conserven unicament les dades necessaries per obligacio legal.
+                    </p>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            5. Conservacio de les dades
-                        </h2>
-                        <p>
-                            Les dades personals es conserven mentre el compte d&apos;usuari estigui actiu.
-                            En cas d&apos;eliminacio del compte, les dades es suprimeixen de forma definitiva,
-                            excepte aquelles que calgui conservar per obligacio legal.
-                        </p>
-                    </section>
+                <Section title="6. Drets dels usuaris">
+                    <p>Tens dret a:</p>
+                    <div className="mt-2 overflow-x-auto">
+                        <table className="w-full text-left text-sm">
+                            <thead className="border-b border-pf-border text-xs uppercase text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark">
+                                <tr>
+                                    <th className="px-4 py-3 font-semibold">Dret</th>
+                                    <th className="px-4 py-3 font-semibold">Descripcio</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-pf-border dark:divide-pf-border-dark">
+                                {[
+                                    { right: 'Acces', desc: 'Consultar les teves dades personals.' },
+                                    { right: 'Rectificacio', desc: 'Modificar les dades incorrectes o incompletes.' },
+                                    { right: 'Supressio', desc: "Sol·licitar l'eliminacio del teu compte i dades." },
+                                    { right: 'Portabilitat', desc: 'Obtenir una copia de les teves dades en format estructurat.' },
+                                    { right: 'Oposicio', desc: 'Oposar-te al tractament de les teves dades.' },
+                                ].map((item) => (
+                                    <tr key={item.right} className="transition-colors hover:bg-pf-surface-2 dark:hover:bg-pf-surface-2dark">
+                                        <td className="px-4 py-3 font-medium text-pf-text dark:text-pf-text-dark">{item.right}</td>
+                                        <td className="px-4 py-3">{item.desc}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p className="mt-3">
+                        Pots exercir aquests drets des de la seccio de configuracio del teu perfil
+                        o contactant-nos directament.
+                    </p>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            6. Drets dels usuaris
-                        </h2>
-                        <p className="mb-2">Tens dret a:</p>
-                        <ul className="list-inside list-disc space-y-1 pl-2">
-                            <li><strong>Acces:</strong> consultar les teves dades personals.</li>
-                            <li><strong>Rectificacio:</strong> modificar les dades incorrectes o incompletes.</li>
-                            <li><strong>Supressio:</strong> sol·licitar l&apos;eliminacio del teu compte i dades.</li>
-                            <li><strong>Portabilitat:</strong> obtenir una copia de les teves dades en format estructurat.</li>
-                            <li><strong>Oposicio:</strong> oposar-te al tractament de les teves dades.</li>
-                        </ul>
-                        <p className="mt-2">
-                            Pots exercir aquests drets des de la seccio de configuracio del teu perfil
-                            o contactant-nos directament.
-                        </p>
-                    </section>
+                <Section title="7. Cookies">
+                    <p>
+                        PathFinder utilitza cookies essencials per al funcionament de la sessio
+                        d&apos;usuari i les preferencies de tema (clar/fosc). No utilitzem cookies
+                        de seguiment ni de publicitat de tercers. Consulta la nostra
+                        {' '}<a href="/legal/politica-cookies" className="text-pf-primary hover:underline dark:text-pf-primary-dark">Politica de Cookies</a> per
+                        a mes detalls.
+                    </p>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            7. Cookies
-                        </h2>
-                        <p>
-                            PathFinder utilitza cookies essencials per al funcionament de la sessio
-                            d&apos;usuari i les preferencies de tema (clar/fosc). No utilitzem cookies
-                            de seguiment ni de publicitat de tercers.
-                        </p>
-                    </section>
+                <Section title="8. Seguretat">
+                    <p>
+                        Apliquem mesures de seguretat tecniques i organitzatives per protegir les dades:
+                    </p>
+                    <ul className="list-inside list-disc space-y-1.5 pl-2">
+                        <li>Contrasenyes xifrades amb <strong className="text-pf-text dark:text-pf-text-dark">bcrypt</strong>.</li>
+                        <li>Autenticacio de dos factors (<strong className="text-pf-text dark:text-pf-text-dark">2FA</strong>) opcional.</li>
+                        <li>Proteccio <strong className="text-pf-text dark:text-pf-text-dark">CSRF</strong> en tots els formularis.</li>
+                        <li>Control d&apos;acces basat en rols (usuari, moderador, administrador).</li>
+                        <li>Verificacio de correu electronic obligatoria.</li>
+                    </ul>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            8. Seguretat
-                        </h2>
-                        <p>
-                            Apliquem mesures de seguretat tecniques i organitzatives per protegir les dades:
-                            contrasenyes xifrades amb bcrypt, autenticacio de dos factors (2FA) opcional,
-                            proteccio CSRF en tots els formularis i control d&apos;acces basat en rols.
-                        </p>
-                    </section>
+                <Section title="9. Imatges">
+                    <p>
+                        Les imatges pujades pels usuaris es processen automaticament:
+                        es redimensionen (maxim <strong className="text-pf-text dark:text-pf-text-dark">1600px</strong> d&apos;amplada) i
+                        es converteixen a format <strong className="text-pf-text dark:text-pf-text-dark">WebP</strong> (qualitat 80%)
+                        per optimitzar l&apos;emmagatzematge i la velocitat de carrega.
+                        Les imatges originals no es conserven al servidor.
+                    </p>
+                </Section>
 
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            9. Imatges
-                        </h2>
-                        <p>
-                            Les imatges pujades pels usuaris es processen automaticament: es redimensionen
-                            (maxim 1600px d&apos;amplada) i es converteixen a format WebP per optimitzar
-                            l&apos;emmagatzematge i la velocitat de carrega. Les imatges originals no es conserven.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h2 className="mb-2 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                            10. Modificacions
-                        </h2>
-                        <p>
-                            Ens reservem el dret de modificar aquesta politica de privacitat en qualsevol moment.
-                            Qualsevol canvi es publicara en aquesta mateixa pagina amb la data d&apos;actualitzacio.
-                        </p>
-                    </section>
-
-                    <p className="text-sm text-pf-text-3 dark:text-pf-text-3dark">
+                <Section title="10. Modificacions">
+                    <p>
+                        Ens reservem el dret de modificar aquesta politica de privacitat en qualsevol moment.
+                        Qualsevol canvi es publicara en aquesta mateixa pagina amb la data d&apos;actualitzacio.
+                    </p>
+                    <p className="mt-4 text-sm text-pf-text-3 dark:text-pf-text-3dark">
                         Ultima actualitzacio: abril 2026
                     </p>
-                </div>
+                </Section>
+            </main>
+        </>
+    );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+    return (
+        <section className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
+            <div className="border-b border-pf-border bg-pf-bg px-6 py-4 dark:border-pf-border-dark dark:bg-pf-bg-dark">
+                <h2 className="text-lg font-bold text-pf-text dark:text-pf-text-dark">{title}</h2>
             </div>
-        </MainLayout>
+            <div className="space-y-4 p-6 leading-relaxed text-pf-text-2 dark:text-pf-text-2dark">
+                {children}
+            </div>
+        </section>
     );
 }
