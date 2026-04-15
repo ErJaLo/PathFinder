@@ -28,13 +28,10 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
       <div className="header-logo flex items-center gap-3">
         <Link href="/" className="flex-shrink-0">
           <img
-            src="/img/Logo_petit.png"
+            src="/img/Logo_petit(1).jpg"
             alt="PathFinder"
-            className="h-10 w-10 rounded-lg object-cover"
+            className="h-10 w-25 rounded-lg object-cover"
           />
-        </Link>
-        <Link href="/" className="flex-shrink-0">
-          <div className="header-logo-text font-serif font-bold text-lg leading-tight">PathFinder</div>
         </Link>
       </div>
 

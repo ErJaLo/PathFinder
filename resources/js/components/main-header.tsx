@@ -36,9 +36,9 @@ export function MainHeader() {
                 {/* Logo */}
                 <Link href={home()} className="flex-shrink-0">
                     <img
-                        src="/img/Logo_petit.png"
+                        src="/img/Logo_petit(1).jpg"
                         alt="PathFinder"
-                        className="h-10 w-10 rounded-lg object-cover"
+                        className="h-10 w-25 rounded-lg object-cover"
                     />
                 </Link>
 

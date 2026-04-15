@@ -18,13 +18,10 @@ export function MainFooter() {
                 <div className="flex flex-wrap items-center gap-3">
                     <Link href="/" className="flex items-center gap-2">
                         <img
-                            src="/img/Logo_petit.png"
+                            src="/img/Logo_petit(1).jpg"
                             alt="PathFinder"
-                            className="h-7 w-7 rounded-md object-cover"
+                            className="h-10 w-25 rounded-md object-cover"
                         />
-                        <span className="text-sm font-semibold text-pf-text dark:text-pf-text-dark">
-                            PathFinder
-                        </span>
                     </Link>
                     <span className="text-xs text-pf-text-3 dark:text-pf-text-3dark">
                         &copy; {year} PathFinder. Tots els drets reservats.
