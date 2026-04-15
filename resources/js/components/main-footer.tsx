@@ -9,7 +9,7 @@ export function MainFooter() {
         { label: 'Contacte', href: '#contacte' },
         { label: 'Politica de privacitat', href: '/politica-privacitat' },
         { label: 'Termes i condicions', href: '#termes-condicions' },
-        { label: 'Politica de cookies', href: '#politica-cookies' },
+        { label: 'Política de cookies', href: '/politica-cookies' },
     ];
 
     return (
