@@ -79,7 +79,7 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
+                                <Label htmlFor="password_confirmation" className="text-pf-text-2 dark:text-pf-text-2dark">
                                     Confirma la contrasenya
                                 </Label>
                                 <PasswordInput
