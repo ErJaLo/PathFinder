@@ -23,9 +23,7 @@ export default function cookies(){
                 {/* Secció 1: Què són les cookies? */}
                 <section className="bg-pf-surface dark:bg-pf-surface-dark border border-pf-border dark:border-pf-border-dark rounded-xl shadow-sm overflow-hidden">
                     <div className="bg-pf-bg dark:bg-pf-bg-dark border-b border-pf-border dark:border-pf-border-dark px-6 py-4 flex items-center gap-3">
-                        <div className="bg-pf-primary-l dark:bg-pf-primary-ldark p-1.5 rounded-md text-pf-primary dark:text-pf-primary-dark">
-                            <Info className="w-5 h-5" />
-                        </div>
+                        
                         <h2 className="text-lg font-bold text-pf-text dark:text-pf-text-dark">Què són les cookies?</h2>
                     </div>
                     <div className="p-6 space-y-4 text-pf-text-2 dark:text-pf-text-2dark leading-relaxed">
@@ -45,39 +43,34 @@ export default function cookies(){
                 {/* Secció 2: Tipus de cookies que emprem */}
                 <section className="bg-pf-surface dark:bg-pf-surface-dark border border-pf-border dark:border-pf-border-dark rounded-xl shadow-sm overflow-hidden">
                     <div className="bg-pf-bg dark:bg-pf-bg-dark border-b border-pf-border dark:border-pf-border-dark px-6 py-4 flex items-center gap-3">
-                        <div className="bg-pf-accent-l dark:bg-pf-accent-ldark p-1.5 rounded-md text-pf-accent dark:text-pf-accent-dark">
-                            <AlignLeft className="w-5 h-5" />
-                        </div>
+                        
                         <h2 className="text-lg font-bold text-pf-text dark:text-pf-text-dark">Tipus de cookies que emprem</h2>
                     </div>
                     <div className="p-6 space-y-6 text-pf-text-2 dark:text-pf-text-2dark leading-relaxed">
                         
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <Lock className="w-5 h-5 text-pf-text dark:text-pf-text-dark" />
                                 <h3 className="font-bold text-pf-text dark:text-pf-text-dark">Cookies estrictament necessàries</h3>
                             </div>
-                            <p className="pl-7">
+                            <p className="pl-3">
                                 Indispensables per al funcionament de PathFinder. Sense elles no pots iniciar sessió, gestionar les teves experiències ni navegar amb seguretat. No requereixen el teu consentiment previ.
                             </p>
                         </div>
 
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <Settings className="w-5 h-5 text-pf-text dark:text-pf-text-dark" />
                                 <h3 className="font-bold text-pf-text dark:text-pf-text-dark">Cookies funcionals</h3>
                             </div>
-                            <p className="pl-7">
+                            <p className="pl-3">
                                 Recorden les teves preferències de la plataforma: idioma, ordre d'ordenació de les experiències, categoria activa al filtre o si prefereixes el mode fosc. Milloren la usabilitat però no són essencials.
                             </p>
                         </div>
 
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <BarChart2 className="w-5 h-5 text-pf-text dark:text-pf-text-dark" />
                                 <h3 className="font-bold text-pf-text dark:text-pf-text-dark">Cookies analítiques</h3>
                             </div>
-                            <p className="pl-7">
+                            <p className="pl-3">
                                 Ens permeten entendre com s'utilitza PathFinder: quines experiències s'han vist més, on s'abandona la navegació o quin rendiment té la plataforma. Totes les dades són <strong className="text-pf-text dark:text-pf-text-dark">anonimitzades</strong> i mai no s'associen a un usuari identificat.
                             </p>
                         </div>
@@ -91,9 +84,6 @@ export default function cookies(){
                 {/* Secció 3: Cookies que utilitzem */}
                 <section className="bg-pf-surface dark:bg-pf-surface-dark border border-pf-border dark:border-pf-border-dark rounded-xl shadow-sm overflow-hidden">
                     <div className="bg-pf-bg dark:bg-pf-bg-dark border-b border-pf-border dark:border-pf-border-dark px-6 py-4 flex items-center gap-3">
-                        <div className="bg-pf-primary-l dark:bg-pf-primary-ldark p-1.5 rounded-md text-pf-primary dark:text-pf-primary-dark">
-                            <Layout className="w-5 h-5" />
-                        </div>
                         <h2 className="text-lg font-bold text-pf-text dark:text-pf-text-dark">Cookies que utilitzem</h2>
                     </div>
                     <div className="overflow-x-auto">
@@ -147,9 +137,6 @@ export default function cookies(){
                 {/* Secció 4: Cookies de tercers */}
                 <section className="bg-pf-surface dark:bg-pf-surface-dark border border-pf-border dark:border-pf-border-dark rounded-xl shadow-sm overflow-hidden mb-12">
                     <div className="bg-pf-bg dark:bg-pf-bg-dark border-b border-pf-border dark:border-pf-border-dark px-6 py-4 flex items-center gap-3">
-                        <div className="bg-green-100 dark:bg-green-900/40 p-1.5 rounded-md text-green-700 dark:text-green-400">
-                            <Users className="w-5 h-5" />
-                        </div>
                         <h2 className="text-lg font-bold text-pf-text dark:text-pf-text-dark">Cookies de tercers</h2>
                     </div>
                     <div className="p-6 space-y-6 text-pf-text-2 dark:text-pf-text-2dark leading-relaxed">
