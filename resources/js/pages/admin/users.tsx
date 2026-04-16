@@ -431,7 +431,7 @@ export default function AdminUsers() {
 
                 {/* Footer count */}
                 <p className="text-right text-xs text-pf-text-3 dark:text-pf-text-3dark">
-                    {users.length} usuari{users.length !== 1 ? 's' : ''}
+                    {total} usuari{total !== 1 ? 's' : ''}
                 </p>
             </div>
         </AdminLayout>
