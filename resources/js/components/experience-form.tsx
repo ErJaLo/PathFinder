@@ -2,10 +2,10 @@ import { useForm } from '@inertiajs/react';
 import { ImagePlus, X, Save, Send, MapPin, AlertTriangle } from 'lucide-react';
 import { useState, lazy, Suspense } from 'react';
 import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
+import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { Spinner } from '@/components/ui/spinner';
 import type { Experience, ExperienceCategory, ExperienceCountry } from '@/types';
 
@@ -33,6 +33,7 @@ type FormData = {
 function countryFlag(code: string): string {
     const base = 0x1f1e6 - 65;
     const upper = code.toUpperCase();
+
     return String.fromCodePoint(upper.charCodeAt(0) + base, upper.charCodeAt(1) + base);
 }
 
@@ -96,7 +97,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
         <>
             {Object.keys(errors).length > 0 && (
                 <div className="mb-6 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
-                    <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                    <AlertTriangle className="h-4 w-4 shrink-0" />
                     {errors.title || errors.content || errors.categories
                         ? 'Per publicar, cal omplir els camps obligatoris (titol, contingut i categories).'
                         : "Hi ha errors al formulari. Revisa els camps marcats."}
@@ -125,12 +126,10 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <Label htmlFor="content">
                         Contingut <span className="text-pf-accent">*</span>
                     </Label>
-                    <Textarea
-                        id="content"
+                    <RichTextEditor
                         value={formData.content}
-                        onChange={(e) => setField('content', e.target.value)}
+                        onChange={(html) => setField('content', html)}
                         placeholder="Explica la teva experiencia: que vas fer, que vas veure, consells per a altres viatgers..."
-                        className="min-h-[180px]"
                     />
                     <InputError message={errors.content} />
                 </div>
@@ -175,6 +174,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <div className="flex flex-wrap gap-2">
                         {categories.map((cat) => {
                             const active = formData.categories.includes(cat.id);
+
                             return (
                                 <button
                                     key={cat.id}
@@ -222,7 +222,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                             value={formData.experience_date}
                             onChange={(e) => setField('experience_date', e.target.value)}
                             max={today}
-                            className="h-10 text-pf-text dark:text-pf-text-dark [color-scheme:light] dark:[color-scheme:dark]"
+                            className="h-10 text-pf-text scheme-light dark:text-pf-text-dark dark:scheme-dark"
                         />
                         <InputError message={errors.experience_date} />
                     </div>
@@ -235,7 +235,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                         Ubicacio al mapa
                     </Label>
                     <Suspense fallback={
-                        <div className="flex h-[280px] items-center justify-center rounded-xl border border-pf-border bg-pf-surface-2 dark:border-pf-border-dark dark:bg-pf-surface-2dark">
+                        <div className="flex h-70 items-center justify-center rounded-xl border border-pf-border bg-pf-surface-2 dark:border-pf-border-dark dark:bg-pf-surface-2dark">
                             <Spinner className="h-6 w-6" />
                         </div>
                     }>

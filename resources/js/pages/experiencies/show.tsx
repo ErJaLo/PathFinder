@@ -1,4 +1,5 @@
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
+import DOMPurify from 'dompurify';
 import {
     ArrowLeft,
     ThumbsUp,
@@ -12,9 +13,9 @@ import {
     User,
 } from 'lucide-react';
 import { useState } from 'react';
+import { lazy, Suspense } from 'react';
 import { route } from 'ziggy-js';
 import ModalReport from '@/components/modals/modal-report';
-import { lazy, Suspense } from 'react';
 import MainLayout from '@/layouts/main-layout';
 import type { Experience, ExperienceAuthorDetail } from '@/types';
 
@@ -28,6 +29,7 @@ type Props = {
 function countryFlag(code: string): string {
     const base = 0x1f1e6 - 65;
     const upper = code.toUpperCase();
+
     return String.fromCodePoint(
         upper.charCodeAt(0) + base,
         upper.charCodeAt(1) + base,
@@ -35,13 +37,16 @@ function countryFlag(code: string): string {
 }
 
 function formatNum(n: number): string {
-    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
-    
+    if (n >= 1000) {
+        return (n / 1000).toFixed(1) + 'K';
+    }
+
     return String(n);
 }
 
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
+
     return date.toLocaleDateString('ca-ES', {
         day: 'numeric',
         month: 'short',
@@ -56,6 +61,15 @@ function getInitials(name: string): string {
     .join('')
     .toUpperCase()
     .slice(0, 2);
+}
+
+function escapeHtml(value: string): string {
+    return value
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
 }
 
 const heroGradient =
@@ -77,6 +91,13 @@ export default function ShowExperiencia({ experience, author }: Props) {
     });
 
     const voteForm = useForm({ value: 0 as -1 | 0 | 1 });
+    const hasHtmlTags = /<\/?[a-z][\s\S]*>/i.test(experience.content);
+    const htmlContent = hasHtmlTags
+        ? experience.content
+        : `<p>${escapeHtml(experience.content).replaceAll('\n', '<br />')}</p>`;
+    const safeContent = DOMPurify.sanitize(htmlContent, {
+        USE_PROFILES: { html: true },
+    });
 
     const score = voteState.up - voteState.down;
 
@@ -106,6 +127,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
     const submitVote = (target: -1 | 1) => {
         if (!auth?.user) {
             router.get(route('login'));
+
             return;
         }
 
@@ -169,7 +191,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
                 )}
 
                 {/* Gradient overlay */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-transparent" />
 
                 {/* Content over hero */}
                 <div className="absolute inset-x-0 bottom-0 z-10 mx-auto max-w-7xl px-6 pb-8">
@@ -240,7 +262,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
                     {experience.latitude != null && experience.longitude != null && (
                         <div className="mb-6">
                             <Suspense fallback={
-                                <div className="flex h-[220px] items-center justify-center rounded-xl border border-pf-border bg-pf-surface-2 dark:border-pf-border-dark dark:bg-pf-surface-2dark">
+                                <div className="flex h-55 items-center justify-center rounded-xl border border-pf-border bg-pf-surface-2 dark:border-pf-border-dark dark:bg-pf-surface-2dark">
                                     <span className="text-sm text-pf-text-3 dark:text-pf-text-3dark">Carregant mapa...</span>
                                 </div>
                             }>
@@ -255,19 +277,10 @@ export default function ShowExperiencia({ experience, author }: Props) {
 
                     {/* Content */}
                     <article className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark">
-                        <div className="prose-pf px-6 py-7 text-[15px] leading-[1.8] text-pf-text-2 sm:px-8 dark:text-pf-text-2dark">
-                            {experience.content
-                                .split('\n')
-                                .map((paragraph, i) => {
-                                    const trimmed = paragraph.trim();
-                                    if (!trimmed) return null;
-                                    return (
-                                        <p key={i} className="mb-4 last:mb-0">
-                                            {trimmed}
-                                        </p>
-                                    );
-                                })}
-                        </div>
+                        <div
+                            className="rich-content px-6 py-7 text-[15px] leading-[1.8] text-pf-text-2 sm:px-8 dark:text-pf-text-2dark"
+                            dangerouslySetInnerHTML={{ __html: safeContent }}
+                        />
                     </article>
                 </div>
 
@@ -280,7 +293,7 @@ export default function ShowExperiencia({ experience, author }: Props) {
                         </div>
                         <div className="p-4">
                             <div className="mb-3 flex items-center gap-3">
-                                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-pf-accent-l text-lg font-bold text-pf-accent-h dark:bg-pf-accent-ldark dark:text-pf-accent-dark">
+                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-pf-accent-l text-lg font-bold text-pf-accent-h dark:bg-pf-accent-ldark dark:text-pf-accent-dark">
                                     {getInitials(author.name)}
                                 </div>
                                 <div>
