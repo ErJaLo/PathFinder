@@ -54,7 +54,7 @@ export function AdminSidebar() {
     const navUsuaris: any[]=[
         ...(isAdmin
             ? [
-                  { title: "Baixa d'usuaris", href: '/admin/users', icon: Users },
+                  { title: "Gestió d'usuaris", href: '/admin/users', icon: Users },
               ]
             : []),
     ]
