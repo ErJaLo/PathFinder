@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     ThumbsUp,
@@ -62,6 +62,12 @@ const heroGradient =
     'linear-gradient(135deg, #1A5FA8 0%, #0C4880 40%, #0a3060 100%)';
 
 export default function ShowExperiencia({ experience, author }: Props) {
+    const { auth } = usePage().props as {
+        auth?: {
+            user?: unknown | null;
+        };
+    };
+
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isVoting, setIsVoting] = useState(false);
     const [voteState, setVoteState] = useState({
@@ -98,6 +104,11 @@ export default function ShowExperiencia({ experience, author }: Props) {
     };
 
     const submitVote = (target: -1 | 1) => {
+        if (!auth?.user) {
+            router.get(route('login'));
+            return;
+        }
+
         if (isVoting) {
             return;
         }
