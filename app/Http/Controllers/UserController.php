@@ -28,6 +28,7 @@ class UserController extends Controller
             ->selectRaw("
                 users.id,
                 users.name,
+                users.surname,
                 users.email,
                 users.role,
                 users.created_at,
@@ -38,7 +39,7 @@ class UserController extends Controller
                 END as status
             ")
             ->leftJoin('posts', 'posts.user_id', '=', 'users.id')
-            ->groupBy('users.id', 'users.name', 'users.email', 'users.role', 'users.active', 'users.created_at')
+            ->groupBy('users.id', 'users.name', 'users.surname', 'users.email', 'users.role', 'users.active', 'users.created_at')
             ->when(
                 $search !== '',
                 fn($q) =>
