@@ -2,6 +2,7 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { route } from 'ziggy-js';
 import Summary from '@/components/admin/summary';
+import ModalUserCreate from '@/components/modals/modal-user-create';
 import ModalUserEdit from '@/components/modals/modal-user-edit';
 import ModalUserToggleStatus from '@/components/modals/modal-user-toggle-status';
 import { DataPagination } from '@/components/ui/data-pagination';
@@ -81,6 +82,7 @@ export default function AdminUsers() {
     const [search, setSearch] = useState(prevSearch);
     const [statusFilter, setStatusFilter] = useState(prevStatus);
     const [confirmUser, setConfirmUser] = useState<User | null>(null);
+    const [createUserOpen, setCreateUserOpen] = useState(false);
     const [editUser, setEditUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[]>(initialUsers);
 
@@ -163,6 +165,11 @@ export default function AdminUsers() {
                 user={editUser}
             />
 
+            <ModalUserCreate
+                open={createUserOpen}
+                onOpenChange={setCreateUserOpen}
+            />
+
             <div className="flex flex-1 flex-col gap-6 p-6">
                 <div>
                     <h1 className="text-2xl font-bold text-pf-primary dark:text-pf-primary-dark">
@@ -190,6 +197,14 @@ export default function AdminUsers() {
                         </span>
 
                         <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={() => setCreateUserOpen(true)}
+                                className="h-8 rounded-lg bg-pf-primary px-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                            >
+                                Nou usuari
+                            </button>
+
                             <div className="relative flex items-center">
                                 <svg
                                     className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-pf-text-3 dark:text-pf-text-3dark"
