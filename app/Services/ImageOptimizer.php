@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ImageOptimizer
@@ -17,18 +19,94 @@ class ImageOptimizer
     }
 
     /**
-     * Optimize and store an uploaded image.
-     * Returns the public path (e.g., "experiences/abc123.webp").
+     * Store an uploaded image.
+     * Returns a PUBLIC URL:
+     *  - If Cloudinary is configured: a secure Cloudinary URL.
+     *  - Otherwise: a relative /storage/... path (served via public disk).
      */
     public function store(UploadedFile $file, string $directory = 'experiences'): string
     {
-        $image = $this->loadImage($file);
-        if (!$image) {
-            // Fallback: store original if GD can't process it
-            return $file->store($directory, 'public');
+        if ($this->cloudinaryEnabled()) {
+            $url = $this->uploadToCloudinary($file, $directory);
+            if ($url !== null) {
+                return $url;
+            }
+            // If Cloudinary fails, fall through to local storage.
+            Log::warning('Cloudinary upload failed, falling back to local storage');
         }
 
-        // Resize if wider than max
+        return $this->storeLocally($file, $directory);
+    }
+
+    private function cloudinaryEnabled(): bool
+    {
+        return !empty(config('services.cloudinary.cloud_name'))
+            && !empty(config('services.cloudinary.api_key'))
+            && !empty(config('services.cloudinary.api_secret'));
+    }
+
+    private function uploadToCloudinary(UploadedFile $file, string $directory): ?string
+    {
+        $cloud = config('services.cloudinary.cloud_name');
+        $apiKey = config('services.cloudinary.api_key');
+        $apiSecret = config('services.cloudinary.api_secret');
+        $rootFolder = config('services.cloudinary.folder', 'pathfinder');
+        $folder = trim($rootFolder, '/') . '/' . trim($directory, '/');
+        $timestamp = time();
+
+        // Transformation: resize max width, auto format/quality (Cloudinary picks WebP/AVIF when supported)
+        $eager = "c_limit,w_{$this->maxWidth}/f_auto/q_auto:good";
+
+        // Build the params that need to be signed (alphabetical order, excluding file/api_key/signature)
+        $paramsToSign = [
+            'eager' => $eager,
+            'folder' => $folder,
+            'timestamp' => $timestamp,
+        ];
+
+        $signature = $this->signCloudinaryParams($paramsToSign, $apiSecret);
+
+        try {
+            $response = Http::timeout(30)
+                ->attach('file', file_get_contents($file->getPathname()), $file->getClientOriginalName())
+                ->post("https://api.cloudinary.com/v1_1/{$cloud}/image/upload", [
+                    'api_key' => $apiKey,
+                    'timestamp' => $timestamp,
+                    'folder' => $folder,
+                    'eager' => $eager,
+                    'signature' => $signature,
+                ]);
+
+            if (!$response->successful()) {
+                Log::warning('Cloudinary upload error: ' . $response->body());
+                return null;
+            }
+
+            $data = $response->json();
+            return $data['secure_url'] ?? null;
+        } catch (\Throwable $e) {
+            Log::warning('Cloudinary upload exception: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    private function signCloudinaryParams(array $params, string $apiSecret): string
+    {
+        ksort($params);
+        $toSign = [];
+        foreach ($params as $key => $value) {
+            $toSign[] = "{$key}={$value}";
+        }
+        return sha1(implode('&', $toSign) . $apiSecret);
+    }
+
+    private function storeLocally(UploadedFile $file, string $directory): string
+    {
+        $image = $this->loadImage($file);
+        if (!$image) {
+            return '/storage/' . $file->store($directory, 'public');
+        }
+
         $width = imagesx($image);
         $height = imagesy($image);
 
@@ -40,12 +118,10 @@ class ImageOptimizer
             $image = $resized;
         }
 
-        // Save as WebP
         $filename = uniqid() . '_' . time() . '.webp';
         $path = $directory . '/' . $filename;
         $fullPath = Storage::disk('public')->path($path);
 
-        // Ensure directory exists
         $dir = dirname($fullPath);
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
@@ -54,7 +130,7 @@ class ImageOptimizer
         imagewebp($image, $fullPath, $this->quality);
         imagedestroy($image);
 
-        return $path;
+        return '/storage/' . $path;
     }
 
     private function loadImage(UploadedFile $file): ?\GdImage
@@ -76,7 +152,6 @@ class ImageOptimizer
         $image = @imagecreatefrompng($path);
         if (!$image) return null;
 
-        // Preserve transparency for processing, then WebP handles it
         imagesavealpha($image, true);
         imagealphablending($image, true);
 
