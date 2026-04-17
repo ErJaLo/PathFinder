@@ -181,7 +181,7 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                 {/* Feed */}
                 <div>
                     {/* Toolbar */}
-                    <div className="mb-5 space-y-2.5">
+                    <div className="mb-0 space-y-2.5">
                         {/* Row 1: Search + Filters button */}
                         <div className="flex gap-2.5 max-sm:flex-col">
                             <div className="flex flex-1 items-center gap-2 rounded-full border border-pf-border bg-pf-surface px-3.5 transition-colors focus-within:border-pf-primary dark:border-pf-border-dark dark:bg-pf-surface-dark">
@@ -367,6 +367,40 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                             </div>
                         </div>
                     </div>
+                    {/* Pagination */}
+                            {experiences.last_page > 1 && (
+                                <div className="mb-3 flex items-center justify-center gap-1.5">
+                                    <button
+                                        onClick={() => experiences.current_page > 1 && navigate({ page: experiences.current_page - 1 })}
+                                        disabled={experiences.current_page <= 1}
+                                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-pf-border text-pf-text-3 transition-all hover:border-pf-primary hover:text-pf-primary disabled:opacity-40 disabled:hover:border-pf-border disabled:hover:text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" />
+                                    </button>
+
+                                    {Array.from({ length: experiences.last_page }, (_, i) => i + 1).map((page) => (
+                                        <button
+                                            key={page}
+                                            onClick={() => navigate({ page })}
+                                            className={`flex h-8 min-w-8 items-center justify-center rounded-lg border px-2 text-xs font-medium transition-all ${
+                                                page === experiences.current_page
+                                                    ? 'border-transparent bg-pf-primary text-white'
+                                                    : 'border-pf-border text-pf-text-2 hover:border-pf-primary hover:text-pf-primary dark:border-pf-border-dark dark:text-pf-text-2dark'
+                                            }`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        onClick={() => experiences.current_page < experiences.last_page && navigate({ page: experiences.current_page + 1 })}
+                                        disabled={experiences.current_page >= experiences.last_page}
+                                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-pf-border text-pf-text-3 transition-all hover:border-pf-primary hover:text-pf-primary disabled:opacity-40 disabled:hover:border-pf-border disabled:hover:text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark"
+                                    >
+                                        <ChevronRight className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            )}
 
                     {/* Posts */}
                     {experiences.data.length > 0 ? (
