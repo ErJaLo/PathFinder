@@ -12,6 +12,7 @@ use App\Http\Controllers\ReportsController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/explorar', [ExperienciaController::class, 'index'])->name('explorar.index');
 Route::inertia('/politica-privacitat', 'politica-privacitat')->name('politica-privacitat');
+Route::inertia('/termes-us', 'legal/termes-us')->name('legal.termes-us');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/settings/experiences', [ExperienciaController::class, 'meves'])->name('experiencies.meves');
