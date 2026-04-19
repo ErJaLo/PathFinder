@@ -1,9 +1,11 @@
 
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import React from 'react';
+import { route } from 'ziggy-js';
 import DeleteUser from '@/components/delete-user';
 import { UserForm } from '@/components/user-form';
 import { UserHeader } from '@/components/user-Header';
+
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage().props;
@@ -19,6 +21,19 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
         month: 'long',
         day: 'numeric',
     });
+
+    function guardarImatge(e: React.ChangeEvent<HTMLInputElement>) {
+        if (e.target.files && e.target.files[0]) {
+            const formData = new FormData();
+            formData.append('image', e.target.files[0]);
+            
+            router.post(route("admin.user.image", auth.user.id), formData, {
+                forceFormData: true,
+                preserveScroll: true,
+            });
+        }
+    }
+
 
     return (
         <div className="min-h-screen bg-pf-bg text-pf-text dark:bg-pf-bg-dark dark:text-pf-text-dark">
@@ -43,13 +58,23 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                 {/* Bloc d'Avatar */}
                 <div className="flex items-center gap-5 border-b border-pf-border p-6 dark:border-pf-border-dark">
                     <div className="relative flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full bg-pf-accent-l font-serif text-2xl font-bold text-pf-accent-h dark:bg-pf-accent-ldark dark:text-pf-accent-dark">
-                        {initials}
-                        <button className="absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-pf-surface bg-pf-primary text-white shadow-sm transition-colors hover:bg-pf-primary-h dark:border-pf-surface-dark">
+                        {auth.user.img ? (
+                            <img src={`/storage/${auth.user.img}`} alt="Perfil" className="h-full w-full rounded-full object-cover" />
+                        ) : (
+                            initials
+                        )}
+                        
+                        <input type="file" name="image" id="profile-image-upload" className="hidden" accept="image/*" onChange={guardarImatge} />
+                        
+                        <label 
+                            htmlFor="profile-image-upload" 
+                            className="absolute bottom-0 right-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-pf-surface bg-pf-primary text-white shadow-sm transition-colors hover:bg-pf-primary-h dark:border-pf-surface-dark"
+                        >
                             <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                        </button>
+                        </label>
                     </div>
                     <div>
                         <div className="font-serif text-lg font-bold text-pf-text dark:text-pf-text-dark">{auth.user.name} {typeof auth.user.surname === 'string' ? auth.user.surname : ''}</div>

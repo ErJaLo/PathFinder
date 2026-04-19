@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import React, { useState } from 'react';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
 import { UserDropdown } from '@/components/user-dropdown';
@@ -15,6 +15,8 @@ type UserHeaderProps = {
 
 export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const { auth } = usePage().props;
+  
   const initials = user.name
     .split(' ')
     .map((n) => n[0])
@@ -84,7 +86,11 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
             : <HiOutlineMoon className="w-6 h-6 text-pf-primary-dark" />}
         </button>
         <div className="header-user flex items-center">
+          {user.img ? (
+            <UserDropdown user={user} initials={<img src={`/storage/${user.img}`} alt="Perfil" className="h-full w-full rounded-full object-cover" />} />
+          ) : (
             <UserDropdown user={user} initials={initials} />
+          )}
         </div>
         
         {/* Mobile menu toggle */}
