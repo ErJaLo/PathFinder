@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaisosController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/explorar', [ExperienciaController::class, 'index'])->name('explorar.index');
@@ -15,6 +16,9 @@ Route::inertia('/politica-privacitat', 'politica-privacitat')->name('politica-pr
 Route::inertia('/termes-us', 'legal/termes-us')->name('legal.termes-us');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/contact-us', [ContactController::class, 'index'])->name('contact.index');
+    Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.send');
+
     Route::get('/settings/experiences', [ExperienciaController::class, 'meves'])->name('experiencies.meves');
     Route::get('/experiencies/{post}/editar', [ExperienciaController::class, 'edit'])->name('experiencies.edit');
     Route::put('/experiencies/{post}', [ExperienciaController::class, 'update'])->name('experiencies.update');
