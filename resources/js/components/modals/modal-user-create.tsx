@@ -24,7 +24,7 @@ function ModalUserCreate({ open, onOpenChange }: ModalUserCreateProps) {
     name: '',
     surname: '',
     email: '',
-    role: 'user' as 'admin' | 'user',
+    role: 'user' as 'admin' | 'moderator' | 'user',
     password: '',
     password_confirmation: '',
   });
@@ -104,10 +104,11 @@ function ModalUserCreate({ open, onOpenChange }: ModalUserCreateProps) {
             <select
               id="create-user-role"
               value={data.role}
-              onChange={(event) => setData('role', event.target.value as 'admin' | 'user')}
+              onChange={(event) => setData('role', event.target.value as 'admin' | 'moderator' | 'user')}
               className="h-10 w-full rounded-md border border-pf-border bg-pf-surface-2 px-3 text-sm text-pf-text focus:ring-2 focus:ring-pf-primary focus:outline-none dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-dark dark:focus:ring-pf-primary-dark"
             >
               <option value="user">Usuari</option>
+              <option value="moderator">Moderador</option>
               <option value="admin">Admin</option>
             </select>
             <InputError message={errors.role} />

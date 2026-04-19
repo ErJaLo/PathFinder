@@ -58,7 +58,7 @@ interface User {
     surname?: string | null;
     email: string;
     created_at: string;
-    role: 'admin' | 'user';
+    role: 'admin' | 'moderator' | 'user';
     status: 'active' | 'inactive';
     posts?: number;
 }
@@ -315,11 +315,15 @@ export default function AdminUsers() {
                                                     className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ${
                                                         user.role === 'admin'
                                                             ? 'bg-pf-primary-l text-pf-primary-h dark:bg-pf-primary-ldark dark:text-pf-primary-hdark'
+                                                            : user.role === 'moderator'
+                                                              ? 'bg-pf-amber-l text-pf-amber-dark dark:bg-pf-amber-ldark dark:text-pf-amber-dark'
                                                             : 'bg-pf-surface-2 text-pf-text-3 dark:bg-pf-surface-2dark dark:text-pf-text-3dark'
                                                     }`}
                                                 >
                                                     {user.role === 'admin'
                                                         ? 'Admin'
+                                                        : user.role === 'moderator'
+                                                          ? 'Moderador'
                                                         : 'Usuari'}
                                                 </span>
                                             </td>

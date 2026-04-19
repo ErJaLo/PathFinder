@@ -39,14 +39,7 @@ Route::get("/llocs", [PaisosController::class, "llistarPaisos"])->name("llocs");
 
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::get('users/getUsers/{x?}/{y?}', [UserController::class, 'getUsers'])
-        ->whereNumber('x')
-        ->whereNumber('y')
-        ->name('admin.users.getUsers');
-    Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
-    Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
-    Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
+
     Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
     Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");
     Route::post("category", [CategoryController::class, "store"])->name('admin.categories.store');
@@ -60,6 +53,17 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::put("reports/{report}/aprove-post", [ReportsController::class, "rejectedStatus"])->name("admin.reports.aprove-post");
     Route::get("reports/detail/{report}", [ReportsController::class, "show"])->name("admin.reports.detail");
     Route::post("reports/delete/{report}", [ReportsController::class, "destroy"])->name("admin.report.delete");
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('users/getUsers/{x?}/{y?}', [UserController::class, 'getUsers'])
+        ->whereNumber('x')
+        ->whereNumber('y')
+        ->name('admin.users.getUsers');
+    Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
 });
 
 require __DIR__ . '/settings.php';
