@@ -8,7 +8,7 @@ export function MainFooter() {
         { label: 'Explorar', href: '/explorar' },
         { label: 'Contacte', href: '#contacte' },
         { label: 'Politica de privacitat', href: '/politica-privacitat' },
-        { label: 'Termes i condicions', href: '#termes-condicions' },
+        { label: 'Termes i condicions', href: '/termes-us' },
         { label: 'Política de cookies', href: '/politica-cookies' },
     ];
 
