@@ -97,12 +97,12 @@ export function MainHeader() {
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
                                 
-                                {user.role === 'admin' && (
+                                {(user.role === 'admin' || user.role === 'moderator') && (
                                     <>
                                         <DropdownMenuGroup>
                                             <DropdownMenuItem asChild>  
                                                 <Link href="/admin" className='cursor-pointer'>
-                                                    Pagina d'administrador
+                                                    Administrar web
                                                 </Link>
                                             </DropdownMenuItem>
                                         </DropdownMenuGroup>

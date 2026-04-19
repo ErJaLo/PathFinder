@@ -84,7 +84,7 @@ class UserController extends Controller
         $validated = $request->validate([
             ...($this->profileRules()),
             'password' => $this->passwordRules(),
-            'role' => ['required', 'in:user,admin'],
+            'role' => ['required', 'in:user,moderator,admin'],
         ]);
 
         User::create($validated);
@@ -128,7 +128,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             ...($this->profileRules($user->id)),
-            'role' => ['required', 'in:user,admin'],
+            'role' => ['required', 'in:user,moderator,admin'],
         ]);
 
         // Si se proporciona contraseña, añadirla a la validación
