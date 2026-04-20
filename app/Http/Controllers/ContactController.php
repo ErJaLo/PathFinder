@@ -40,4 +40,73 @@ class ContactController extends Controller
 
 		return back()->with('success', 'Missatge enviat correctament.');
 	}
+
+	public function adminIndex(Request $request)
+	{
+		$perPage = $request->integer('perPage', 10);
+		$page = $request->integer('page', 1);
+		$offset = ($page - 1) * $perPage;
+		$status = trim((string) $request->input('status', ''));
+		$type = trim((string) $request->input('type', ''));
+		$search = trim((string) $request->input('search', ''));
+
+		$query = ContactMessage::query()
+			->with('user:id,name,email')
+			->select('id', 'user_id', 'type', 'subject', 'message', 'status', 'created_at', 'updated_at')
+			->when(
+				$search !== '',
+				fn($q) => $q->where(function ($searchQuery) use ($search) {
+					$searchQuery->where('subject', 'like', "%{$search}%")
+						->orWhere('message', 'like', "%{$search}%")
+						->orWhereHas('user', function ($userQuery) use ($search) {
+							$userQuery->where('name', 'like', "%{$search}%")
+								->orWhere('email', 'like', "%{$search}%");
+						});
+				})
+			)
+			->when($status !== '', fn($q) => $q->where('status', $status))
+			->when($type !== '', fn($q) => $q->where('type', $type));
+
+		$total = $query->count();
+
+		$messages = $query->orderByDesc('created_at')
+			->limit($perPage)
+			->offset($offset)
+			->get();
+
+		return Inertia::render('admin/contact-messages', [
+			'messages' => $messages,
+			'perPage' => $perPage,
+			'page' => $page,
+			'total' => $total,
+			'status' => $status,
+			'type' => $type,
+			'search' => $search,
+		]);
+	}
+
+	public function adminShow(ContactMessage $contactMessage)
+	{
+		$contactMessage->load('user:id,name,email');
+
+		return Inertia::render('admin/contact-message-detail', [
+			'message' => $contactMessage,
+		]);
+	}
+
+	public function markInReview(ContactMessage $contactMessage)
+	{
+		if ($contactMessage->status !== 'resolved') {
+			$contactMessage->update(['status' => 'in_review']);
+		}
+
+		return back();
+	}
+
+	public function markResolved(ContactMessage $contactMessage)
+	{
+		$contactMessage->update(['status' => 'resolved']);
+
+		return back();
+	}
 }

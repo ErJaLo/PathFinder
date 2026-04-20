@@ -6,6 +6,7 @@ import {
     Users,
     CircleAlert,
     AlignLeft,
+    Mail,
 } from 'lucide-react';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -24,7 +25,7 @@ import { home } from '@/routes';
 import type { Auth } from '@/types';
 
 export function AdminSidebar() {
-    const { auth, globalData } = usePage<{ auth: Auth, globalData: { totalReports: number } }>().props;
+    const { auth, globalData } = usePage<{ auth: Auth, globalData: { totalReports: number; totalContactMessagesPending: number } }>().props;
     const user = auth?.user;
     const { isCurrentUrl } = useCurrentUrl();
     
@@ -40,6 +41,7 @@ export function AdminSidebar() {
               ]
             : []),
         { title: 'Abusos reportats', href: '/admin/reports', icon: CircleAlert, badge: globalData?.totalReports },
+        { title: 'Formularis contacte', href: '/admin/contacts', icon: Mail, badge: globalData?.totalContactMessagesPending },
 
     ]
     const navUsuaris: any[]=[

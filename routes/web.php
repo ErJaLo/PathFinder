@@ -56,6 +56,11 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::put("reports/{report}/aprove-post", [ReportsController::class, "rejectedStatus"])->name("admin.reports.aprove-post");
     Route::get("reports/detail/{report}", [ReportsController::class, "show"])->name("admin.reports.detail");
     Route::post("reports/delete/{report}", [ReportsController::class, "destroy"])->name("admin.report.delete");
+
+    Route::get('contacts', [ContactController::class, 'adminIndex'])->name('admin.contacts.index');
+    Route::get('contacts/{contactMessage}', [ContactController::class, 'adminShow'])->name('admin.contacts.detail');
+    Route::put('contacts/{contactMessage}/in-review', [ContactController::class, 'markInReview'])->name('admin.contacts.in-review');
+    Route::put('contacts/{contactMessage}/resolve', [ContactController::class, 'markResolved'])->name('admin.contacts.resolve');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {

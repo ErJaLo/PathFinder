@@ -37,12 +37,14 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
         $globalData = [
-            'totalReports' => 0
+            'totalReports' => 0,
+            'totalContactMessagesPending' => 0,
         ];
 
         // Si l'usuari és administrador o moderador, calculem el total de reports
         if ($user && in_array($user->role, ['admin', 'moderator'])) {
             $globalData['totalReports'] = \Illuminate\Support\Facades\DB::table('reports')->where('status', 'pending')->count();
+            $globalData['totalContactMessagesPending'] = \Illuminate\Support\Facades\DB::table('contact_messages')->where('status', 'pending')->count();
             $globalData["totalReportsResols"] =  \Illuminate\Support\Facades\DB::table('reports')->whereIn('status', ['accepted', 'dismissed'])->count();
             $globalData["totalReportsDescartats"] =  \Illuminate\Support\Facades\DB::table('reports')->where('status', 'dismissed')->count();
             $globalData["totalCategories"] = \Illuminate\Support\Facades\DB::table('categories')->count();
