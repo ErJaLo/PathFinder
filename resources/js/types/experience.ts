@@ -7,6 +7,7 @@ export type ExperienceCountry = {
     code: string;
     name: string;
     img?: string | null;
+    continent?: string | null;
 };
 
 export type ExperienceAuthor = {

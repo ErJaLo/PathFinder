@@ -2,6 +2,7 @@ import { useForm } from '@inertiajs/react';
 import { ImagePlus, X, Save, Send, MapPin, AlertTriangle } from 'lucide-react';
 import { useState, lazy, Suspense } from 'react';
 import InputError from '@/components/input-error';
+import { CountryCombobox } from '@/components/country-combobox';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -29,13 +30,6 @@ type FormData = {
     categories: number[];
     status: 'draft' | 'published';
 };
-
-function countryFlag(code: string): string {
-    const base = 0x1f1e6 - 65;
-    const upper = code.toUpperCase();
-
-    return String.fromCodePoint(upper.charCodeAt(0) + base, upper.charCodeAt(1) + base);
-}
 
 export function ExperienceForm({ experience, categories, countries }: Props) {
     const isEditing = !!experience;
@@ -198,19 +192,12 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                         <Label htmlFor="country_code">Pais</Label>
-                        <select
+                        <CountryCombobox
                             id="country_code"
+                            countries={countries}
                             value={formData.country_code}
-                            onChange={(e) => setField('country_code', e.target.value)}
-                            className="h-10 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm text-pf-text outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-pf-surface-dark dark:text-pf-text-dark [&>option]:bg-pf-surface [&>option]:text-pf-text dark:[&>option]:bg-pf-surface-dark dark:[&>option]:text-pf-text-dark"
-                        >
-                            <option value="">Selecciona un pais...</option>
-                            {countries.map((c) => (
-                                <option key={c.code} value={c.code}>
-                                    {countryFlag(c.code)} {c.name}
-                                </option>
-                            ))}
-                        </select>
+                            onChange={(code) => setField('country_code', code)}
+                        />
                         <InputError message={errors.country_code} />
                     </div>
 
@@ -245,11 +232,15 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                                 : null
                             }
                             onChange={(coords) => {
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    latitude: coords?.lat ?? null,
-                                    longitude: coords?.lng ?? null,
-                                }));
+                                setField('latitude', coords?.lat ?? null);
+                                setField('longitude', coords?.lng ?? null);
+                            }}
+                            onCountryDetected={(code) => {
+                                // Only auto-select if the country exists in our DB
+                                const match = countries.find((c) => c.code.toUpperCase() === code);
+                                if (match) {
+                                    setField('country_code', match.code);
+                                }
                             }}
                         />
                     </Suspense>

@@ -17,18 +17,36 @@ type LatLng = { lat: number; lng: number } | null;
 type Props = {
     value: LatLng;
     onChange: (coords: LatLng) => void;
+    onCountryDetected?: (countryCode: string) => void;
     height?: number;
 };
+
+async function reverseGeocode(lat: number, lng: number): Promise<string | null> {
+    try {
+        const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=3&accept-language=en`,
+            { headers: { 'Accept': 'application/json' } },
+        );
+        if (!res.ok) return null;
+        const data = await res.json();
+        const code = data?.address?.country_code;
+        return code ? String(code).toUpperCase() : null;
+    } catch {
+        return null;
+    }
+}
 
 const DEFAULT_CENTER: [number, number] = [41.39, 2.17];
 const DEFAULT_ZOOM = 5;
 
-export function MapPicker({ value, onChange, height = 280 }: Props) {
+export function MapPicker({ value, onChange, onCountryDetected, height = 280 }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<L.Map | null>(null);
     const markerRef = useRef<L.Marker | null>(null);
     const onChangeRef = useRef(onChange);
+    const onCountryDetectedRef = useRef(onCountryDetected);
     onChangeRef.current = onChange;
+    onCountryDetectedRef.current = onCountryDetected;
 
     // Init map once
     useEffect(() => {
@@ -54,13 +72,22 @@ export function MapPicker({ value, onChange, height = 280 }: Props) {
             const coords = { lat: e.latlng.lat, lng };
 
             if (markerRef.current) {
-                markerRef.current.setLatLng(e.latlng);
+                markerRef.current.setLatLng([coords.lat, coords.lng]);
             } else {
-                markerRef.current = L.marker(e.latlng, { icon: defaultIcon }).addTo(map);
+                markerRef.current = L.marker([coords.lat, coords.lng], { icon: defaultIcon }).addTo(map);
             }
 
-            map.flyTo(e.latlng, Math.max(map.getZoom(), 10), { duration: 0.5 });
+            map.flyTo([coords.lat, coords.lng], Math.max(map.getZoom(), 10), { duration: 0.5 });
             onChangeRef.current(coords);
+
+            // Reverse geocode to detect country (best effort, non-blocking)
+            if (onCountryDetectedRef.current) {
+                reverseGeocode(coords.lat, coords.lng).then((countryCode) => {
+                    if (countryCode && onCountryDetectedRef.current) {
+                        onCountryDetectedRef.current(countryCode);
+                    }
+                });
+            }
         });
 
         mapRef.current = map;

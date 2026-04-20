@@ -90,7 +90,7 @@ class ExperienciaController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name')->get(['id', 'name']);
-        $countries = Country::orderBy('name')->get(['code', 'name']);
+        $countries = Country::orderBy('name')->get(['code', 'name', 'continent']);
 
         return Inertia::render('experiencies/crear', [
             'categories' => $categories,
@@ -250,7 +250,7 @@ class ExperienciaController extends Controller
 
         $post->load(['categories:id,name', 'mainCountry:code,name']);
         $categories = Category::orderBy('name')->get(['id', 'name']);
-        $countries = Country::orderBy('name')->get(['code', 'name']);
+        $countries = Country::orderBy('name')->get(['code', 'name', 'continent']);
 
         return Inertia::render('experiencies/editar', [
             'experience' => $post,
