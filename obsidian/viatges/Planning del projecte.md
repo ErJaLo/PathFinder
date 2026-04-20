@@ -195,7 +195,7 @@ Cada secció correspon a una branca de git independent. Les branques amb depend�
 - [ ] **Frontend:** Editor ric de text (TipTap, React-Quill, o similar).
 - [ ] **Frontend:** Upload múltiple d'imatges amb preview.
 - [x] **Frontend:** Lazy loading d'imatges (`loading="lazy"` a cards i llistes).
-- [ ] **Frontend:** Imatges servides des de CDN (Cloudinary).
+- [x] **Frontend:** Imatges servides des de CDN (Cloudinary) — amb fallback a local si no esta configurat.
 - [x] **Frontend:** Mapa interactiu amb OpenStreetMap + Leaflet vanilla.
   - `MapPicker` — selecció de coordenades al formulari (clic al mapa).
   - `MapDisplay` — visualització read-only a la pàgina de detall.
