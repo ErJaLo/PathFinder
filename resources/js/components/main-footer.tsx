@@ -6,9 +6,9 @@ export function MainFooter() {
     const footerLinks = [
         { label: 'Inici', href: '/' },
         { label: 'Explorar', href: '/explorar' },
-        { label: 'Contacte', href: '#contacte' },
+        { label: 'Contacte', href: '/contact-us' },
         { label: 'Politica de privacitat', href: '/politica-privacitat' },
-        { label: 'Termes i condicions', href: '#termes-condicions' },
+        { label: 'Termes i condicions', href: '/termes-us' },
         { label: 'Política de cookies', href: '/politica-cookies' },
     ];
 
