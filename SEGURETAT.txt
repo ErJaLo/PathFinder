@@ -112,4 +112,4 @@ RECOMANACIONS PER A PRODUCCIO
 10. Activar 2FA per als comptes d'administrador.
 
 
-Data d'actualitzacio: abril 2026
+Data d'actualitzacio: 20 abril 2026

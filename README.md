@@ -275,7 +275,9 @@ npm run lint
 
 ## Integrants
 
-Projecte desenvolupat com a treball de fi de curs del cicle formatiu DAW.
+Nicolas Miszczak, Jan Lopez, Roger Muntané
+
+Projecte desenvolupat com a treball de M6, M7 y M9 del cicle formatiu DAW.
 
 ---
 
