@@ -49,12 +49,6 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::post("users/{usuari}/image", [UserController::class, "saveImage"])->name("admin.user.image");
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
 
-    Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
-    Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");
-    Route::post("category", [CategoryController::class, "store"])->name('admin.categories.store');
-    Route::get("category/{category}/edit", [CategoryController::class, "edit"])->name("admin.category.edit");
-    Route::put("category/{category}", [CategoryController::class, "update"])->name("admin.category.update");
-
     Route::get("reports", [ReportsController::class, "index"])->name("admin.reports.index");
     Route::put("reports/{report}/resolve", [ReportsController::class, "acceptStatus"])->name("admin.reports.accepted");
     Route::put("reports/{report}/cancel-post", [ExperienciaController::class, "rejectedStatus"])->name("admin.reports.cancel-post");
@@ -73,6 +67,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
     Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
+
+    Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
+    Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");
+    Route::post("category", [CategoryController::class, "store"])->name('admin.categories.store');
+    Route::get("category/{category}/edit", [CategoryController::class, "edit"])->name("admin.category.edit");
+    Route::put("category/{category}", [CategoryController::class, "update"])->name("admin.category.update");
 });
 
 require __DIR__ . '/settings.php';

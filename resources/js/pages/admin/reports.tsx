@@ -34,7 +34,7 @@ interface Reports{
 export default function ReportsPage(){
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Administració', href: '/admin' },
-        { title: 'reports', href: '/admin/reports' }
+        { title: 'Abusos reportats', href: '/admin/reports' }
     ];
     
 

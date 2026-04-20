@@ -34,11 +34,11 @@ export function AdminSidebar() {
         { title: 'Resum', href: '/admin', icon: LayoutGrid },
     ]
     const navContingut: any[]=[
-        {
-            title: 'Gestió de categories',
-            href: '/admin/category',
-            icon: AlignLeft,
-        },
+        ...(isAdmin
+            ? [
+                  { title: 'Gestió de categories', href: '/admin/category', icon: AlignLeft },
+              ]
+            : []),
         { title: 'Abusos reportats', href: '/admin/reports', icon: CircleAlert, badge: globalData?.totalReports },
 
     ]
