@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Nette\Utils\Image;
 
 class UserController extends Controller
 {
@@ -32,6 +33,7 @@ class UserController extends Controller
                 users.email,
                 users.role,
                 users.created_at,
+                users.img,
                 COUNT(posts.user_id) as posts,
                 CASE
                     WHEN users.active = 1 THEN 'active'
@@ -152,5 +154,21 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'Usuario eliminado correctamente.');
+    }
+
+    public function saveImage(Request $request, User $usuari)
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'max:4096'],
+        ]);
+
+        if ($request->hasFile('image')) {
+            // Guarda l'arxiu pujat a storage/app/public/avatars i retorna la ruta relativa
+            $path = $request->file('image')->store('avatars', 'public');
+
+            $usuari->update(["img" => $path]);
+        }
+
+        return back();
     }
 }

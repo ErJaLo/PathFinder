@@ -1,5 +1,6 @@
 import { Link, useForm } from '@inertiajs/react';
 import { LogOut, Settings, User as UserIcon } from 'lucide-react';
+import React from 'react';
 import { route } from 'ziggy-js';
 import {
     DropdownMenu,
@@ -13,7 +14,7 @@ import type { User } from '@/types/auth';
 
 type UserDropdownProps = {
     user: User;
-    initials: string;
+    initials: string | React.ReactNode;
 };
 
 export function UserDropdown({ user, initials }: UserDropdownProps) {

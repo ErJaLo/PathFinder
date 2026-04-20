@@ -39,6 +39,15 @@ Route::get("/llocs", [PaisosController::class, "llistarPaisos"])->name("llocs");
 
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('users/getUsers/{x?}/{y?}', [UserController::class, 'getUsers'])
+        ->whereNumber('x')
+        ->whereNumber('y')
+        ->name('admin.users.getUsers');
+    Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::post("users/{usuari}/image", [UserController::class, "saveImage"])->name("admin.user.image");
+    Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
 
     Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
     Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");

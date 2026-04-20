@@ -75,7 +75,7 @@ export function MainHeader() {
                             <DropdownMenuTrigger asChild>
                                 <button className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
                                     <Avatar className="h-10 w-10">
-                                        <AvatarImage src={user.img ?? user.avatar} alt={user.name} />
+                                        <AvatarImage src={user.img ? `/storage/${user.img}` : user.avatar} alt={user.name} className="object-cover" />
                                         <AvatarFallback className="bg-pf-primary-l text-sm font-semibold text-pf-primary dark:bg-pf-primary-ldark dark:text-pf-primary-dark">
                                             {getInitials(user.name)}
                                         </AvatarFallback>
