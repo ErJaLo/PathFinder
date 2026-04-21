@@ -2,6 +2,7 @@ import { useForm, usePage, router, Link } from '@inertiajs/react';
 import { AlertCircle, Search, Check, Eye, Mail, Clock3 } from 'lucide-react';
 import { useState } from 'react';
 import { route } from 'ziggy-js';
+import Summary from '@/components/admin/summary';
 import { DataPagination } from '@/components/ui/data-pagination';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem } from '@/types';
@@ -135,6 +136,8 @@ export default function ContactMessagesPage() {
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
+            <Summary />
+
             <div className="mx-2 mt-6 overflow-hidden rounded-xl border border-pf-border bg-pf-surface shadow-sm dark:border-pf-border-dark dark:bg-pf-surface-dark sm:mx-4">
                 <div className="flex items-center justify-between border-b border-pf-border bg-white p-4 dark:border-pf-border-dark dark:bg-pf-surface-dark">
                     <div className="flex items-center gap-3 text-pf-text dark:text-pf-text-dark">
