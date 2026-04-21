@@ -280,7 +280,6 @@ export default function MevesExperiencies({ experiences, filters }: Props) {
     );
 }
 
-/* ── Delete confirmation dialog ── */
 function DeleteDialog({ experienceId, experienceTitle }: { experienceId: number; experienceTitle: string }) {
     const [open, setOpen] = useState(false);
     const form = useForm();

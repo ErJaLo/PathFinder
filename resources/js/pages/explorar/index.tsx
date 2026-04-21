@@ -17,7 +17,6 @@ import MainLayout from '@/layouts/main-layout';
 import { ExperienceCard } from '@/components/experience-card';
 import type { Experience, ExperienceCategory } from '@/types';
 
-/* ── Types ── */
 type PaginatedData<T> = {
     data: T[];
     current_page: number;
@@ -62,7 +61,6 @@ type Props = {
     filters: Filters;
 };
 
-/* ── Helpers ── */
 function getInitials(name: string): string {
     return name
         .split(' ')
@@ -97,7 +95,6 @@ const pillActive = 'border-transparent bg-pf-primary text-white';
 const pillInactive =
     'border-pf-border bg-pf-surface-2 text-pf-text-2 hover:border-pf-primary hover:bg-pf-primary-l hover:text-pf-primary dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-2dark dark:hover:border-pf-primary-dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark';
 
-/* ══════════════════════════════ */
 export default function ExplorarIndex({ experiences, categories, countries, trendingCountries, topUsers, filters }: Props) {
     const [view, setView] = useState<'grid' | 'list'>('grid');
     const [searchValue, setSearchValue] = useState(filters.search);

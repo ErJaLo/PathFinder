@@ -48,7 +48,6 @@ export function MapPicker({ value, onChange, onCountryDetected, height = 280 }: 
     onChangeRef.current = onChange;
     onCountryDetectedRef.current = onCountryDetected;
 
-    // Init map once
     useEffect(() => {
         if (!containerRef.current) return;
 
