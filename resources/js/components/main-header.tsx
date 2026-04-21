@@ -19,7 +19,7 @@ import type { Auth } from '@/types';
 
 const navItems = [
     { title: 'Explorar', href: '/explorar', icon: Compass },
-    { title: 'Mapes', href: '/mapes', icon: Map },
+    // { title: 'Mapes', href: '/mapes', icon: Map },
 ];
 
 export function MainHeader() {
