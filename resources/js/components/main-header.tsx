@@ -118,7 +118,7 @@ export function MainHeader() {
                             setMobileUserMenuOpen(false);
                         }}
                     />
-                    <div className="fixed inset-x-2 top-2 z-50 max-h-[88vh] overflow-y-auto rounded-xl border border-pf-border bg-pf-surface shadow-lg md:hidden dark:border-pf-border-dark dark:bg-pf-surface-dark">
+                    <div className="fixed inset-x-0 top-0 z-50 max-h-[88vh] overflow-y-auto border-b border-pf-border bg-pf-surface md:hidden dark:border-pf-border-dark dark:bg-pf-surface-dark">
                         <div className="flex items-center justify-between border-b border-pf-border px-4 py-3 dark:border-pf-border-dark">
                             <Link href={home()} className="shrink-0" onClick={() => setMobileOpen(false)}>
                                 <img
