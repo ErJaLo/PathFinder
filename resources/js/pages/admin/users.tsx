@@ -252,18 +252,19 @@ export default function AdminUsers() {
                     </div>
 
                     {/* ── Table ── */}
-                    <table className="w-full text-sm">
-                        <thead>
-                            <tr className="border-b border-pf-border bg-pf-surface-2 text-left text-xs font-semibold tracking-wide text-pf-text-3 uppercase dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-3dark">
-                                <th className="px-4 py-3">Usuari</th>
-                                <th className="px-4 py-3">Rol</th>
-                                <th className="px-4 py-3">Experiències</th>
-                                <th className="px-4 py-3">Registre</th>
-                                <th className="px-4 py-3">Estat</th>
-                                <th className="px-4 py-3">Accions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-pf-border dark:divide-pf-border-dark">
+                    <div className="w-full overflow-x-auto">
+                        <table className="w-full min-w-190 text-sm">
+                            <thead>
+                                <tr className="border-b border-pf-border bg-pf-surface-2 text-left text-xs font-semibold tracking-wide text-pf-text-3 uppercase dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-3dark">
+                                    <th className="px-4 py-3">Usuari</th>
+                                    <th className="px-4 py-3">Rol</th>
+                                    <th className="px-4 py-3">Experiències</th>
+                                    <th className="px-4 py-3">Registre</th>
+                                    <th className="px-4 py-3">Estat</th>
+                                    <th className="px-4 py-3">Accions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-pf-border dark:divide-pf-border-dark">
                             {users.length === 0 ? (
                                 <tr>
                                     <td
@@ -438,8 +439,9 @@ export default function AdminUsers() {
                                     );
                                 })
                             )}
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                     <DataPagination
                         total={total}
                         perPage={perPage}
