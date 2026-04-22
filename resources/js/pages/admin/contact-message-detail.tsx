@@ -62,7 +62,7 @@ export default function ContactMessageDetailPage() {
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
-            <div className="mx-auto max-w-6xl px-4 py-8">
+            <div className="mx-auto w-full max-w-8xl px-4 py-8">
                 <div className="mb-6 flex items-center gap-2 text-pf-text-3 dark:text-pf-text-2dark">
                     <Link href="/admin/contacts" className="flex items-center gap-1 transition hover:text-pf-primary">
                         <ChevronLeft className="h-4 w-4" />
@@ -75,18 +75,18 @@ export default function ContactMessageDetailPage() {
                         <Mail className="h-7 w-7 text-blue-500" strokeWidth={2.5} />
                     </div>
                     <div className="flex flex-col gap-2">
+                        <span className="w-fit rounded-md border border-blue-200 px-2.5 py-1 text-xs font-bold uppercase text-blue-700 dark:border-blue-800 dark:text-blue-400">
+                            {TYPE_LABELS[message.type]}
+                        </span>
+                        <h1 className="text-2xl font-extrabold text-pf-text dark:text-white">{message.subject}</h1>
                         <div className="flex items-center gap-3">
-                            <span className="rounded-md border border-blue-200 px-2.5 py-1 text-xs font-bold uppercase text-blue-700 dark:border-blue-800 dark:text-blue-400">
-                                {TYPE_LABELS[message.type]}
-                            </span>
+                            <p className="text-sm font-medium text-pf-text-3 dark:text-pf-text-3dark">
+                                Rebuda el {message.created_at ? new Date(message.created_at).toLocaleString('ca-ES') : '-'}
+                            </p>
                             <span className={`rounded-md border px-2.5 py-1 text-xs font-bold ${statusClasses}`}>
                                 {STATUS_LABELS[message.status]}
                             </span>
                         </div>
-                        <h1 className="text-2xl font-extrabold text-pf-text dark:text-white">{message.subject}</h1>
-                        <p className="text-sm font-medium text-pf-text-3 dark:text-pf-text-3dark">
-                            Rebuda el {message.created_at ? new Date(message.created_at).toLocaleString('ca-ES') : '-'}
-                        </p>
                     </div>
                 </div>
 

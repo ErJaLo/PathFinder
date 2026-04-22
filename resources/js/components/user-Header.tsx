@@ -39,7 +39,7 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
 
       {/* Desktop nav */}
       <nav className="header-nav hidden xl:flex items-center gap-2">
-        <span className="header-section text-xs uppercase tracking-wider text-white/40 px-3">El meu perfil</span>
+        {/* <span className="header-section text-xs uppercase tracking-wider text-white/40 px-3">El meu perfil</span> */}
         <Link
           href="/settings/profile"
           className={`header-item flex items-center gap-2 px-4 py-2 rounded-md ${isCurrentUrl('/llocs') ? 'text-white bg-pf-primary' : 'text-white/70 hover:bg-pf-primary-l hover:text-white'}`}
@@ -60,7 +60,7 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
           </svg>
           Contrasenya
         </Link>
-        <span className="header-section text-xs uppercase tracking-wider text-white/40 px-3">Contingut</span>
+        {/* <span className="header-section text-xs uppercase tracking-wider text-white/40 px-3">Contingut</span> */}
         <Link
           href="/settings/experiences"
           className={`header-item flex items-center gap-2 px-4 py-2 rounded-md ${isCurrentUrl('/settings/experiences') ? 'text-white bg-pf-primary' : 'text-white/70 hover:bg-pf-primary-l hover:text-white'}`}

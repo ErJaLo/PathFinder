@@ -215,12 +215,6 @@ export default function ReportsPage(){
 
                             {/* Content */}
                             <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-2">
-                                  
-                                    <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 rounded bg-red-50/50 dark:bg-transparent">
-                                        Alta
-                                    </span>
-                                </div>
                                 
                                 <h3 className="text-base font-bold text-pf-text dark:text-white mb-1 truncate">
                                     {rep.post?.title || "Post sense títol"}
