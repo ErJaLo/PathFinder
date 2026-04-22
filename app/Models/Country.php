@@ -17,6 +17,7 @@ class Country extends Model
         'name',
         'nationality',
         'img',
+        'continent',
     ];
 
     public function posts()

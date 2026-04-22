@@ -1,0 +1,115 @@
+SEGURETAT.TXT
+=============
+
+Aquest fitxer documenta els aspectes de seguretat del projecte PathFinder,
+incloent-hi les mesures implementades i les limitacions o tasques pendents.
+
+
+MESURES IMPLEMENTADES
+---------------------
+
+Autenticacio:
+  - Laravel Fortify gestiona login, registre, recuperacio de contrasenya,
+    verificacio de correu electronic i autenticacio de dos factors (2FA).
+  - Contrasenyes xifrades amb bcrypt (default de Laravel).
+  - Codis de recuperacio per a 2FA.
+  - Sessions amb cookies signades i httpOnly.
+
+Autoritzacio:
+  - Middleware `CheckRole` per protegir rutes d'administracio.
+  - Rutes admin requereixen rol `moderator` o `admin`.
+  - Les accions sobre experiencies (edit, update, destroy) comproven
+    que l'usuari autenticat es el propietari del post (abort 403 si no).
+
+Validacio:
+  - Validacio al client: atributs HTML5 i logica de useForm d'Inertia.
+  - Validacio al servidor: Form Request/validate() a tots els controladors.
+  - Validacio condicional: per esborranys els camps no son obligatoris,
+    per publicats si (titol, contingut, categories).
+
+Proteccio contra atacs:
+  - CSRF: token automatic a tots els formularis via Inertia.
+  - XSS: React escapa automaticament el contingut. No s'injecta HTML
+    brut de l'usuari (no hi ha dangerouslySetInnerHTML).
+  - SQL Injection: us exclusiu d'Eloquent ORM i prepared statements.
+  - Mass Assignment: propietat `$fillable` definida a tots els models.
+
+Imatges:
+  - Validacio de MIME type i size max (2MB) als uploads.
+  - Optimitzacio automatica: resize a 1600px max i conversio a WebP.
+  - Si s'usa Cloudinary: upload signat amb HMAC-SHA1.
+  - Els paths d'imatges es validen per evitar manipulacio.
+
+Seguretat de la sessio:
+  - Rate limiting a l'endpoint d'actualitzacio de contrasenya (6 intents/min).
+  - Email verification opcional via Fortify.
+  - 2FA opcional activable des de /settings/security.
+
+
+ASPECTES PENDENTS O AMB LIMITACIONS
+-----------------------------------
+
+Gestio d'imatges:
+  - Les imatges antigues pujades a Cloudinary queden orfanes quan
+    s'elimina o actualitza una experiencia. Cal implementar crida a
+    l'API de Cloudinary per esborrar-les (o neteja periodica).
+  - No hi ha validacio avançada del contingut de les imatges
+    (deteccio de contingut inadequat, virus, etc.).
+
+Rate limiting:
+  - Nomes aplicat a /settings/password. Caldria estendre'l a /login,
+    /register i endpoints de votacio/reports per evitar spam.
+
+Logs i auditoria:
+  - No hi ha log d'accions administratives (baixa d'usuaris, rebuig
+    d'experiencies, eliminacio de categories).
+  - Caldria implementar un sistema d'auditoria per traçabilitat.
+
+Headers de seguretat:
+  - No s'han configurat explicitament headers com Content-Security-Policy,
+    Strict-Transport-Security, X-Frame-Options o Referrer-Policy.
+  - Es recomana afegir-los via middleware o config del servidor web
+    en desplegament a produccio.
+
+Backup i recuperacio:
+  - No hi ha sistema de backup automatic de la BBDD implementat.
+  - En produccio caldria configurar dumps periodics.
+
+Reports i moderacio:
+  - No s'envien notificacions a l'autor d'un post quan es reportat
+    o rebutjat.
+  - No hi ha limit de reports falsos per usuari; un usuari podria
+    reportar repetidament sense consequencies (pero el sistema
+    impedeix reports duplicats sobre la mateixa experiencia).
+
+Esborrat de comptes:
+  - L'eliminacio d'usuari es permanent (no hi ha soft delete).
+  - Les experiencies i votacions associades s'eliminen en cascada.
+  - Caldria implementar un periode de gracia / arxivat abans de la
+    supressio definitiva per a complir amb requeriments legals.
+
+Tests:
+  - No hi ha cobertura de tests automatitzats. Caldria afegir
+    tests PHPUnit per al backend i React Testing Library per al frontend.
+
+Accessibilitat:
+  - No s'ha fet una auditoria completa d'accessibilitat (WCAG).
+  - Caldria revisar contrastos, navegacio per teclat i lectors de pantalla.
+
+
+RECOMANACIONS PER A PRODUCCIO
+-----------------------------
+
+1. Configurar HTTPS obligatori (redirect HTTP -> HTTPS al servidor web).
+2. Activar `APP_DEBUG=false` i `APP_ENV=production`.
+3. Configurar `SESSION_SECURE_COOKIE=true` i `SESSION_SAME_SITE=lax`.
+4. Definir limits de rate limiting adequats a /login i /register.
+5. Configurar headers de seguretat via middleware.
+6. Activar email verification obligatoria per a tots els usuaris nous.
+7. Configurar logs centralitzats (Sentry, Papertrail o similar).
+8. Programar backups automatics de la BBDD.
+9. Restringir acces SSH/FTP al servidor amb claus publiques.
+10. Activar 2FA per als comptes d'administrador.
+
+
+Data d'actualitzacio: 20 abril 2026

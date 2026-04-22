@@ -1,11 +1,12 @@
-import { router } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import { ImagePlus, X, Save, Send, MapPin, AlertTriangle } from 'lucide-react';
 import { useState, lazy, Suspense } from 'react';
 import InputError from '@/components/input-error';
+import { CountryCombobox } from '@/components/country-combobox';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
+import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { Spinner } from '@/components/ui/spinner';
 import type { Experience, ExperienceCategory, ExperienceCountry } from '@/types';
 
@@ -30,17 +31,11 @@ type FormData = {
     status: 'draft' | 'published';
 };
 
-function countryFlag(code: string): string {
-    const base = 0x1f1e6 - 65;
-    const upper = code.toUpperCase();
-    return String.fromCodePoint(upper.charCodeAt(0) + base, upper.charCodeAt(1) + base);
-}
-
 export function ExperienceForm({ experience, categories, countries }: Props) {
     const isEditing = !!experience;
     const today = new Date().toISOString().split('T')[0];
 
-    const [formData, setFormData] = useState<FormData>({
+    const { data: formData, setData: setFormData, post, processing, errors, transform } = useForm<FormData>({
         title: experience?.title ?? '',
         content: experience?.content ?? '',
         experience_date: experience?.experience_date?.split('T')[0] ?? '',
@@ -53,20 +48,17 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
     });
 
     const [imagePreview, setImagePreview] = useState<string | null>(experience?.image ?? null);
-    const [processing, setProcessing] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const setField = <K extends keyof FormData>(key: K, value: FormData[K]) => {
-        setFormData((prev) => ({ ...prev, [key]: value }));
+    const setField = (key: keyof FormData, value: unknown) => {
+        setFormData(key as never, value as never);
     };
 
     const toggleCategory = (id: number) => {
-        setFormData((prev) => ({
-            ...prev,
-            categories: prev.categories.includes(id)
-                ? prev.categories.filter((c) => c !== id)
-                : [...prev.categories, id],
-        }));
+        setFormData('categories',
+            formData.categories.includes(id)
+                ? formData.categories.filter((c) => c !== id)
+                : [...formData.categories, id],
+        );
     };
 
     const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,23 +73,12 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
     };
 
     const submitAs = (status: 'draft' | 'published') => {
-        setProcessing(true);
-        setErrors({});
-
-        const payload = { ...formData, status } as unknown as Record<string, string>;
-
         if (isEditing) {
-            router.post(`/experiencies/${experience.id}`, { ...payload, _method: 'PUT' }, {
-                forceFormData: true,
-                onError: (errs) => { setErrors(errs); setProcessing(false); },
-                onFinish: () => setProcessing(false),
-            });
+            transform((d) => ({ ...d, status, _method: 'PUT' as const }));
+            post(`/experiencies/${experience.id}`, { forceFormData: true });
         } else {
-            router.post('/experiencies', payload, {
-                forceFormData: true,
-                onError: (errs) => { setErrors(errs); setProcessing(false); },
-                onFinish: () => setProcessing(false),
-            });
+            transform((d) => ({ ...d, status }));
+            post('/experiencies', { forceFormData: true });
         }
     };
 
@@ -110,13 +91,15 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
         <>
             {Object.keys(errors).length > 0 && (
                 <div className="mb-6 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
-                    <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-                    Per publicar, cal omplir els camps obligatoris (titol, contingut i categories).
+                    <AlertTriangle className="h-4 w-4 shrink-0" />
+                    {errors.title || errors.content || errors.categories
+                        ? 'Per publicar, cal omplir els camps obligatoris (titol, contingut i categories).'
+                        : "Hi ha errors al formulari. Revisa els camps marcats."}
                 </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* ── Title ── */}
+                {/* Title */}
                 <div className="space-y-2">
                     <Label htmlFor="title">
                         Titol <span className="text-pf-accent">*</span>
@@ -132,22 +115,20 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.title} />
                 </div>
 
-                {/* ── Content ── */}
+                {/* Content */}
                 <div className="space-y-2">
                     <Label htmlFor="content">
                         Contingut <span className="text-pf-accent">*</span>
                     </Label>
-                    <Textarea
-                        id="content"
+                    <RichTextEditor
                         value={formData.content}
-                        onChange={(e) => setField('content', e.target.value)}
+                        onChange={(html) => setField('content', html)}
                         placeholder="Explica la teva experiencia: que vas fer, que vas veure, consells per a altres viatgers..."
-                        className="min-h-[180px]"
                     />
                     <InputError message={errors.content} />
                 </div>
 
-                {/* ── Image ── */}
+                {/* Image */}
                 <div className="space-y-2">
                     <Label>Imatge destacada</Label>
                     {imagePreview ? (
@@ -179,7 +160,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.image} />
                 </div>
 
-                {/* ── Categories ── */}
+                {/* Categories */}
                 <div className="space-y-2">
                     <Label>
                         Categories <span className="text-pf-accent">*</span>
@@ -187,6 +168,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <div className="flex flex-wrap gap-2">
                         {categories.map((cat) => {
                             const active = formData.categories.includes(cat.id);
+
                             return (
                                 <button
                                     key={cat.id}
@@ -206,23 +188,16 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.categories} />
                 </div>
 
-                {/* ── Country + Date ── */}
+                {/* Country + Date */}
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                         <Label htmlFor="country_code">Pais</Label>
-                        <select
+                        <CountryCombobox
                             id="country_code"
+                            countries={countries}
                             value={formData.country_code}
-                            onChange={(e) => setField('country_code', e.target.value)}
-                            className="h-10 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm text-pf-text outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-pf-surface-dark dark:text-pf-text-dark [&>option]:bg-pf-surface [&>option]:text-pf-text dark:[&>option]:bg-pf-surface-dark dark:[&>option]:text-pf-text-dark"
-                        >
-                            <option value="">Selecciona un pais...</option>
-                            {countries.map((c) => (
-                                <option key={c.code} value={c.code}>
-                                    {countryFlag(c.code)} {c.name}
-                                </option>
-                            ))}
-                        </select>
+                            onChange={(code) => setField('country_code', code)}
+                        />
                         <InputError message={errors.country_code} />
                     </div>
 
@@ -234,20 +209,20 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                             value={formData.experience_date}
                             onChange={(e) => setField('experience_date', e.target.value)}
                             max={today}
-                            className="h-10 text-pf-text dark:text-pf-text-dark [color-scheme:light] dark:[color-scheme:dark]"
+                            className="h-10 text-pf-text scheme-light dark:text-pf-text-dark dark:scheme-dark"
                         />
                         <InputError message={errors.experience_date} />
                     </div>
                 </div>
 
-                {/* ── Map location ── */}
+                {/* Map location */}
                 <div className="space-y-2">
                     <Label>
                         <MapPin className="mr-1 inline h-3.5 w-3.5" />
                         Ubicacio al mapa
                     </Label>
                     <Suspense fallback={
-                        <div className="flex h-[280px] items-center justify-center rounded-xl border border-pf-border bg-pf-surface-2 dark:border-pf-border-dark dark:bg-pf-surface-2dark">
+                        <div className="flex h-70 items-center justify-center rounded-xl border border-pf-border bg-pf-surface-2 dark:border-pf-border-dark dark:bg-pf-surface-2dark">
                             <Spinner className="h-6 w-6" />
                         </div>
                     }>
@@ -257,11 +232,15 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                                 : null
                             }
                             onChange={(coords) => {
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    latitude: coords?.lat ?? null,
-                                    longitude: coords?.lng ?? null,
-                                }));
+                                setField('latitude', coords?.lat ?? null);
+                                setField('longitude', coords?.lng ?? null);
+                            }}
+                            onCountryDetected={(code) => {
+                                // Only auto-select if the country exists in our DB
+                                const match = countries.find((c) => c.code.toUpperCase() === code);
+                                if (match) {
+                                    setField('country_code', match.code);
+                                }
                             }}
                         />
                     </Suspense>
@@ -269,7 +248,7 @@ export function ExperienceForm({ experience, categories, countries }: Props) {
                     <InputError message={errors.longitude} />
                 </div>
 
-                {/* ── Actions ── */}
+                {/* Actions */}
                 <div className="flex items-center gap-3 border-t border-pf-border pt-6 dark:border-pf-border-dark">
                     <Button
                         type="submit"

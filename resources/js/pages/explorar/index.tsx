@@ -17,7 +17,6 @@ import MainLayout from '@/layouts/main-layout';
 import { ExperienceCard } from '@/components/experience-card';
 import type { Experience, ExperienceCategory } from '@/types';
 
-/* ── Types ── */
 type PaginatedData<T> = {
     data: T[];
     current_page: number;
@@ -30,6 +29,7 @@ type PaginatedData<T> = {
 type TrendingCountry = {
     code: string;
     name: string;
+    img?: string | null;
     posts_count: number;
 };
 
@@ -61,7 +61,6 @@ type Props = {
     filters: Filters;
 };
 
-/* ── Helpers ── */
 function getInitials(name: string): string {
     return name
         .split(' ')
@@ -84,12 +83,6 @@ function countryFlag(code: string): string {
     return String.fromCodePoint(upper.charCodeAt(0) + base, upper.charCodeAt(1) + base);
 }
 
-const countryIcons: Record<string, string> = {
-    JP: '🏯', MA: '🕌', PE: '🦙', ID: '🌋', IS: '🧊',
-    TH: '🛶', NP: '🏔', MX: '🌮', VN: '🏍', GR: '🏛',
-    ZA: '🦁', NA: '🦒', ET: '🏜', DE: '🏰',
-};
-
 const avatarColors = [
     { bg: 'bg-pf-primary-l dark:bg-pf-primary-ldark', text: 'text-pf-primary dark:text-pf-primary-dark' },
     { bg: 'bg-pf-accent-l dark:bg-pf-accent-ldark', text: 'text-pf-accent-h dark:text-pf-accent-dark' },
@@ -102,7 +95,6 @@ const pillActive = 'border-transparent bg-pf-primary text-white';
 const pillInactive =
     'border-pf-border bg-pf-surface-2 text-pf-text-2 hover:border-pf-primary hover:bg-pf-primary-l hover:text-pf-primary dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-2dark dark:hover:border-pf-primary-dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark';
 
-/* ══════════════════════════════ */
 export default function ExplorarIndex({ experiences, categories, countries, trendingCountries, topUsers, filters }: Props) {
     const [view, setView] = useState<'grid' | 'list'>('grid');
     const [searchValue, setSearchValue] = useState(filters.search);
@@ -148,7 +140,7 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
         <MainLayout>
             <Head title="Explorar experiencies — PathFinder" />
 
-            {/* ══════ COUNTRY TAGS STRIP (marquee) ══════ */}
+            {/* Country tags strip */}
             <div className="group/marquee -m-7 mb-6 flex items-center border-b border-pf-border dark:border-pf-border-dark">
                 {/* Fixed "Tots" button */}
                 <div className="flex-shrink-0 border-r border-pf-border py-2.5 pr-3 dark:border-pf-border-dark">
@@ -181,12 +173,12 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                 </div>
             </div>
 
-            {/* ══════ MAIN LAYOUT: FEED + SIDEBAR ══════ */}
+            {/* Main layout */}
             <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_300px]">
-                {/* ── FEED ── */}
+                {/* Feed */}
                 <div>
                     {/* Toolbar */}
-                    <div className="mb-5 space-y-2.5">
+                    <div className="mb-0 space-y-2.5">
                         {/* Row 1: Search + Filters button */}
                         <div className="flex gap-2.5 max-sm:flex-col">
                             <div className="flex flex-1 items-center gap-2 rounded-full border border-pf-border bg-pf-surface px-3.5 transition-colors focus-within:border-pf-primary dark:border-pf-border-dark dark:bg-pf-surface-dark">
@@ -372,6 +364,40 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                             </div>
                         </div>
                     </div>
+                    {/* Pagination */}
+                            {experiences.last_page > 1 && (
+                                <div className="mb-3 flex items-center justify-center gap-1.5">
+                                    <button
+                                        onClick={() => experiences.current_page > 1 && navigate({ page: experiences.current_page - 1 })}
+                                        disabled={experiences.current_page <= 1}
+                                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-pf-border text-pf-text-3 transition-all hover:border-pf-primary hover:text-pf-primary disabled:opacity-40 disabled:hover:border-pf-border disabled:hover:text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" />
+                                    </button>
+
+                                    {Array.from({ length: experiences.last_page }, (_, i) => i + 1).map((page) => (
+                                        <button
+                                            key={page}
+                                            onClick={() => navigate({ page })}
+                                            className={`flex h-8 min-w-8 items-center justify-center rounded-lg border px-2 text-xs font-medium transition-all ${
+                                                page === experiences.current_page
+                                                    ? 'border-transparent bg-pf-primary text-white'
+                                                    : 'border-pf-border text-pf-text-2 hover:border-pf-primary hover:text-pf-primary dark:border-pf-border-dark dark:text-pf-text-2dark'
+                                            }`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        onClick={() => experiences.current_page < experiences.last_page && navigate({ page: experiences.current_page + 1 })}
+                                        disabled={experiences.current_page >= experiences.last_page}
+                                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-pf-border text-pf-text-3 transition-all hover:border-pf-primary hover:text-pf-primary disabled:opacity-40 disabled:hover:border-pf-border disabled:hover:text-pf-text-3 dark:border-pf-border-dark dark:text-pf-text-3dark"
+                                    >
+                                        <ChevronRight className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            )}
 
                     {/* Posts */}
                     {experiences.data.length > 0 ? (
@@ -446,7 +472,7 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                     )}
                 </div>
 
-                {/* ── SIDEBAR ── */}
+                {/* Sidebar */}
                 <aside className="sticky top-20 hidden flex-col gap-4 lg:flex">
                     {/* Trending countries */}
                     {trendingCountries.length > 0 && (
@@ -468,8 +494,12 @@ export default function ExplorarIndex({ experiences, categories, countries, tren
                                         <span className="text-[11px] text-pf-text-3 dark:text-pf-text-3dark" style={{ width: 16, textAlign: 'center' }}>
                                             {i + 1}
                                         </span>
-                                        <div className="flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-lg bg-pf-surface-2 text-xl dark:bg-pf-surface-2dark">
-                                            {countryIcons[country.code] ?? countryFlag(country.code)}
+                                        <div className="flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center overflow-hidden rounded-lg bg-pf-surface-2 dark:bg-pf-surface-2dark">
+                                            {country.img ? (
+                                                <img src={country.img} alt={country.name} className="h-full w-full object-cover" />
+                                            ) : (
+                                                <span className="text-xl">{countryFlag(country.code)}</span>
+                                            )}
                                         </div>
                                         <div className="flex-1 overflow-hidden">
                                             <div className="truncate text-[13px] font-medium text-pf-text dark:text-pf-text-dark">

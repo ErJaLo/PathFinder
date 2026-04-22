@@ -3,16 +3,22 @@
 use App\Http\Controllers\ExperienciaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaisosController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/explorar', [ExperienciaController::class, 'index'])->name('explorar.index');
+Route::inertia('/politica-privacitat', 'politica-privacitat')->name('politica-privacitat');
+Route::inertia('/termes-us', 'legal/termes-us')->name('legal.termes-us');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('/contact-us', [ContactController::class, 'index'])->name('contact.index');
+    Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.send');
+
     Route::get('/settings/experiences', [ExperienciaController::class, 'meves'])->name('experiencies.meves');
     Route::get('/experiencies/{post}/editar', [ExperienciaController::class, 'edit'])->name('experiencies.edit');
     Route::put('/experiencies/{post}', [ExperienciaController::class, 'update'])->name('experiencies.update');
@@ -24,12 +30,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
+Route::inertia('/politica-cookies', 'legal/politica-cookies')->name('legal.politica-cookies');
+
+
 
 
 Route::get("/llocs", [PaisosController::class, "llistarPaisos"])->name("llocs");
 
 Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(function () {
-    Route::inertia('/', 'admin/index')->name('admin.index');
+    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('users/getUsers/{x?}/{y?}', [UserController::class, 'getUsers'])
         ->whereNumber('x')
@@ -37,12 +46,8 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
         ->name('admin.users.getUsers');
     Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
     Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::post("users/{usuari}/image", [UserController::class, "saveImage"])->name("admin.user.image");
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
-    Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
-    Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");
-    Route::post("category", [CategoryController::class, "store"])->name('admin.categories.store');
-    Route::get("category/{category}/edit", [CategoryController::class, "edit"])->name("admin.category.edit");
-    Route::put("category/{category}", [CategoryController::class, "update"])->name("admin.category.update");
 
     Route::get("reports", [ReportsController::class, "index"])->name("admin.reports.index");
     Route::put("reports/{report}/resolve", [ReportsController::class, "acceptStatus"])->name("admin.reports.accepted");
@@ -51,6 +56,28 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::put("reports/{report}/aprove-post", [ReportsController::class, "rejectedStatus"])->name("admin.reports.aprove-post");
     Route::get("reports/detail/{report}", [ReportsController::class, "show"])->name("admin.reports.detail");
     Route::post("reports/delete/{report}", [ReportsController::class, "destroy"])->name("admin.report.delete");
+
+    Route::get('contacts', [ContactController::class, 'adminIndex'])->name('admin.contacts.index');
+    Route::get('contacts/{contactMessage}', [ContactController::class, 'adminShow'])->name('admin.contacts.detail');
+    Route::put('contacts/{contactMessage}/in-review', [ContactController::class, 'markInReview'])->name('admin.contacts.in-review');
+    Route::put('contacts/{contactMessage}/resolve', [ContactController::class, 'markResolved'])->name('admin.contacts.resolve');
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('users/getUsers/{x?}/{y?}', [UserController::class, 'getUsers'])
+        ->whereNumber('x')
+        ->whereNumber('y')
+        ->name('admin.users.getUsers');
+    Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
+
+    Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
+    Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");
+    Route::post("category", [CategoryController::class, "store"])->name('admin.categories.store');
+    Route::get("category/{category}/edit", [CategoryController::class, "edit"])->name("admin.category.edit");
+    Route::put("category/{category}", [CategoryController::class, "update"])->name("admin.category.update");
 });
 
 require __DIR__ . '/settings.php';

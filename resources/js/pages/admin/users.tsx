@@ -2,6 +2,9 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { route } from 'ziggy-js';
 import Summary from '@/components/admin/summary';
+import ModalUserCreate from '@/components/modals/modal-user-create';
+import ModalUserEdit from '@/components/modals/modal-user-edit';
+import ModalUserToggleStatus from '@/components/modals/modal-user-toggle-status';
 import { DataPagination } from '@/components/ui/data-pagination';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem } from '@/types';
@@ -52,52 +55,12 @@ const DOT_STYLES: Record<string, string> = {
 interface User {
     id: number;
     name: string;
+    surname?: string | null;
     email: string;
     created_at: string;
-    role: 'admin' | 'user';
+    role: 'admin' | 'moderator' | 'user';
     status: 'active' | 'inactive';
     posts?: number;
-}
-
-function ConfirmModal({
-    user,
-    onCancel,
-    onConfirm,
-}: {
-    user: User;
-    onCancel: () => void;
-    onConfirm: (id: number) => void;
-}) {
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-            <div className="w-full max-w-sm rounded-xl border border-pf-border bg-pf-surface p-6 shadow-2xl dark:border-pf-border-dark dark:bg-pf-surface-dark">
-                <h2 className="mb-1 text-lg font-semibold text-pf-text dark:text-pf-text-dark">
-                    Canviar estat
-                </h2>
-                <p className="mb-6 text-sm text-pf-text-3 dark:text-pf-text-3dark">
-                    Segur que vols {user.status === 'active' ? 'desactivar' : 'activar'}{' '}
-                    <span className="font-medium text-pf-text dark:text-pf-text-dark">
-                        {user.name}
-                    </span>
-                    ?
-                </p>
-                <div className="flex justify-end gap-2">
-                    <button
-                        onClick={onCancel}
-                        className="rounded-lg border border-pf-border px-4 py-2 text-sm font-medium text-pf-text hover:bg-pf-bg-2 dark:border-pf-border-dark dark:text-pf-text-dark dark:hover:bg-pf-bg-2dark"
-                    >
-                        Cancel·lar
-                    </button>
-                    <button
-                        onClick={() => onConfirm(user.id)}
-                        className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
-                    >
-                        Confirmar
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
 }
 
 export default function AdminUsers() {
@@ -119,6 +82,8 @@ export default function AdminUsers() {
     const [search, setSearch] = useState(prevSearch);
     const [statusFilter, setStatusFilter] = useState(prevStatus);
     const [confirmUser, setConfirmUser] = useState<User | null>(null);
+    const [createUserOpen, setCreateUserOpen] = useState(false);
+    const [editUser, setEditUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[]>(initialUsers);
 
     useEffect(() => {
@@ -179,16 +144,33 @@ export default function AdminUsers() {
             <Head title="Administració — PathFinder" />
             <Summary />
 
-            {confirmUser && (
-                <ConfirmModal
-                    user={confirmUser}
-                    onCancel={() => setConfirmUser(null)}
-                    onConfirm={handleDeactivate}
-                />
-            )}
+            <ModalUserToggleStatus
+                open={confirmUser !== null}
+                user={confirmUser}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setConfirmUser(null);
+                    }
+                }}
+                onConfirm={handleDeactivate}
+            />
+
+            <ModalUserEdit
+                open={editUser !== null}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setEditUser(null);
+                    }
+                }}
+                user={editUser}
+            />
+
+            <ModalUserCreate
+                open={createUserOpen}
+                onOpenChange={setCreateUserOpen}
+            />
 
             <div className="flex flex-1 flex-col gap-6 p-6">
-                {/* Page title */}
                 <div>
                     <h1 className="text-2xl font-bold text-pf-primary dark:text-pf-primary-dark">
                         Usuaris
@@ -198,11 +180,8 @@ export default function AdminUsers() {
                     </p>
                 </div>
 
-                {/* Panel */}
                 <div className="overflow-hidden rounded-xl border border-pf-border bg-pf-surface dark:border-pf-border-dark dark:bg-pf-surface-dark">
-                    {/* ── Panel header ── */}
                     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-pf-border px-4 py-3 dark:border-pf-border-dark">
-                        {/* Title */}
                         <span className="flex items-center gap-2 text-sm font-semibold text-pf-text dark:text-pf-text-dark">
                             <svg
                                 className="h-4 w-4 text-pf-primary dark:text-pf-primary-dark"
@@ -217,9 +196,15 @@ export default function AdminUsers() {
                             Gestió d'usuaris
                         </span>
 
-                        {/* Toolbar */}
                         <div className="flex items-center gap-2">
-                            {/* Search */}
+                            <button
+                                type="button"
+                                onClick={() => setCreateUserOpen(true)}
+                                className="h-8 rounded-lg bg-pf-primary px-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                            >
+                                Nou usuari
+                            </button>
+
                             <div className="relative flex items-center">
                                 <svg
                                     className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-pf-text-3 dark:text-pf-text-3dark"
@@ -267,18 +252,19 @@ export default function AdminUsers() {
                     </div>
 
                     {/* ── Table ── */}
-                    <table className="w-full text-sm">
-                        <thead>
-                            <tr className="border-b border-pf-border bg-pf-surface-2 text-left text-xs font-semibold tracking-wide text-pf-text-3 uppercase dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-3dark">
-                                <th className="px-4 py-3">Usuari</th>
-                                <th className="px-4 py-3">Rol</th>
-                                <th className="px-4 py-3">Experiències</th>
-                                <th className="px-4 py-3">Registre</th>
-                                <th className="px-4 py-3">Estat</th>
-                                <th className="px-4 py-3">Accions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-pf-border dark:divide-pf-border-dark">
+                    <div className="w-full overflow-x-auto">
+                        <table className="w-full min-w-190 text-sm">
+                            <thead>
+                                <tr className="border-b border-pf-border bg-pf-surface-2 text-left text-xs font-semibold tracking-wide text-pf-text-3 uppercase dark:border-pf-border-dark dark:bg-pf-surface-2dark dark:text-pf-text-3dark">
+                                    <th className="px-4 py-3">Usuari</th>
+                                    <th className="px-4 py-3">Rol</th>
+                                    <th className="px-4 py-3">Experiències</th>
+                                    <th className="px-4 py-3">Registre</th>
+                                    <th className="px-4 py-3">Estat</th>
+                                    <th className="px-4 py-3">Accions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-pf-border dark:divide-pf-border-dark">
                             {users.length === 0 ? (
                                 <tr>
                                     <td
@@ -330,16 +316,19 @@ export default function AdminUsers() {
                                                     className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ${
                                                         user.role === 'admin'
                                                             ? 'bg-pf-primary-l text-pf-primary-h dark:bg-pf-primary-ldark dark:text-pf-primary-hdark'
+                                                            : user.role === 'moderator'
+                                                              ? 'bg-pf-amber-l text-pf-amber-dark dark:bg-pf-amber-ldark dark:text-pf-amber-dark'
                                                             : 'bg-pf-surface-2 text-pf-text-3 dark:bg-pf-surface-2dark dark:text-pf-text-3dark'
                                                     }`}
                                                 >
                                                     {user.role === 'admin'
                                                         ? 'Admin'
+                                                        : user.role === 'moderator'
+                                                          ? 'Moderador'
                                                         : 'Usuari'}
                                                 </span>
                                             </td>
 
-                                            {/* Experiències */}
                                             <td className="px-4 py-3 text-pf-text-3 dark:text-pf-text-3dark">
                                                 {user.posts ?? '—'}
                                             </td>
@@ -363,10 +352,31 @@ export default function AdminUsers() {
                                                 </span>
                                             </td>
 
-                                            {/* Actions */}
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center gap-1">
                                                     <button
+                                                        title="Editar usuari"
+                                                        onClick={() =>
+                                                            setEditUser(user)
+                                                        }
+                                                        className="rounded-lg p-1.5 text-pf-text-3 transition-colors hover:bg-pf-bg-2 hover:text-pf-primary dark:text-pf-text-3dark dark:hover:bg-pf-bg-2dark dark:hover:text-pf-primary-dark"
+                                                    >
+                                                        <svg
+                                                            className="h-4 w-4"
+                                                            fill="none"
+                                                            viewBox="0 0 12 12"
+                                                            stroke="currentColor"
+                                                            strokeWidth="1.5"
+                                                        >
+                                                            <path
+                                                                d="M8.7 1.8a1.2 1.2 0 011.7 1.7L4.6 9.3 2 10l.7-2.6 6-5.6z"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                            />
+                                                        </svg>
+                                                    </button>
+
+                                                    {/* <button
                                                         disabled={false}
                                                         title="Veure experiències"
                                                         className="rounded-lg p-1.5 text-pf-text-3 transition-colors hover:bg-pf-bg-2 hover:text-pf-text disabled:cursor-not-allowed disabled:opacity-40 dark:text-pf-text-3dark dark:hover:bg-pf-bg-2dark dark:hover:text-pf-text-dark"
@@ -388,14 +398,14 @@ export default function AdminUsers() {
                                                                 strokeLinecap="round"
                                                             />
                                                         </svg>
-                                                    </button>
+                                                    </button> */}
 
                                                     <button
                                                         disabled={user.role === 'admin'}
                                                         title={
                                                             user.status === 'active'
-                                                                ? 'Desactivar'
-                                                                : 'Activar'
+                                                                ? 'Deshabilitar'
+                                                                : 'Habilitar'
                                                         }
                                                         onClick={() =>
                                                             setConfirmUser(user)
@@ -409,10 +419,18 @@ export default function AdminUsers() {
                                                             stroke="currentColor"
                                                             strokeWidth="1.5"
                                                         >
-                                                            <path
-                                                                d="M2 6h8M6 2v8"
-                                                                strokeLinecap="round"
-                                                            />
+                                                            {user.status === 'active' ? (
+                                                                <path
+                                                                    d="M2 6h8"
+                                                                    strokeLinecap="round"
+                                                                />
+                                                            ) : (
+                                                                <path
+                                                                    d="M2.5 6.2L4.8 8.5 9.5 3.8"
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                />
+                                                            )}
                                                         </svg>
                                                     </button>
                                                 </div>
@@ -421,8 +439,9 @@ export default function AdminUsers() {
                                     );
                                 })
                             )}
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                     <DataPagination
                         total={total}
                         perPage={perPage}
@@ -433,7 +452,7 @@ export default function AdminUsers() {
 
                 {/* Footer count */}
                 <p className="text-right text-xs text-pf-text-3 dark:text-pf-text-3dark">
-                    {users.length} usuari{users.length !== 1 ? 's' : ''}
+                    {total} usuari{total !== 1 ? 's' : ''}
                 </p>
             </div>
         </AdminLayout>

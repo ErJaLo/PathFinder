@@ -62,7 +62,7 @@ class ExperienciaController extends Controller
             ->whereHas('posts')
             ->orderByDesc('posts_count')
             ->limit(5)
-            ->get(['code', 'name']);
+            ->get(['code', 'name', 'img']);
 
         $topUsers = User::withCount('posts')
             ->whereHas('posts')
@@ -90,7 +90,7 @@ class ExperienciaController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name')->get(['id', 'name']);
-        $countries = Country::orderBy('name')->get(['code', 'name']);
+        $countries = Country::orderBy('name')->get(['code', 'name', 'continent']);
 
         return Inertia::render('experiencies/crear', [
             'categories' => $categories,
@@ -120,7 +120,7 @@ class ExperienciaController extends Controller
         $imagePath = null;
         if ($request->hasFile('image')) {
             $optimizer = new ImageOptimizer();
-            $imagePath = '/storage/' . $optimizer->store($request->file('image'));
+            $imagePath = $optimizer->store($request->file('image'));
         }
 
         $post = Post::create([
@@ -250,7 +250,7 @@ class ExperienciaController extends Controller
 
         $post->load(['categories:id,name', 'mainCountry:code,name']);
         $categories = Category::orderBy('name')->get(['id', 'name']);
-        $countries = Country::orderBy('name')->get(['code', 'name']);
+        $countries = Country::orderBy('name')->get(['code', 'name', 'continent']);
 
         return Inertia::render('experiencies/editar', [
             'experience' => $post,
@@ -283,11 +283,12 @@ class ExperienciaController extends Controller
         $validated = $request->validate($rules);
 
         if ($request->hasFile('image')) {
-            if ($post->image) {
+            // Only delete local images; Cloudinary URLs stay as orphans (cleanup is a separate concern)
+            if ($post->image && str_starts_with($post->image, '/storage/')) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
             }
             $optimizer = new ImageOptimizer();
-            $validated['image'] = '/storage/' . $optimizer->store($request->file('image'));
+            $validated['image'] = $optimizer->store($request->file('image'));
         } else {
             unset($validated['image']);
         }
@@ -309,7 +310,7 @@ class ExperienciaController extends Controller
             abort(403);
         }
 
-        if ($post->image) {
+        if ($post->image && str_starts_with($post->image, '/storage/')) {
             Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
         }
 

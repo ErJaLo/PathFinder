@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Nette\Utils\Image;
 
 class UserController extends Controller
 {
@@ -28,9 +29,11 @@ class UserController extends Controller
             ->selectRaw("
                 users.id,
                 users.name,
+                users.surname,
                 users.email,
                 users.role,
                 users.created_at,
+                users.img,
                 COUNT(posts.user_id) as posts,
                 CASE
                     WHEN users.active = 1 THEN 'active'
@@ -38,7 +41,7 @@ class UserController extends Controller
                 END as status
             ")
             ->leftJoin('posts', 'posts.user_id', '=', 'users.id')
-            ->groupBy('users.id', 'users.name', 'users.email', 'users.role', 'users.active', 'users.created_at')
+            ->groupBy('users.id', 'users.name', 'users.surname', 'users.email', 'users.role', 'users.active', 'users.created_at')
             ->when(
                 $search !== '',
                 fn($q) =>
@@ -83,7 +86,7 @@ class UserController extends Controller
         $validated = $request->validate([
             ...($this->profileRules()),
             'password' => $this->passwordRules(),
-            'role' => ['required', 'in:user,admin'],
+            'role' => ['required', 'in:user,moderator,admin'],
         ]);
 
         User::create($validated);
@@ -127,7 +130,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             ...($this->profileRules($user->id)),
-            'role' => ['required', 'in:user,admin'],
+            'role' => ['required', 'in:user,moderator,admin'],
         ]);
 
         // Si se proporciona contraseña, añadirla a la validación
@@ -151,5 +154,21 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'Usuario eliminado correctamente.');
+    }
+
+    public function saveImage(Request $request, User $usuari)
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'max:4096'],
+        ]);
+
+        if ($request->hasFile('image')) {
+            // Guarda l'arxiu pujat a storage/app/public/avatars i retorna la ruta relativa
+            $path = $request->file('image')->store('avatars', 'public');
+
+            $usuari->update(["img" => $path]);
+        }
+
+        return back();
     }
 }

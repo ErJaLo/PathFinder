@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('nationality')->nullable();
             $table->string('img')->nullable();
+            $table->string('continent', 20)->nullable()->index();
         });
     }
 

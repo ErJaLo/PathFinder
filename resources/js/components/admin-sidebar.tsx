@@ -1,17 +1,13 @@
 import { Link, usePage } from '@inertiajs/react';
-import {useForm} from '@inertiajs/react';
 
 import {
-    AlertTriangle,
     ArrowLeft,
-    FolderTree,
     LayoutGrid,
     Users,
     CircleAlert,
     AlignLeft,
+    Mail,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { route } from 'ziggy-js';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
@@ -26,10 +22,10 @@ import {
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { home } from '@/routes';
-import type { Auth, NavItem } from '@/types';
+import type { Auth } from '@/types';
 
 export function AdminSidebar() {
-    const { auth, globalData } = usePage<{ auth: Auth, globalData: { totalReports: number } }>().props;
+    const { auth, globalData } = usePage<{ auth: Auth, globalData: { totalReports: number; totalContactMessagesPending: number } }>().props;
     const user = auth?.user;
     const { isCurrentUrl } = useCurrentUrl();
     
@@ -41,37 +37,20 @@ export function AdminSidebar() {
     const navContingut: any[]=[
         ...(isAdmin
             ? [
-                  {
-                      title: 'Gestió de categories',
-                      href: '/admin/category',
-                      icon: AlignLeft,
-                  },
+                  { title: 'Gestió de categories', href: '/admin/category', icon: AlignLeft },
               ]
             : []),
         { title: 'Abusos reportats', href: '/admin/reports', icon: CircleAlert, badge: globalData?.totalReports },
+        { title: 'Formularis contacte', href: '/admin/contacts', icon: Mail, badge: globalData?.totalContactMessagesPending },
 
     ]
     const navUsuaris: any[]=[
         ...(isAdmin
             ? [
-                  { title: "Baixa d'usuaris", href: '/admin/users', icon: Users },
+                  { title: "Gestió d'usuaris", href: '/admin/users', icon: Users },
               ]
             : []),
     ]
-    const navItems: NavItem[] = [
-        { title: 'Dashboard', href: '/admin', icon: LayoutGrid },
-        { title: 'Reports', href: '/admin/reports', icon: AlertTriangle },
-        ...(isAdmin
-            ? [
-                  {
-                      title: 'Categories',
-                      href: '/admin/categories',
-                      icon: FolderTree,
-                  },
-                  { title: 'Usuaris', href: '/admin/users', icon: Users },
-              ]
-            : []),
-    ];
 
     return (
         <Sidebar 
@@ -159,30 +138,32 @@ export function AdminSidebar() {
                     </SidebarMenu>
                 </SidebarGroup>
 
-                <SidebarGroup className="px-3 mt-2">
-                    <SidebarGroupLabel className="px-2 text-xs font-bold tracking-wider text-white/30 uppercase">Usuaris</SidebarGroupLabel>
-                    <SidebarMenu>
-                        {navUsuaris.map((item) => (
-                            <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton
-                                    asChild
-                                    isActive={isCurrentUrl(item.href)}
-                                    tooltip={{ children: item.title }}
-                                    className={`my-0.5 rounded-md transition-colors ${
-                                        isCurrentUrl(item.href) 
-                                            ? 'bg-pf-primary text-white data-[active=true]:bg-pf-primary data-[active=true]:text-white data-[active=true]:font-bold' 
-                                            : 'text-white/60 hover:bg-white/10 hover:text-white'
-                                    }`}
-                                >
-                                    <Link href={item.href} prefetch>
-                                        {item.icon && <item.icon className="h-4 w-4" />}
-                                        <span className="font-medium text-sm">{item.title}</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        ))}
-                    </SidebarMenu>
-                </SidebarGroup>
+                {isAdmin && (
+                    <SidebarGroup className="px-3 mt-2">
+                        <SidebarGroupLabel className="px-2 text-xs font-bold tracking-wider text-white/30 uppercase">Usuaris</SidebarGroupLabel>
+                        <SidebarMenu>
+                            {navUsuaris.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton
+                                        asChild
+                                        isActive={isCurrentUrl(item.href)}
+                                        tooltip={{ children: item.title }}
+                                        className={`my-0.5 rounded-md transition-colors ${
+                                            isCurrentUrl(item.href) 
+                                                ? 'bg-pf-primary text-white data-[active=true]:bg-pf-primary data-[active=true]:text-white data-[active=true]:font-bold' 
+                                                : 'text-white/60 hover:bg-white/10 hover:text-white'
+                                        }`}
+                                    >
+                                        <Link href={item.href} prefetch>
+                                            {item.icon && <item.icon className="h-4 w-4" />}
+                                            <span className="font-medium text-sm">{item.title}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroup>
+                )}
             </SidebarContent>
 
             <SidebarFooter className="bg-pf-text border-t border-white/5 [&_[data-test=sidebar-menu-button]]:!text-white [&_[data-test=sidebar-menu-button]:hover]:!bg-white/10 [&_[data-test=sidebar-menu-button][data-state=open]]:!bg-white/10">

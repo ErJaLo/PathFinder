@@ -7,7 +7,7 @@ import '../css/app.css';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { initializeTheme } from '@/hooks/use-appearance';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'PathFinder';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
