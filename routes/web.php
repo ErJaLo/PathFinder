@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/experiencies/crear', [ExperienciaController::class, 'create'])->name('experiencies.create');
     Route::post('/experiencies', [ExperienciaController::class, 'store'])->name('experiencies.store');
     Route::post('/reports', [ReportsController::class, 'store'])->name('reports.store');
+    Route::post("users/{usuari}/image", [UserController::class, "saveImage"])->name("admin.user.image");
 });
 
 Route::get('/experiencies/{post}', [ExperienciaController::class, 'show'])->name('experiencies.show');
@@ -46,7 +47,6 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
         ->name('admin.users.getUsers');
     Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
     Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
-    Route::post("users/{usuari}/image", [UserController::class, "saveImage"])->name("admin.user.image");
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
 
     Route::get("reports", [ReportsController::class, "index"])->name("admin.reports.index");
