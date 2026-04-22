@@ -107,6 +107,7 @@ export function UserForm({ mustVerifyEmail, status }: { mustVerifyEmail: boolean
                             <select
                                 id="country_code"
                                 name="country_code"
+                                required
                                 value={country}
                                 onChange={e => setCountry(e.target.value)}
                                 className="h-[38px] w-full rounded-md border border-pf-border bg-pf-bg px-3 text-[13px] text-pf-text outline-none transition-all focus:border-pf-primary focus:bg-pf-surface dark:border-pf-border-dark dark:bg-pf-bg-dark dark:text-pf-text-dark dark:focus:border-pf-primary-dark dark:focus:bg-pf-surface-dark"
