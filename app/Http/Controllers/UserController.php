@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Nette\Utils\Image;
 
 class UserController extends Controller
 {
@@ -99,13 +98,15 @@ class UserController extends Controller
      */
     public function toggleActive(User $user)
     {
-        // echo "test";
-        // exit;
-        $user->update([
-            'active' => !$user->active
-        ]);
+        $updated = User::query()
+            ->whereKey($user->id)
+            ->update(['active' => DB::raw('NOT active')]);
 
-        return redirect()->back();
+        if ($updated === 0) {
+            return redirect()->back()->with('error', 'No s\'ha pogut actualitzar l\'estat de l\'usuari.');
+        }
+
+        return redirect()->back()->with('success', 'Estat de l\'usuari actualitzat correctament.');
     }
     /**
      * Display the specified resource.

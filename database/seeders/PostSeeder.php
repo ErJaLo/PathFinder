@@ -27,32 +27,7 @@ class PostSeeder extends Seeder
         Storage::disk('public')->makeDirectory('experiences');
 
         // Experiences with real bundled images
-        $withImages = [
-            [
-                'title' => 'Champion Burger a Westfield la Maquinista',
-                'content' => "Un grup d'estudiants i imbécils han anat a probar hamburgueses al event internacional de The Champions Burger.",
-                'image' => 'ChampionBurger1.jpeg',
-                'country_code' => 'ES',
-                'latitude' => 41.4462,
-                'longitude' => 2.1987,
-            ],
-            [
-                'title' => 'Tast de hamburgueses a Champion Burger',
-                'content' => "La primera hamburguesa que vam provar el Roger i jo va ser espectacular, la carn de wagyu del stand de 'El surtidor on fire' es la millor que hem provat.",
-                'image' => 'ChampionBurger2.jpeg',
-                'country_code' => 'ES',
-                'latitude' => 41.4462,
-                'longitude' => 2.1987,
-            ],
-            [
-                'title' => 'Voley i tirar pedres a la platja de Mataró',
-                'content' => "Tres individus van anar a passar el dia a la platja de Mataró, on a un li van fotre un cop amb la pilota de voley i després van anar a tirar pedres al mar. El dia va ser molt divertit i relaxant, amb molta sorra, poc sol i aigua molt freda.",
-                'image' => 'UsAtTheBeach.jpeg',
-                'country_code' => 'ES',
-                'latitude' => 41.5343,
-                'longitude' => 2.4476,
-            ],
-        ];
+      
 
         // Experiences without images
         $withoutImages = [
@@ -107,6 +82,32 @@ class PostSeeder extends Seeder
             ],
         ];
 
+          $withImages = [
+            [
+                'title' => 'Champion Burger a Westfield la Maquinista',
+                'content' => "Un grup d'estudiants i imbécils han anat a probar hamburgueses al event internacional de The Champions Burger.",
+                'image' => 'ChampionBurger1.jpeg',
+                'country_code' => 'ES',
+                'latitude' => 41.4462,
+                'longitude' => 2.1987,
+            ],
+            [
+                'title' => 'Tast de hamburgueses a Champion Burger',
+                'content' => "La primera hamburguesa que vam provar el Roger i jo va ser espectacular, la carn de wagyu del stand de 'El surtidor on fire' es la millor que hem provat.",
+                'image' => 'ChampionBurger2.jpeg',
+                'country_code' => 'ES',
+                'latitude' => 41.4462,
+                'longitude' => 2.1987,
+            ],
+            [
+                'title' => 'Voley i tirar pedres a la platja de Mataró',
+                'content' => "Tres individus van anar a passar el dia a la platja de Mataró, on a un li van fotre un cop amb la pilota de voley i després van anar a tirar pedres al mar. El dia va ser molt divertit i relaxant, amb molta sorra, poc sol i aigua molt freda.",
+                'image' => 'UsAtTheBeach.jpeg',
+                'country_code' => 'ES',
+                'latitude' => 41.5343,
+                'longitude' => 2.4476,
+            ],
+        ];
         foreach ($withoutImages as $exp) {
             $post = Post::factory()->create([
                 'user_id' => $users->random()->id,
