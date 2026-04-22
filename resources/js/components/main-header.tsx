@@ -1,18 +1,10 @@
 import { Link, usePage, useForm } from '@inertiajs/react';
-import { Map, Compass, User, Menu, X, PenLine } from 'lucide-react';
+import { Compass, User, Menu, X, PenLine } from 'lucide-react';
 import { useState } from 'react';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
 import { route } from 'ziggy-js';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { ThemeProvider, useTheme } from '@/context/ThemeContext';
+import { UserDropdown } from '@/components/user-dropdown';
+import { useTheme } from '@/context/ThemeContext';
 import { useInitials } from '@/hooks/use-initials';
 import { home, login, register } from '@/routes';
 import type { Auth } from '@/types';
@@ -34,7 +26,7 @@ export function MainHeader() {
         <nav className="sticky top-0 z-50 border-b border-pf-border bg-pf-surface/90 backdrop-blur-sm dark:border-pf-border-dark dark:bg-pf-surface-dark/90">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
                 {/* Logo */}
-                <Link href={home()} className="flex-shrink-0">
+                <Link href={home()} className="shrink-0">
                     <img
                         src="/img/Logo_petit(1).jpg"
                         alt="PathFinder"
@@ -71,53 +63,20 @@ export function MainHeader() {
                         </Link>
                     )}
                     {user ? (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <button className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-pf-primary-l hover:text-pf-primary dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
-                                    <Avatar className="h-10 w-10">
-                                        <AvatarImage src={user.img ? `/storage/${user.img}` : user.avatar} alt={user.name} className="object-cover" />
-                                        <AvatarFallback className="bg-pf-primary-l text-sm font-semibold text-pf-primary dark:bg-pf-primary-ldark dark:text-pf-primary-dark">
-                                            {getInitials(user.name)}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-48">
-                                <DropdownMenuGroup>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/settings/experiences" className="cursor-pointer">
-                                            Gestió d'experiencies
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/settings/profile" className="cursor-pointer">
-                                            Perfil d'usuari
-                                        </Link>
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-                                <DropdownMenuSeparator />
-                                
-                                {(user.role === 'admin' || user.role === 'moderator') && (
-                                    <>
-                                        <DropdownMenuGroup>
-                                            <DropdownMenuItem asChild>  
-                                                <Link href="/admin" className='cursor-pointer'>
-                                                    Administrar web
-                                                </Link>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuGroup>
-                                        <DropdownMenuSeparator />
-                                    </>
-                                )}
-
-                                <DropdownMenuItem 
-                                    className="w-full cursor-pointer"
-                                    onSelect={() => logoutForm.post(route('logout'))}
-                                >
-                                    Tancar sessió
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <UserDropdown
+                            user={user}
+                            initials={
+                                user.img || user.avatar ? (
+                                    <img
+                                        src={user.img ? `/storage/${user.img}` : user.avatar}
+                                        alt={user.name}
+                                        className="h-full w-full rounded-full object-cover"
+                                    />
+                                ) : (
+                                    getInitials(user.name)
+                                )
+                            }
+                        />
                     ) : (
                         <Link href={login()} className="flex h-12 w-12 items-center justify-center rounded-full text-pf-text-2 hover:bg-pf-primary-l hover:text-pf-primary transition-colors dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark">
                             <User className="w-6 h-6" />

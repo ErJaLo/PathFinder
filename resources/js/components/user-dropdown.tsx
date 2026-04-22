@@ -1,5 +1,5 @@
 import { Link, useForm } from '@inertiajs/react';
-import { LogOut, Settings, User as UserIcon } from 'lucide-react';
+import { LogOut, Shield, User as UserIcon, List, LayoutDashboard } from 'lucide-react';
 import React from 'react';
 import { route } from 'ziggy-js';
 import {
@@ -36,18 +36,37 @@ export function UserDropdown({ user, initials }: UserDropdownProps) {
                 </div>
                 <DropdownMenuGroup className="py-1">
                     <DropdownMenuItem asChild className="hover:bg-pf-primary-l dark:hover:bg-pf-border-dark focus:bg-pf-primary-l dark:focus:bg-pf-border-dark focus:text-pf-primary dark:focus:text-white cursor-pointer rounded-none border-none">
+                        <Link href="/settings/experiences" className="flex items-center gap-3 w-full px-4 py-2">
+                            <List className="w-4 h-4 text-pf-text-3 dark:text-white/80" />
+                            <span>Gestió d'experiències</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="hover:bg-pf-primary-l dark:hover:bg-pf-border-dark focus:bg-pf-primary-l dark:focus:bg-pf-border-dark focus:text-pf-primary dark:focus:text-white cursor-pointer rounded-none border-none">
                         <Link href="/settings/profile" className="flex items-center gap-3 w-full px-4 py-2">
                             <UserIcon className="w-4 h-4 text-pf-text-3 dark:text-white/80" />
-                            <span>Perfil</span>
+                            <span>Perfil d'usuari</span>
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="hover:bg-pf-primary-l dark:hover:bg-pf-border-dark focus:bg-pf-primary-l dark:focus:bg-pf-border-dark focus:text-pf-primary dark:focus:text-white cursor-pointer rounded-none border-none">
                         <Link href="/settings/security" className="flex items-center gap-3 w-full px-4 py-2">
-                            <Settings className="w-4 h-4 text-pf-text-3 dark:text-white/80" />
-                            <span>Configuració</span>
+                            <Shield className="w-4 h-4 text-pf-text-3 dark:text-white/80" />
+                            <span>Seguretat</span>
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
+                {(user.role === 'admin' || user.role === 'moderator') && (
+                    <>
+                        <DropdownMenuSeparator className="bg-pf-border dark:bg-pf-border-dark m-0" />
+                        <DropdownMenuGroup className="py-1">
+                            <DropdownMenuItem asChild className="hover:bg-pf-primary-l dark:hover:bg-pf-border-dark focus:bg-pf-primary-l dark:focus:bg-pf-border-dark focus:text-pf-primary dark:focus:text-white cursor-pointer rounded-none border-none">
+                                <Link href="/admin" className="flex items-center gap-3 w-full px-4 py-2">
+                                    <LayoutDashboard className="w-4 h-4 text-pf-text-3 dark:text-white/80" />
+                                    <span>Administrar web</span>
+                                </Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    </>
+                )}
                 <DropdownMenuSeparator className="bg-pf-border dark:bg-pf-border-dark m-0" />
                 <DropdownMenuItem 
                     className="hover:bg-pf-primary-l dark:hover:bg-pf-border-dark focus:bg-pf-primary-l dark:focus:bg-pf-border-dark focus:text-pf-primary dark:focus:text-white cursor-pointer rounded-none border-none py-1"
