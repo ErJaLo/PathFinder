@@ -47,7 +47,8 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
         ->name('admin.users.getUsers');
     Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
     Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
-    Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
+    // Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
+
 
     Route::get("reports", [ReportsController::class, "index"])->name("admin.reports.index");
     Route::put("reports/{report}/resolve", [ReportsController::class, "acceptStatus"])->name("admin.reports.accepted");
@@ -63,6 +64,8 @@ Route::middleware(['auth', 'role:moderator,admin'])->prefix('admin')->group(func
     Route::put('contacts/{contactMessage}/resolve', [ContactController::class, 'markResolved'])->name('admin.contacts.resolve');
 });
 
+Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
+
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('users/getUsers/{x?}/{y?}', [UserController::class, 'getUsers'])
@@ -71,7 +74,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         ->name('admin.users.getUsers');
     Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
     Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
-    Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
+    // Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('admin.users.toggleActive');
 
     Route::get("category", [CategoryController::class, "index"])->name("admin.category.index");
     Route::delete("category/{category}", [CategoryController::class, "destroy"])->name("admin.category.destroy");
