@@ -46,7 +46,7 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
         {/* <span className="header-section text-xs uppercase tracking-wider text-white/40 px-3">El meu perfil</span> */}
         <Link
           href="/settings/profile"
-          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${isCurrentUrl('/settings/profile') ? 'bg-pf-primary-l text-pf-primary dark:bg-pf-primary-ldark dark:text-pf-primary-dark' : 'text-pf-text-2 hover:bg-pf-primary-l hover:text-pf-primary dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark'}`}
+          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${isCurrentUrl('/llocs') ? 'bg-pf-primary-l text-pf-primary dark:bg-pf-primary-ldark dark:text-pf-primary-dark' : 'text-pf-text-2 hover:bg-pf-primary-l hover:text-pf-primary dark:text-pf-text-2dark dark:hover:bg-pf-primary-ldark dark:hover:text-pf-primary-dark'}`}
         >
           <svg fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4">
             <circle cx="8" cy="5" r="3" />
