@@ -16,6 +16,10 @@ Plataforma comunitària per compartir experiències de viatge. Els usuaris poden
 | Mapes | Leaflet + OpenStreetMap |
 | Imatges | Cloudinary (CDN) amb fallback a GD local (WebP) |
 | Build | Vite 7 |
+| Graficos | ReChart |
+| Text enriquit | TipTap |
+| API paisos | Nominatim |
+
 
 ---
 
